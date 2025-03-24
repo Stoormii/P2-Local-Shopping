@@ -1,0 +1,187 @@
+/*Top nav barre*/
+
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: white;
+    overflow: hidden;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    width: 14%;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+  
+  
+  /* scroll barre*/
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
+    text-align: center;
+  }
+  .recommended-container {
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .recommended-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Hide scrollbar */
+    -ms-overflow-style: none; /* Hide scrollbar for IE */
+  }
+  .carousel::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+  }
+  .product {
+    flex: 0 0 auto;
+    width: 150px;
+    margin-right: 15px;
+    text-align: center;
+  }
+  .product img {
+    width: 100%;
+    border-radius: 5px;
+  }
+  .product-name {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .product-location {
+    color: lightgray;
+    font-size: 14px;
+  }
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 50%;
+  }
+  .arrow-left {
+    left: -30px;
+  }
+  .arrow-right {
+    right: -30px;
+  }
+  
+  /*put two section beside*/
+  
+  .indent-1 {float: left;}
+  .indent-1 section {width: 50%; float: left;}
+  
+  /*near by store*/
+  
+  .NearByShops-container {
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .NearByShops-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  
+  .shop-name {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .shop-location {
+    color: lightgray;
+    font-size: 14px;
+  }
+  
+  /*bottim nav*/
+  
+  .bottomNav {
+    background-color: gray;
+    overflow: hidden;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .bottomNav a {
+    float: left;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px 16px;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /*general syntaxe*/
+  
+  /*img2*/
+  .container {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    width: 300px;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  
+  /*search barre*/
+  
+  .search-container {
+    width: 150px;
+    display: flex;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    padding: 5px;
+  }
+  
+  .search-container input {
+    border: none;
+    outline: none;
+    padding: 8px;
+    width: 100%;
+    border-radius: 25px;
+  }
+  
+  .search-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }

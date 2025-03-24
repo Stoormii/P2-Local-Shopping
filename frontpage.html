@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Shop Local</title>
+        <link rel="stylesheet" type="text/css" href="/stylesheet.css">
+    </head>
+    <body>
+        <div class="topnav">
+            <a class="active" href="#home">Shop Local</a>
+            <a href="#categories">categories</a>
+            <a class="search-container">
+                <input type="text" placeholder="Search...">
+                <button type="submit">🔍</button>
+            </a>
+            <a href="#basket">basket</a>
+            <a href="#account">account</a>
+          </div>
+        <section>
+            <h1>Discover Local Deals & Businesses Near You</h1>
+            <a>Your one-stop platform to explore offers, support local shops, and connect with businesses in your community</a>
+        </section>
+        <img src="/img/thx_u.png" style="width: 500px;height: 400px;">
+        <section>
+            <title>Recommended Products</title>
+        <body>
+        <div class="recommended-container">
+            <div class="recommended-title">Recommended</div>
+            <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
+            <div class="carousel" id="carousel">
+                <div class="product">
+                    <img src="/img/black-tshirt.jpg" alt="Black T-Shirt">
+                    <div class="product-name">Black T-Shirt</div>
+                    <div class="product-location">Garn 22<br>2.4 km from you!</div>
+                </div>
+                <div class="product">
+                    <img src="/img/black-tshirt.jpg" alt="Black T-Shirt">
+                    <div class="product-name">Black T-Shirt</div>
+                    <div class="product-location">Isls<br>5.0 km from you!</div>
+                </div>
+                <div class="product">
+                    <img src="/img/black-tshirt.jpg" alt="Black T-Shirt">
+                    <div class="product-name">Black T-Shirt</div>
+                    <div class="product-location">Athena<br>500 m from you!</div>
+                </div>
+                <div class="product">
+                    <img src="/img/black-tshirt.jpg" alt="Black T-Shirt">
+                    <div class="product-name">Black T-Shirt</div>
+                    <div class="product-location">Nova<br>3.0 km from you!</div>
+                </div>
+                <div class="product">
+                    <img src="/img/black-tshirt.jpg" alt="Black T-Shirt">
+                    <div class="product-name">Black T-Shirt</div>
+                    <div class="product-location">Zeus<br>1.2 km from you!</div>
+                </div>
+            </div>
+            <button class="arrow arrow-right" onclick="scrollRight()">›</button>
+        </div>
+        
+        <script>
+            const carousel = document.getElementById("carousel");
+        
+            function scrollLeft() {
+                carousel.scrollBy({ left: -200, behavior: "smooth" });
+            }
+        
+            function scrollRight() {
+                carousel.scrollBy({ left: 200, behavior: "smooth" });
+            }
+        </script>
+        </body>
+        </section>
+        <br>
+        <section class="indent-1"> 
+            <section>
+            <h1> Benefits of local shopping</h1>
+                <dl>Supporting Local Businesses</dl>
+                    <dt>When shop locally, you help support small and 
+                    independent businesses in your community.
+                    This strengthens the local economy and helps
+                    create jobs within the area. </dt>
+                    <dd><br></dd>
+                <div class="container">
+                    <img src="/img/img2.png" height="150%">
+                </div>
+            </section>
+            <section>
+                <div class="container">
+                    <img src="/img/img2.png" height="150%">
+                </div>
+                <dl>Quality and personalizied Services</dl>
+                    <dt>Local shops often provide personalizied
+                    services and expert advice. The personel usually 
+                    verruy knowledgeable about the products, making 
+                    the shopping experience personalizied and tailored
+                    to your needs.
+                    </dt>
+                    <dd><br></dd>
+            </section>
+        </section>
+        <section>
+            <body>
+                <div class="nearByShops-container"> 
+                    <div class="NearByShops-title">Stores near you !</div>
+                    <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
+                    <div class="carousel" id="carousel2">
+                        <div class="Shops">
+                            <img src="/img/shops.png">
+                            <div class="shop-name">Garn 22</div>
+                            <div class="shop-location">Garn 22<br>2.4 km from you!</div>
+                            <div class="description">Description</div>
+                        </div>
+                        <div class="Shops">
+                            <img src="/img/shops.png">
+                            <div class="shop-name" href="">Isls</div>
+                            <div class="shop-location">Isls<br>5.0 km from you!</div>
+                            <div class="description">Description</div>
+                        </div>
+                        <div class="Shops">
+                            <img src="/img/shops.png">
+                            <div class="shop-name">Athena</div>
+                            <div class="shop-location">Athena<br>500 m from you!</div>
+                            <div class="description">Description</div>
+                        </div>
+                        <div class="Shops">
+                            <img src="/img/shops.png">
+                            <div class="shop-name">Nova</div>
+                            <div class="shop-location">Nova<br>3.0 km from you!</div>
+                            <div class="description">Description</div>
+                        </div>
+                        <div class="Shops">
+                            <img src="/img/shops.png">
+                            <div class="shop-name">zeus</div>
+                            <div class="shop-location">Zeus<br>1.2 km from you!</div>
+                            <div class="description">Description</div>
+                        </div>
+                    </div>
+                    <button class="arrow arrow-right" onclick="scrollRight()">›</button>
+                </div>
+                
+                <script>
+                    const carousel2 = document.getElementById("carousel2");
+                
+                    function scrollLeft() {
+                        carousel.scrollBy({ left: -200, behavior: "smooth" });
+                    }
+                
+                    function scrollRight() {
+                        carousel.scrollBy({ left: 200, behavior: "smooth" });
+                    }
+                </script>
+                <a><br></a>
+                <div class="bottomNav">
+                    <a class="active" href="#home">Shop Local</a>
+                </div>
+                </body>
+        </section>
+        </section>
+    </body>
+</html>
