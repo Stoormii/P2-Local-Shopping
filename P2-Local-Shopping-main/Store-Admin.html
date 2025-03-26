@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShoppingLocal adminpage</title>
+    <link rel="stylesheet" href="valdestyle.css">
+</head>
+<body>
+    <a href="login.html"> <h3>tilbage til login</h3> </a>
+    <div class="container">
+        <h1>Velkommen,""</h1>
+        
+        <h2>Dine Produkter</h2>
+        <div class="product-list" id="productList"></div>
+
+        <h2>Tilføj nyt produkt</h2>
+        <form class="product-form" id="productForm">
+            <div class="form-group">
+                <label for="productName">Produktnavn:</label>
+                <input type="text" id="productName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productPrice">Pris (DKK):</label>
+                <input type="number" id="productPrice" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productCategory">Kategori:</label>
+                <select id="productCategory" required>
+                    <option value="">Vælg kategori</option>
+                    <option value="???">????</option>
+                    <option value="??">????</option>
+                    <option value="???">????</option>
+                    <option value="???">??</option>
+                    <option value="andre">Andre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productDescription">Beskrivelse:</label>
+                <textarea id="productDescription" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="productImage">Produktbillede:</label>
+                <input type="file" id="productImage" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="button">Gem produkt</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
