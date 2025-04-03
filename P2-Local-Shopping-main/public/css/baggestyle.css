@@ -101,3 +101,42 @@ body > a, body > p, h1, h2 {
     margin: 0;
     
 }
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  border: 10px solid white;
+  border-radius: 25px;
+}
+
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+.nav-links li {
+  display: inline;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  padding: 2px 15px;
+  border-radius: 5px;
+  
+}
+
+.nav-links a:hover {
+  background-color: #0073e6;
+  color: #fff;
+}
+
+.nav-links a.active {
+  color: #333aff; 
+  font-weight: bold; 
+}

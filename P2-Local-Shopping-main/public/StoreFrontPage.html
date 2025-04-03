@@ -7,7 +7,28 @@
     <title>Store</title>
 </head>
 <body>
-    <a href="salesprojekt.html"> <h3>See new orders</h3> </a>
-    <a href="Store-Admin.html"> <h3>Edit items</h3> </a>
+
+    <nav class="navbar">
+        <ul class="nav-links">
+          <li><a href="#home" id="home-link">Home</a></li>
+          <li><a href="Store-Admin.html" id="product-link">Products</a></li>
+          <li><a href="salesprojekt.html" id="neworder-link">New orders</a></li>
+          <li><a href="salesprojekt.html" id="stats-link">stats</a></li>
+        </ul>
+      </nav>
+<script>
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        
+        navLinks.forEach(nav => nav.classList.remove('active'));
+    
+        
+        link.classList.add('active');
+      });
+    });</script>
+    <h1>Welcome "store"</h1>
+
 </body>
 </html>
