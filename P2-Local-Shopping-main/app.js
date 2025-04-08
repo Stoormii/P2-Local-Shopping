@@ -19,14 +19,7 @@ app.use(cors({
   origin: '*', // Tillader alle domæner (kan ændres til specifikt domæne)
 }));
 
-// Server statiske filer fra public-mappen under /node9
-app.use(BASE_PATH, express.static(path.join(__dirname, 'public')));
-
-// Fallback route: hvis ingen fil matches, send signup.html
-app.get(`${BASE_PATH}/*`, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
-});
-
+// API-ruter skal defineres før fallback-ruten for at undgå overskrivning
 app.get(`${BASE_PATH}/users`, async (req, res) => {
   try {
     const users = await getUsers();
@@ -89,6 +82,14 @@ app.post(`${BASE_PATH}/login`, async (req, res) => {
     console.error('Error in /login route:', error);
     res.status(500).json({ error: "Could not login" });
   }
+});
+
+// Server statiske filer fra public-mappen under /node9
+app.use(BASE_PATH, express.static(path.join(__dirname, 'public')));
+
+// Fallback route for frontend - server signup.html hvis ingen af de øvrige ruter matches
+app.get(`${BASE_PATH}/*`, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
 // Global error handler
