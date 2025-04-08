@@ -1,4 +1,5 @@
 import express from 'express';
+import 'dotenv/config';
 import cors from 'cors';
 import { getUsers, createUser } from './database.js';
 import path from 'path';
@@ -8,7 +9,7 @@ import {pool} from './database.js'; // Importer pool fra database.js
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+const BASE_PATH = '/node9';
 const app = express();
 
 app.use(express.json()); // Så vi kan bruge JSON-Data fra frontend
@@ -17,14 +18,14 @@ app.use(cors({
 }));         
 
 // Server statiske filer fra public-mappen
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(BASE_PATH, express.static(path.join(__dirname, 'public')));
 
 // Route til roden, der serverer signup.html fra public-mappen
-app.get('/', (req, res) => {
+app.get(BASE_PATH, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get("/users", async (req, res) => {
+app.get(`${BASE_PATH}/users`, async (req, res)=> {
   try {
     const users = await getUsers();
     res.json(users);
@@ -34,7 +35,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.post("/signup", async (req, res) => {
+app.post(`${BASE_PATH}/signup`, async (req, res) => {
   console.log('Request body:', req.body);
   const { firstname, email, password } = req.body;
   if (!firstname || !email || !password) {
@@ -97,6 +98,8 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080');
+const PORT = process.env.PORT;
+console.log("Port Value:", process.env.PORT);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
