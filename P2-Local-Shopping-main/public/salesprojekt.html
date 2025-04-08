@@ -8,6 +8,29 @@
   <title>Sales and New Orders</title>
   <link rel="stylesheet" href="css/baggestyle.css">
 </head>
+
+<nav class="navbar">
+  <ul class="nav-links">
+    <li><a href="#home" id="home-link">Home</a></li>
+    <li><a href="Store-Admin.html" id="product-link">Products</a></li>
+    <li><a href="salesprojekt.html" id="neworder-link">New orders</a></li>
+    <li><a href="salesprojekt.html" id="stats-link">stats</a></li>
+  </ul>
+</nav>
+<script>
+const navLinks = document.querySelectorAll('.nav-links a');
+
+navLinks.forEach(link => {
+link.addEventListener('click', () => {
+  
+  navLinks.forEach(nav => nav.classList.remove('active'));
+
+  
+  link.classList.add('active');
+});
+});</script>
+
+</body>
 <body>
   <a href="StoreFrontPage.html"> <h3>Return to Store page</h3> </a>
   <h2><center>New Orders</center></h2>
