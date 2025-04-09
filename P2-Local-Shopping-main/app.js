@@ -9,7 +9,7 @@ import { pool } from './database.js'; // Importer pool fra database.js
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const BASE_PATH = '/node9/';
+const BASE_PATH = '/node9';
 const PORT = process.env.PORT || 3399; // fallback hvis PORT ikke er sat i .env
 
 const app = express();
