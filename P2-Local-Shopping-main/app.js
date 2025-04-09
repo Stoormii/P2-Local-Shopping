@@ -9,8 +9,7 @@ import { pool } from './database.js'; // Importer pool fra database.js
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const BASE_PATH = '/node9';
-const PORT = process.env.PORT || 3399; // fallback hvis PORT ikke er sat i .env
+const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
 
 const app = express();
 
@@ -19,8 +18,14 @@ app.use(cors({
   origin: '*', // Tillader alle domæner (kan ændres til specifikt domæne)
 }));
 
-// API-ruter skal defineres før fallback-ruten for at undgå overskrivning
-app.get(`${BASE_PATH}/users`, async (req, res) => {
+// Serve static files directly from the public directory
+app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
+  console.log(`Static middleware accessed for: ${req.url}`);
+  next();
+}));
+
+// API-ruter (uden /node9 prefix, da reverse proxy fjerner det)
+app.get('/users', async (req, res) => {
   try {
     const users = await getUsers();
     res.json(users);
@@ -30,7 +35,7 @@ app.get(`${BASE_PATH}/users`, async (req, res) => {
   }
 });
 
-app.post(`${BASE_PATH}/signup`, async (req, res) => {
+app.post('/signup', async (req, res) => {
   console.log('Request body:', req.body);
   const { firstname, email, password } = req.body;
   if (!firstname || !email || !password) {
@@ -50,7 +55,7 @@ app.post(`${BASE_PATH}/signup`, async (req, res) => {
   }
 });
 
-app.post(`${BASE_PATH}/login`, async (req, res) => {
+app.post('/login', async (req, res) => {
   console.log('Login request body:', req.body);
   const { email, password } = req.body;
 
@@ -84,12 +89,16 @@ app.post(`${BASE_PATH}/login`, async (req, res) => {
   }
 });
 
-// Server statiske filer fra public-mappen under /node9
-app.use(BASE_PATH, express.static(path.join(__dirname, 'public')));
-
 // Fallback route for frontend - server signup.html hvis ingen af de øvrige ruter matches
-app.get(`${BASE_PATH}/*`, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+app.get('*', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'signup.html');
+  console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(`Error serving signup.html: ${err}`);
+      res.status(404).send('File not found');
+    }
+  });
 });
 
 // Global error handler
