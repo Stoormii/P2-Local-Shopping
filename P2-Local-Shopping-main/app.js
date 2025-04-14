@@ -36,22 +36,26 @@ app.get('/users', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-  console.log('Request body:', req.body);
+  console.log('Signup request received:', req.body);
   const { firstname, email, password } = req.body;
+
   if (!firstname || !email || !password) {
-    return res.status(400).json({ error: "All fields are required" });
+      console.log('Missing fields in request body');
+      return res.status(400).json({ error: 'All fields are required' });
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await createUser(firstname, email, hashedPassword);
-    res.status(201).json({ message: "User created successfully!", userid: result.insertId });
+      const hashedPassword = await bcrypt.hash(password, 10);
+      console.log('Hashed password:', hashedPassword);
+      const result = await createUser(firstname, email, hashedPassword);
+      console.log('User created successfully:', result);
+      res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
   } catch (error) {
-    if (error.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ error: "Email already exists" });
-    }
-    console.error(error);
-    res.status(500).json({ error: "Could not create user" });
+      console.error('Error during signup:', error);
+      if (error.code === 'ER_DUP_ENTRY') {
+          return res.status(409).json({ error: 'Email already exists' });
+      }
+      res.status(500).json({ error: 'Could not create user' });
   }
 });
 
