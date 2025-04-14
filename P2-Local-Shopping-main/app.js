@@ -1,30 +1,31 @@
 import express from 'express';
+import 'dotenv/config';
 import cors from 'cors';
 import { getUsers, createUser } from './database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import {pool} from './database.js'; // Importer pool fra database.js
+import { pool } from './database.js'; // Importer pool fra database.js
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
 
 const app = express();
 
 app.use(express.json()); // Så vi kan bruge JSON-Data fra frontend
 app.use(cors({
   origin: '*', // Tillader alle domæner (kan ændres til specifikt domæne)
-}));         
+}));
 
-// Server statiske filer fra public-mappen
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files directly from the public directory
+app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
+  console.log(`Static middleware accessed for: ${req.url}`);
+  next();
+}));
 
-// Route til roden, der serverer signup.html fra public-mappen
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
-});
-
-app.get("/users", async (req, res) => {
+// API-ruter (uden /node9 prefix, da reverse proxy fjerner det)
+app.get('/users', async (req, res) => {
   try {
     const users = await getUsers();
     res.json(users);
@@ -34,7 +35,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.post("/signup", async (req, res) => {
+app.post('/signup', async (req, res) => {
   console.log('Request body:', req.body);
   const { firstname, email, password } = req.body;
   if (!firstname || !email || !password) {
@@ -42,7 +43,7 @@ app.post("/signup", async (req, res) => {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash password before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
     const result = await createUser(firstname, email, hashedPassword);
     res.status(201).json({ message: "User created successfully!", userid: result.insertId });
   } catch (error) {
@@ -54,7 +55,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post('/login', async (req, res) => {
   console.log('Login request body:', req.body);
   const { email, password } = req.body;
 
@@ -72,10 +73,7 @@ app.post("/login", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const user = rows[0]; // Få den første bruger fra resultaterne
-    console.log('User found:', user);
-
-    // Check if the password is correct
+    const user = rows[0];
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log('Password validation result:', isPasswordValid);
 
@@ -84,7 +82,6 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Hvis login er successful
     res.json({ message: "Login successful", user });
   } catch (error) {
     console.error('Error in /login route:', error);
@@ -92,11 +89,26 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Fallback route for frontend - server signup.html hvis ingen af de øvrige ruter matches
+app.get('*', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'signup.html');
+  console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(`Error serving signup.html: ${err}`);
+      res.status(404).send('File not found');
+    }
+  });
+});
+
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080');
+// Start server på 0.0.0.0 så den virker via reverse proxy
+console.log("Port Value:", PORT);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
