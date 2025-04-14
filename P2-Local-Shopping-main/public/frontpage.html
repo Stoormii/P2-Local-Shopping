@@ -11,8 +11,10 @@
             <a class="active" href="#home">Shop Local</a>
             <a href="#categories">Categories</a>
             <a class="search-container">
-                <input type="text" placeholder="Search...">
-                <button type="submit">🔍</button>
+                <form onsubmit="event.preventDefault(); searchItems();">
+                <input type="text" id="searchBar" placeholder="Search...">
+                <button type="submit" onclick="searchItems()">🔍</button>
+                </form>
             </a>
             <a href="#basket">basket</a>
             <div class="account-dropdown">
@@ -25,7 +27,7 @@
                 </div>
             </div>
         </header>
-
+        <script src="JS/searchbarre.js"></script>
         <section>
             <h1>Discover Local Deals & Businesses Near You</h1>
             <a>Your one-stop platform to explore offers, support local shops, and connect with businesses in your community</a>
@@ -37,29 +39,29 @@
             <div class="recommended-title">Recommended</div>
             <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
             <div class="carousel" id="carousel">
-                <div class="product">
+                <div class="product" data-name="black-tshirt">
                     <a href="Itempage.html">
                         <img src="img/black-tshirt.jpg" alt="Black T-Shirt">
                     </a>
                     <div class="product-name">Black T-Shirt</div>
                     <div class="product-location">Garn 22<br>2.4 km from you!</div>
                 </div>
-                <div class="product">
+                <div class="product" data-name="black-tshirt2">
                     <img src="img/black-tshirt.jpg" alt="Black T-Shirt">
                     <div class="product-name">Black T-Shirt</div>
                     <div class="product-location">Isls<br>5.0 km from you!</div>
                 </div>
-                <div class="product">
+                <div class="product" data-name="black-tshirt3">
                     <img src="img/black-tshirt.jpg" alt="Black T-Shirt">
                     <div class="product-name">Black T-Shirt</div>
                     <div class="product-location">Athena<br>500 m from you!</div>
                 </div>
-                <div class="product">
+                <div class="product" data-name="black-tshirt4">
                     <img src="img/black-tshirt.jpg" alt="Black T-Shirt">
                     <div class="product-name">Black T-Shirt</div>
                     <div class="product-location">Nova<br>3.0 km from you!</div>
                 </div>
-                <div class="product">
+                <div class="product" data-name="black-tshirt5">
                     <img src="img/black-tshirt.jpg" alt="Black T-Shirt">
                     <div class="product-name">Black T-Shirt</div>
                     <div class="product-location">Zeus<br>1.2 km from you!</div>
@@ -113,19 +115,19 @@
                     <div class="NearByShops-title">Stores near you !</div>
                     <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
                     <div class="carousel" id="carousel2">
-                        <div class="Shops">
+                        <div class="Shops" data-name="Garn 22">
                             <img src="img/shops.png">
                             <div class="shop-name">Garn 22</div>
                             <div class="shop-location">Garn 22<br>2.4 km from you!</div>
                             <div class="description">Description</div>
                         </div>
-                        <div class="Shops">
+                        <div class="Shops" data-name="Isls">
                             <img src="img/shops.png">
                             <div class="shop-name" href="">Isls</div>
                             <div class="shop-location">Isls<br>5.0 km from you!</div>
                             <div class="description">Description</div>
                         </div>
-                        <div class="Shops">
+                        <div class="Shops" data-name="Athena">
                             <img src="img/shops.png">
                             <div class="shop-name">Athena</div>
                             <div class="shop-location">Athena<br>500 m from you!</div>
