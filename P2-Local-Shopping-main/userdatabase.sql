@@ -12,7 +12,5 @@ CREATE TABLE IF NOT EXISTS users (
 ); 
 
 -- Indsæt kun testbrugere, hvis de ikke allerede findes
-INSERT IGNORE INTO users (firstname, email, password)
-VALUES
-    ('Oliver', 'oliver@denseje.dk', '123abc123'),
-    ('Magnus', 'Magnus@denseje.dk', '123abc321');
+-- INSERT IGNORE INTO users (firstname, email, password)
+
