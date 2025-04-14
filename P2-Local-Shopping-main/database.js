@@ -19,12 +19,18 @@ export async function getUsers() {
 }
 
 // Funktion til at indsætte en ny bruger i databasen
-export async function createUser(firstname, email, password){
-    const result = await pool.query(`
-    INSERT INTO users(firstname, email, password)
-    VALUES(?,?,?)`,
-     [firstname, email, password]) // Indsætter værdierne sikkert i databasen
-    return result
+export async function createUser(firstname, email, password) {
+    try {
+        const [result] = await pool.query(`
+            INSERT INTO users (firstname, email, password)
+            VALUES (?, ?, ?)`,
+            [firstname, email, password]
+        ); // Indsætter værdierne sikkert i databasen
+        return result; // Returnerer kun resultatet
+    } catch (error) {
+        console.error('Error in createUser:', error);
+        throw error; // Kaster fejlen videre for at blive håndteret i app.js
+    }
 }
 
 export {pool} // Eksporterer poolen til brug i andre filer
