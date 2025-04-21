@@ -37,7 +37,7 @@ signupForm.addEventListener('submit', async (e) => {
     // Send dataen til serveren via fetch API
     try {
         console.log(userData);
-        const response = await fetch('/signup', {
+        const response = await fetch('/node9/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ signupForm.addEventListener('submit', async (e) => {
 
         if (response.ok) {
             // Hvis succes, omdiriger brugeren til login-siden
-            window.location.href = '/login.html'; 
+            window.location.href = '/node9/login.html'; 
         } else {
             // Hvis noget gik galt på serveren, vis fejlen
             error_message.innerText = result.error;

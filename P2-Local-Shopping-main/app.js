@@ -15,7 +15,7 @@ const app = express();
 
 app.use(express.json()); // Så vi kan bruge JSON-Data fra frontend
 app.use(cors({
-  origin: '*', // Tillader alle domæner (kan ændres til specifikt domæne)
+  origin: 'https://cs-25-sw-2-09.p2datsw.cs.aau.dk', // Tillader alle domæner (kan ændres til specifikt domæne)
 }));
 
 // Serve static files directly from the public directory
@@ -35,7 +35,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.post('/signup', async (req, res) => {
+app.post('/node9/signup', async (req, res) => {
   console.log('Signup request received:', req.body);
   const { firstname, email, password } = req.body;
 
@@ -59,7 +59,7 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/node9/login', async (req, res) => {
   console.log('Login request body:', req.body);
   const { email, password } = req.body;
 
