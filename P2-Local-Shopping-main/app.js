@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
 }));
 
 // API-rute til at hente alle brugere
-app.get('node9/users', async (req, res) => {
+app.get('/users', async (req, res) => {
     try {
         const users = await getUsers();
         res.json(users);
@@ -50,7 +50,7 @@ app.get('node9/users', async (req, res) => {
 });
 
 // API-rute til oprettelse af ny bruger
-app.post('node9/signup', async (req, res) => {
+app.post('/signup', async (req, res) => {
     console.log('Signup request received:', req.body);
     const { firstname, email, password } = req.body;
 
@@ -84,7 +84,7 @@ app.post('node9/signup', async (req, res) => {
 });
 
 // API-rute til login
-app.post('node9/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     console.log('Login request received:', req.body);
     const { email, password } = req.body;
 
