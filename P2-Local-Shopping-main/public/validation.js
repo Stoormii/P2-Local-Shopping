@@ -1,3 +1,6 @@
+// validation.js
+
+// Hent formular- og inputelementer fra DOM
 const signupForm = document.getElementById('SignupForm');
 const loginForm = document.getElementById('LoginForm');
 const firstname_input = document.getElementById('firstname-input');
@@ -6,38 +9,40 @@ const password_input = document.getElementById('password-input');
 const repeat_password_input = document.getElementById('repeat-password-input');
 const error_message = document.getElementById('error-message');
 
+// Tjek om error_message-elementet findes
 if (!error_message) {
     console.error('Error: Could not find element with ID "error-message"');
 }
 
+// Håndter tilmeldingsformular
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Stop form submission
+        e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('Form submitted');
-        // Først validerer vi input-dataene
+
+        // Valider input-data
         let errors = getSignupFormErrors(firstname_input.value, email_input.value, password_input.value, repeat_password_input.value);
 
-        // Hvis der er fejl, stop formularindsendelse og vis fejl
+        // Vis fejl, hvis der er nogen
         if (errors.length > 0) {
             error_message.innerText = errors.join(". ");
             return;
         }
 
-        // Opret userData objektet, som vi vil sende til serveren
+        // Opret objekt med brugerdata til serveren
         const userData = {
             firstname: firstname_input.value,
             email: email_input.value,
             password: password_input.value
         };
 
-        // Disable the button while fetching
+        // Deaktiver knappen under anmodning
         const signupButton = document.querySelector('button[type="submit"]');
-        signupButton.disabled = true;  
+        signupButton.disabled = true;
 
-        // Send dataen til serveren via fetch API
         try {
             console.log('Sending data to server:', userData);
-            const response = await fetch('/node9/signup', {
+            const response = await fetch('/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,27 +50,35 @@ if (signupForm) {
                 body: JSON.stringify(userData),
             });
 
-            const result = await response.json(); // Forventet svar fra serveren
+            // Tjek om svaret er JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Received non-JSON response:', text);
+                throw new Error('Server returned an unexpected response format');
+            }
+
+            const result = await response.json();
             console.log('Server response:', result);
 
             if (response.ok) {
-                // Hvis succes, omdiriger brugeren til login-siden
-                window.location.href = '/node9/login.html'; 
+                // Omdiriger til login-siden ved succes
+                window.location.href = '/node9/login.html';
             } else {
-                // Hvis noget gik galt på serveren, vis fejlen
-                error_message.innerText = result.error;
-                signupButton.disabled = false; // Enable the button again
+                // Vis serverfejl
+                error_message.innerText = result.error || 'An error occurred';
+                signupButton.disabled = false;
             }
         } catch (error) {
-            // Håndter fejl ved serveranmodning
+            // Håndter netværks- eller JSON-parsingsfejl
             console.error('Network error:', error);
             error_message.innerText = 'An error occurred. Please try again later.';
-            signupButton.disabled = false; // Enable the button again   
+            signupButton.disabled = false;
         }
     });
 }
 
-// Funktion til at validere signup-formularen
+// Funktion til at validere tilmeldingsformularen
 function getSignupFormErrors(firstname, email, password, repeatPassword) {
     let errors = [];
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -167,58 +180,66 @@ allInputs.forEach(input => {
     });
 });
 
+// Håndter login-formular
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Stop form submission
+        e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('Form submitted');
 
-        // Først validerer vi input-dataene
+        // Valider input-data
         let errors = getLoginFormErrors(email_input.value, password_input.value);
 
-        // Hvis der er fejl, stop formularindsendelse og vis fejl
+        // Vis fejl, hvis der er nogen
         if (errors.length > 0) {
             error_message.innerText = errors.join(". ");
             return;
         }
 
-        // Opret userData for loginform objektet, som vi vil sende til serveren
+        // Opret objekt med brugerdata til serveren
         const userData = {
             email: email_input.value,
             password: password_input.value
         };
 
-        // Disable the button while fetching
+        // Deaktiver knappen under anmodning
         const loginButton = document.querySelector('button[type="submit"]');
         loginButton.disabled = true;
 
-        // Send dataen til serveren via fetch API
         try {
             console.log('Sending data to server:', userData);
-            const response = await fetch('/node9/login', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(userData),
             });
-            
-            const result = await response.json(); // Forventet svar fra serveren
-            console.log('Server response:', result); // Debugging
+
+            // Tjek om svaret er JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Received non-JSON response:', text);
+                throw new Error('Server returned an unexpected response format');
+            }
+
+            const result = await response.json();
+            console.log('Server response:', result);
 
             if (response.ok) {
-                // Hvis succes, omdiriger brugeren til login-siden
-                window.location.href = '/frontpage.html'; 
+                // Omdiriger til forsiden ved succes
+                window.location.href = '/frontpage.html';
             } else {
-                // Hvis noget gik galt på serveren, vis fejlen
+                // Vis serverfejl
                 console.log('Error from server:', result.error);
-                error_message.innerText = result.error;
-                loginButton.disabled = false; // Enable the button again
+                error_message.innerText = result.error || 'An error occurred';
+                loginButton.disabled = false;
             }
         } catch (error) {
-            // Håndter fejl ved serveranmodning
+            // Håndter netværks- eller JSON-parsingsfejl
             console.error('Network error:', error);
             error_message.innerText = 'An error occurred. Please try again later.';
-            loginButton.disabled = false; // Enable the button again   
+            loginButton.disabled = false;
         }
     });
 }
