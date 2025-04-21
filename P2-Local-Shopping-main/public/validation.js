@@ -42,7 +42,7 @@ if (signupForm) {
 
         try {
             console.log('Sending data to server:', userData);
-            const response = await fetch('/signup', {
+            const response = await fetch('/node9/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ if (loginForm) {
 
         try {
             console.log('Sending data to server:', userData);
-            const response = await fetch('/login', {
+            const response = await fetch('/node9/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,32 +1,27 @@
-import mysql from 'mysql2'
-import dotenv from 'dotenv'
+// database.js
+import mysql from 'mysql2/promise'; // Brug mysql2/promise for korrekt async/await
+import 'dotenv/config';
 
-// Indlæser variabler fra .env fil.
-dotenv.config()
-
+// Databasekonfiguration
 console.log('Database config:', {
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    host: process.env.MYSQL_HOST || 'localhost',
+    user: process.env.MYSQL_USER || 'cs-25-sw-2-09@student.aau.dk',
+    password: process.env.MYSQL_PASSWORD || 'ye5n@8gKVdikj-NR',
+    database: process.env.MYSQL_DATABASE || 'cs_25_sw_2_09',
 });
 
-
-// Opretter forbindelse til MySQL-Databasen.
+// Opretter forbindelse til MySQL-Databasen
 const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,           // Database host (f.eks. lokalhost)
-    user: process.env.MYSQL_USER,           // Database brugernavn
-    password: process.env.MYSQL_PASSWORD,   // Database adgangskode
-    database: process.env.MYSQL_DATABASE    // Database navn
-}).promise()
+    host: process.env.MYSQL_HOST || 'localhost',
+    user: process.env.MYSQL_USER || 'cs-25-sw-2-09@student.aau.dk',
+    password: process.env.MYSQL_PASSWORD || 'ye5n@8gKVdikj-NR',
+    database: process.env.MYSQL_DATABASE || 'cs_25_sw_2_09',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+}).promise();
 
-
-// Funktion til at hente alle brugere ud fra databasen
-export async function getUsers() { 
-    const[rows] = await pool.query("SELECT * FROM users") // SQL-Query for at hente alle brugere
-    return rows                                           // Returnerer bugerne
-}
-
+// Test forbindelsen
 (async () => {
     try {
         const [results] = await pool.query('SELECT 1');
@@ -36,7 +31,13 @@ export async function getUsers() {
     }
 })();
 
-// Funktion til at indsætte en ny bruger i databasen
+// Funktion til at hente alle brugere
+export async function getUsers() {
+    const [rows] = await pool.query('SELECT * FROM users');
+    return rows;
+}
+
+// Funktion til at oprette en bruger
 export async function createUser(firstname, email, password) {
     try {
         console.log('Inserting user into database:', { firstname, email, password });
@@ -53,7 +54,4 @@ export async function createUser(firstname, email, password) {
     }
 }
 
-export {pool} // Eksporterer poolen til brug i andre filer
-
-//const result = await createUser('Mikkel','email@live.dk','123anc')
-//console.log(result)
+export { pool };
