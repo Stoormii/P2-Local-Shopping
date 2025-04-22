@@ -6,11 +6,7 @@
         <link rel="stylesheet" type="text/css" href="css/ValentinoStylesheet.css">
     </head>
     <body>
-        <script>
-            function redirect(imageId){
-            window.location.href = `shop/${imageId}`;
-            }
-          </script>
+        
         <div class="main-container">
         <header class="topnav">
             <a class="active" href="#home">Shop Local</a>
@@ -121,7 +117,7 @@
                     <button class="arrow arrow-left"  onclick="scrollLeft()">‹</button>
                     <div class="carousel" id="carousel2">
                         <div class="Shops" data-name="Garn 22">
-                            <img id=1 src="img/shops.png"  onclick="redirect(this.id)">
+                            <img id=1 src="img/shops.png"  onclick="redirect1(this.id)">
                             <div class="shop-name">Garn 22</div>
                             <div class="shop-location">Garn 22<br>2.4 km from you!</div>
                             <div class="description">Description</div>

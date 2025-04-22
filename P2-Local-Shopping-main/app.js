@@ -89,6 +89,10 @@ app.post('/login', async (req, res) => {
   }
 });
 
+//This function is used to redirect the user to the item page when they click on an image
+function redirect1(imageId){
+  window.location.href = `items/${imageId}`;
+  }
 
 // Route to serve item details - test af w
 app.get('/item/:id', async (req, res) => {
@@ -164,6 +168,12 @@ app.get('/item/:id', async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+//This function is used to redirect the user to the store page when they click on an image
+function redirect2(imageId){
+  window.location.href = `store/${imageId}`;
+  }
 
 // Route to serve store details
 app.get('/store/:id', async (req, res) => {
