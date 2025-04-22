@@ -1,6 +1,7 @@
 // validation.js
 
 // Hent formular- og inputelementer fra DOM
+const storeloginForm = document.getElementById('StoreLoginForm');
 const signupForm = document.getElementById('SignupForm');
 const loginForm = document.getElementById('LoginForm');
 const firstname_input = document.getElementById('firstname-input');
@@ -228,7 +229,7 @@ if (loginForm) {
 
             if (response.ok) {
                 // Omdiriger til forsiden ved succes
-                window.location.href = '/frontpage.html';
+                window.location.href = '/node9/frontpage.html';
             } else {
                 // Vis serverfejl
                 console.log('Error from server:', result.error);
