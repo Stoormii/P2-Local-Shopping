@@ -31,3 +31,47 @@ export {pool} // Eksporterer poolen til brug i andre filer
 
 //const result = await createUser('Mikkel','email@live.dk','123anc')
 //console.log(result)
+
+//Dette herunder er funktionen til at tilføje produkter til databasen, samt ændringerne til Valde´s kode.
+// Get category ID from Categories table
+export async function getCategoryIdByName(categoryName) {
+    const [rows] = await pool.query(
+        `SELECT Category_ID FROM Categories WHERE Category_name = ?`,
+        [categoryName] // Use category name from Valde's function
+    );
+    return rows.length > 0 ? rows[0].Category_ID : null; // REt
+}
+
+// Get store ID from Store table
+export async function getStoreIdByName(storeName) {
+    const [rows] = await pool.query(
+        `SELECT Store_ID FROM Store WHERE Store_Name = ?`,
+        [storeName] // Brug butikkens navn fra Vald´s funktion
+    );
+    return rows.length > 0 ? rows[0].Store_ID : null; // Return ID, if found
+}
+
+export async function createItem(Product_name, Category_Name, Store_Name, Quantity, Description, Price, image) {
+    // Find Category_ID based on Category_Name
+    const Category_ID = await getCategoryIdByName(Category_Name);
+    if (!Category_ID) {
+        throw new Error(`Kategorien ${Category_Name} findes ikke i databasen.`);
+    }
+
+    // Find Store_ID based på Store_Name
+    const Store_ID = await getStoreIdByName(Store_Name);
+    if (!Store_ID) {
+        throw new Error(`Butikken ${Store_Name} findes ikke i databasen.`);
+    }
+
+    // insert product into the database
+    const [result] = await pool.query(
+        `
+        INSERT INTO Product (Product_name, Category_ID, Store_ID, Quantity, Description, Price, image)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        `,
+        [Product_name, Category_ID, Store_ID, Quantity, Description, Price, image]
+    );
+
+    return result;
+}

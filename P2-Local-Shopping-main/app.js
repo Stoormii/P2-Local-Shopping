@@ -100,3 +100,112 @@ app.use((err, req, res, next) => {
 app.listen(8080, () => {
   console.log('Server is running on port 8080');
 });
+
+
+// Tilføjelse, for at tilføje produkter til databasen
+import { createItem } from './database.js';
+
+app.post('/add-product', async (req, res) => {
+    const { Product_name, Category_Name, Store_Name, Quantity, Description, Price, image } = req.body;
+
+    if (!Product_name || !Category_Name || !Store_Name || !Quantity || !Description || !Price) {
+        return res.status(400).json({ message: 'All fields needs to be filled.' });
+    }
+
+    try {
+        const result = await createItem(Product_name, Category_Name, Store_Name, Quantity, Description, Price, image);
+        res.status(201).json({ message: 'Product added!', productId: result.insertId });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'Could not add item.' });
+    }
+});
+
+app.get('/products', async (req, res) => {
+    try {
+        const [products] = await pool.query(`
+            SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
+                   c.Category_name, s.Store_Name
+            FROM Product p
+            JOIN Categories c ON p.Category_ID = c.Category_ID
+            JOIN Store s ON p.Store_ID = s.Store_ID
+        `);
+        res.status(200).json(products); // Sørg for at returnere status 200
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'Could not upload products.' });
+    }
+});
+
+app.delete('/products/:id', async (req, res) => {
+    const productId = req.params.id; // Hent produkt-ID fra URL'en
+
+    try {
+        const [result] = await pool.query(`
+            DELETE FROM Product 
+            WHERE Product_ID = ?;
+        `, [productId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Product not found.' });
+        }
+
+        res.status(200).json({ message: 'Product deleted successfully.' });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'Could not delete product.' });
+    }
+});
+
+app.put('/products/:id', async (req, res) => {
+    const productId = req.params.id;
+    const { Product_name, Category_Name, Store_Name, Quantity, Description, Price, image } = req.body;
+
+    if (!Product_name || !Category_Name || !Store_Name || !Quantity || !Description || !Price) {
+        return res.status(400).json({ message: 'All fields need to be filled.' });
+    }
+
+    try {
+        // Slå Category_ID op baseret på Category_Name
+        const [categoryRows] = await pool.query(
+            `SELECT Category_ID FROM Categories WHERE Category_name = ?`,
+            [Category_Name]
+        );
+        if (categoryRows.length === 0) {
+            return res.status(400).json({ message: `Category '${Category_Name}' not found.` });
+        }
+        const Category_ID = categoryRows[0].Category_ID;
+
+        // Slå Store_ID op baseret på Store_Name
+        const [storeRows] = await pool.query(
+            `SELECT Store_ID FROM Store WHERE Store_Name = ?`,
+            [Store_Name]
+        );
+        if (storeRows.length === 0) {
+            return res.status(400).json({ message: `Store '${Store_Name}' not found.` });
+        }
+        const Store_ID = storeRows[0].Store_ID;
+
+        // Udfør opdateringen
+        const [result] = await pool.query(
+            `
+            UPDATE Product
+            SET Product_name = ?, Category_ID = ?, Store_ID = ?, Quantity = ?, Description = ?, Price = ?, image = ?
+            WHERE Product_ID = ?;
+            `,
+            [Product_name, Category_ID, Store_ID, Quantity, Description, Price, image, productId]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Product not found.' });
+        }
+
+        res.status(200).json({ message: 'Product updated successfully.' });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'Could not update product.' });
+    }
+});
+
+
+
