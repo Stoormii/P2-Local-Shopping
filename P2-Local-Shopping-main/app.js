@@ -192,30 +192,29 @@ app.get('/store/:id', async (req, res) => {
 
     // Dynamically render the HTML template with the store data
     const htmlContent = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <title>${store.store_name}</title>
-          <link rel="stylesheet" href="/css/lassemedhattenstyles.css">
-      </head>
-      <body>
-          <div class="logo">
-              <a href="/frontpage.html"> <img src="/img/logo.png" alt="Our logo"> </a>
-          </div>
-
-          <div class="store">
-              <h1>${store.store_name}</h1>
-              <img src="/img/${store.store_image}" alt="${store.store_name}">
-
-              <p><strong>Location: ${store.store_location}</strong></p>
-              <p>${store.store_description}</p>
-          </div>
-
-          
-      </body>
-      </html>
-    `;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>${store.store_name}</title>
+    <link rel="stylesheet" href="css/store-template.css">
+</head>
+<body>
+    <div class="logo">
+        <a href="/frontpage.html"> <img src="/img/logo.png" alt="Our logo"> </a>
+    </div>
+    <div class="store">
+        <div class="text-container">
+        <h1>${store.store_name}</h1>
+        <p class="description">${store.store_description}</p>
+        <p class="location"><strong>Location: ${store.store_location}</strong></p>
+        </div>
+        <img src="/img/${store.store_image}" alt="${store.store_name}">
+    </div>
+    
+</body>
+</html>
+`;
 
     res.send(htmlContent);
   } catch (error) {
