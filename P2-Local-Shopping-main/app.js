@@ -122,7 +122,7 @@ app.get('/item/:id', async (req, res) => {
       </head>
       <body>
           <div class="logo">
-              <a href="frontpage.html"> <img src="/img/logo.png" alt="vores logo"> </a>
+              <a href="/frontpage.html"> <img src="/img/logo.png" alt="vores logo"> </a>
           </div>
 
           <div class="product">
@@ -139,7 +139,7 @@ app.get('/item/:id', async (req, res) => {
                       <option value="l">Large (L)</option>
                       <option value="xl">Extra Large (XL)</option>
                   </select>
-                  <p><a href="Basket.html" class="btn">Add to Order</a></p>
+                  <p><a href="/Basket.html" class="btn">Add to Order</a></p>
               </div>
               <h2>Specifications:</h2>
               <ul style="list-style: none; padding: 0;">
@@ -149,18 +149,87 @@ app.get('/item/:id', async (req, res) => {
           </div>
 
           <div class="other-products">
-              <h1>Other products from...</h1>
-              <div class="products-container">
-                  <!-- Example of other products -->
-                  <div class="product">
-                      <img src="img/BlackShirt.jpg" alt="Black Shirt">
-                      <h2>Another Black Shirt</h2>
-                      <p><strong>Price: $99.99</strong></p>
-                      <p><a href="#" class="btn">View</a></p>
-                      <p><a href="#" class="btn">Add to Order</a></p>
-                  </div>
-              </div>
-          </div>
+    <h1>Other products from...</h1>
+    <div class="products-container">
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Other Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="/IP2.html" class="btn">View</a></p>
+            <p><a href="Basket.html" class="btn">Add to Order</a></p>
+        </div>
+        
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+       
+        
+    </div>
+</div>
+
+
+
+<div class="other-products">
+    <h1>Similar items</h1>
+    <div class="products-container">
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Other Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        <div class="product">
+            <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+            <h2>Another Black Shirt</h2>
+            <p><strong>Price: $99.99</strong></p>
+            <p><a href="#" class="btn">View</a></p>
+            <p><a href="#" class="btn">Add to Order</a></p>
+        </div>
+        
+    </div>
+</div>
+
       </body>
       </html>
     `;
@@ -197,7 +266,7 @@ app.get('/store/:id', async (req, res) => {
 <head>
     <meta charset="UTF-8">
     <title>${store.store_name}</title>
-    <link rel="stylesheet" href="css/store-template.css">
+    <link rel="stylesheet" href="/css/store-template.css">
 </head>
 <body>
     <div class="logo">
