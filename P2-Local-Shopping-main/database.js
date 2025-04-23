@@ -28,6 +28,22 @@ const pool = mysql.createPool({
     queueLimit: 0, // Ubegrænset kø af ventende forbindelser
 });
 
+// Test af databaseforbindelse ved at sende en simpel forespørgsel
+(async () => {
+    try {
+        // Debugging: Log aktuelt database
+        console.log('Using database:', process.env.MYSQL_DATABASE);
+
+        const [results] = await pool.query('SELECT DATABASE()'); // Få den aktuelle database
+        console.log('Currently connected to database:', results[0]);
+
+        const [testResult] = await pool.query('SELECT 1');
+        console.log('Database connection successful:', testResult);
+    } catch (err) {
+        console.error('Database connection failed:', err);
+    }
+})();
+
 // Funktion til at tjekke, om en tabel findes i databasen
 async function tableExists(tableName) {
     try {
