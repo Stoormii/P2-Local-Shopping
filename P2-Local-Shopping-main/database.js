@@ -1,9 +1,11 @@
 // database.js
 import mysql from 'mysql2/promise'; // Importerer mysql2 biblioteket for at bruge Promises
 import fs from 'fs/promises'; // Importerer fs (file system) for at arbejde med filer asynkront
-import 'dotenv/config'; // Importerer dotenv konfigurationen, så miljøvariabler kan bruges
+import dotenv from 'dotenv';
 import path from 'path'; // Importerer path-modulet til at håndtere filstier
 import { fileURLToPath } from 'url'; // Importerer fileURLToPath fra 'url' moduler til at håndtere URL'er som filer
+
+dotenv.config();
 
 // Får fat i filnavnet og stien til den nuværende fil
 const __filename = fileURLToPath(import.meta.url);
@@ -11,38 +13,31 @@ const __dirname = path.dirname(__filename);
 
 // Udskrivning af databasekonfigurationen, så man kan tjekke, hvad der bliver brugt
 console.log('Database config:', {
-    host: process.env.MYSQL_HOST || 'localhost', // Værtsadresse (default er localhost)
-    user: process.env.MYSQL_USER || 'cs-25-sw-2-09@student.aau.dk', // Bruger (kommer fra miljøvariabler)
-    password: process.env.MYSQL_PASSWORD || 'ye5n@8gKVdikj-NR', // Adgangskode (kommer fra miljøvariabler)
-    database: process.env.MYSQL_DATABASE || 'cs_25_sw_2_09', // Databasenavn (kommer fra miljøvariabler)
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
 });
 
 // Opretter en MySQL forbindelse med en forbindelse pool
 const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST || 'localhost',
-    user: process.env.MYSQL_USER || 'cs-25-sw-2-09@student.aau.dk',
-    password: process.env.MYSQL_PASSWORD || 'ye5n@8gKVdikj-NR',
-    database: process.env.MYSQL_DATABASE || 'cs_25_sw_2_09',
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
     waitForConnections: true, // Vent på ledige forbindelser
     connectionLimit: 10, // Maksimalt 10 samtidige forbindelser
     queueLimit: 0, // Ubegrænset kø af ventende forbindelser
 });
 
-// Test af databaseforbindelse ved at sende en simpel forespørgsel
-(async () => {
-    try {
-        // Debugging: Log aktuelt database
-        console.log('Using database:', process.env.MYSQL_DATABASE);
+// Valider miljøvariabler
+const requiredEnv = ['MYSQL_HOST', 'MYSQL_USER', 'MYSQL_PASSWORD', 'MYSQL_DATABASE'];
+requiredEnv.forEach((env) => {
+  if (!process.env[env]) {
+    throw new Error(`Manglende miljøvariabel: ${env}`);
+  }
+});
 
-        const [results] = await pool.query('SELECT DATABASE()'); // Få den aktuelle database
-        console.log('Currently connected to database:', results[0]);
-
-        const [testResult] = await pool.query('SELECT 1');
-        console.log('Database connection successful:', testResult);
-    } catch (err) {
-        console.error('Database connection failed:', err);
-    }
-})();
 
 // Funktion til at tjekke, om en tabel findes i databasen
 async function tableExists(tableName) {
@@ -68,72 +63,49 @@ async function tableExists(tableName) {
 async function initializeDatabase() {
     let connection;
     try {
-        // Finder stien til SQL-filen, der indeholder tabellernes skabelon
-        const sqlPath = path.join(__dirname, 'userdatabase.sql');
-        console.log('Reading SQL file from:', sqlPath);
-        // Læser SQL-filen asynkront
-        const sql = await fs.readFile(sqlPath, 'utf8');
-        console.log('SQL file loaded. Length:', sql.length);
-
-        // Henter en forbindelse fra poolen
-        connection = await pool.getConnection();
-
-        // Ekstraherer tabelnavnene fra SQL-filen
-        const tableNames = [...sql.matchAll(/CREATE TABLE IF NOT EXISTS\s+`?(\w+)`?/gi)].map(match => match[1]);
-        console.log('Tables to check:', tableNames);
-
-        // For hvert tabelnavn, tjek om tabellen findes, og opret den kun hvis den ikke findes
-        for (const tableName of tableNames) {
+      connection = await pool.getConnection();
+      const [testResult] = await connection.query('SELECT 1');
+      console.log('Databaseforbindelse succesfuld:', testResult);
+      console.log('Aktuelt forbundet til database:', (await connection.query('SELECT DATABASE()'))[0][0]);
+  
+      const sqlPath = path.join(__dirname, 'userdatabase.sql');
+      console.log('Læser SQL-fil fra:', sqlPath);
+      const sql = await fs.readFile(sqlPath, 'utf8');
+      console.log('SQL-fil indlæst. Længde:', sql.length);
+  
+      const statements = sql.split(';').filter((stmt) => stmt.trim());
+      for (const statement of statements) {
+        if (statement.includes('CREATE TABLE')) {
+          const tableNameMatch = statement.match(/CREATE TABLE IF NOT EXISTS\s+`?(\w+)`?/i);
+          if (tableNameMatch) {
+            const tableName = tableNameMatch[1];
             const exists = await tableExists(tableName);
             if (!exists) {
-                console.log(`Table "${tableName}" does not exist. Creating...`);
-
-                // Ekstraher CREATE TABLE kommandoen for den specifikke tabel
-                const createTableSQLMatch = sql.match(new RegExp(`CREATE TABLE IF NOT EXISTS\\s+${tableName}[^;]+;`, 'i'));
-
-                // Tjek om matchen returnerede noget
-                if (createTableSQLMatch) {
-                    const createTableSQL = createTableSQLMatch[0];
-                    console.log('Executing SQL:', createTableSQL); // Logge den SQL, der bliver kørt
-                    await connection.query(createTableSQL);
-                    console.log(`Table "${tableName}" created successfully.`);
-                } else {
-                    console.error(`Failed to find CREATE TABLE statement for "${tableName}" in SQL file.`);
-                    console.log('SQL content:', sql); // Log hele SQL-filen for at kunne fejlsøge
-                }
-
+              console.log(`Tabellen "${tableName}" findes ikke. Opretter...`);
+              await connection.query(statement);
+              console.log(`Tabellen "${tableName}" oprettet succesfuldt.`);
             } else {
-                console.log(`Table "${tableName}" already exists. Skipping creation.`);
+              console.log(`Tabellen "${tableName}" findes allerede. Springer over oprettelse.`);
             }
+          }
         }
-
-        // Henter en liste over alle tabeller i databasen for at se, hvad der findes
-        const [tables] = await pool.query("SHOW TABLES");
-        console.log('Current tables in DB:', tables);
-
+      }
+  
+      const [tables] = await pool.query('SHOW TABLES');
+      console.log('Nuværende tabeller i databasen:', tables);
     } catch (error) {
-        console.error('Error initializing database:', error);
+      console.error('Fejl ved initialisering af databasen:', error);
+      throw error;
     } finally {
-        if (connection) connection.release(); // Sørger for, at forbindelsen frigives til poolen
+      if (connection) connection.release();
     }
-}
+  }
 
 
 
 // Kører databaseinitialisering ved scriptets opstart
 initializeDatabase();
 
-// Test af databaseforbindelse ved at sende en simpel forespørgsel
-(async () => {
-    try {
-        const [results] = await pool.query('SELECT 1');
-        console.log('Database connection successful:', results); // Hvis forespørgslen lykkes, betyder det, at forbindelsen virker
-    } catch (err) {
-        console.error('Database connection failed:', err); // Håndterer fejl, hvis forbindelsen fejler
-    }
-})();
-
-// CRUD (Create, Read, Update, Delete) funktioner
 
 // Funktion til at hente alle brugere fra databasen
 export async function getUsers() {
