@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import { pool } from './database.js'; // Importer pool fra database.js
+import multer from 'multer'; // Import multer for image uploads
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,27 @@ app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
   console.log(`Static middleware accessed for: ${req.url}`);
   next();
 }));
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'public/uploads')); // Save images in the 'public/uploads' folder
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + '-' + file.originalname);
+    },
+});
+const upload = multer({ storage });
+
+app.post('/upload-image', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const imageUrl = `/uploads/${req.file.filename}`; // Relative URL to the uploaded image
+    res.status(200).json({ imageUrl });
+});
 
 // API-ruter (uden /node9 prefix, da reverse proxy fjerner det)
 app.get('/users', async (req, res) => {
@@ -93,31 +115,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Fallback route for frontend - server signup.html hvis ingen af de øvrige ruter matches
-app.get('*', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'signup.html');
-  console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      console.error(`Error serving signup.html: ${err}`);
-      res.status(404).send('File not found');
-    }
-  });
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
-// Start server på 0.0.0.0 så den virker via reverse proxy
-console.log("Port Value:", PORT);
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-
 // Tilføjelse, for at tilføje produkter til databasen
 import { createItem } from './database.js';
 
@@ -146,7 +143,7 @@ app.get('/products', async (req, res) => {
             JOIN Categories c ON p.Category_ID = c.Category_ID
             JOIN Store s ON p.Store_ID = s.Store_ID
         `);
-        res.status(200).json(products); // Sørg for at returnere status 200
+        res.status(200).json(products); // Returner JSON-data
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).json({ message: 'Could not upload products.' });
@@ -223,5 +220,28 @@ app.put('/products/:id', async (req, res) => {
     }
 });
 
+// Fallback route for frontend - server signup.html hvis ingen af de øvrige ruter matches
+app.get('*', (req, res) => {
+    const filePath = path.join(__dirname, 'public', 'signup.html');
+    console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error(`Error serving signup.html: ${err}`);
+            res.status(404).send('File not found');
+        }
+    });
+});
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
+// Start server på 0.0.0.0 så den virker via reverse proxy
+console.log("Port Value:", PORT);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+const response = await fetch('http://localhost:3399/products');

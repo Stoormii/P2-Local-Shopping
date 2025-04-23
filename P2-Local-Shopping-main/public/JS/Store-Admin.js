@@ -146,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
      //Ændringer der skal laves i Valde´s kode ;) ;) ;) ;) 
      async function handleFormSubmit(event) {
         event.preventDefault();
-    
+
+        const imageUrl = document.getElementById('productImage').dataset.imageUrl || null;
+
         const productData = {
             Product_name: document.getElementById('productName').value,
             Category_Name: document.getElementById('productCategory').value,
@@ -154,42 +156,33 @@ document.addEventListener('DOMContentLoaded', function () {
             Quantity: parseInt(document.getElementById('productStock').value),
             Description: document.getElementById('productDescription').value,
             Price: parseFloat(document.getElementById('productPrice').value),
-            image: document.getElementById('productImage').value || null // Hvis billedet er valgfrit
+            image: imageUrl, // Use the uploaded image URL
         };
-    
+
         try {
             let response;
             if (isEditing) {
-                console.log('Editing product with ID:', currentProductId);
-                // Send PUT-anmodning for at opdatere produktet
                 response = await fetch(`/products/${currentProductId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(productData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData),
                 });
             } else {
-                // Send POST-anmodning for at oprette et nyt produkt
                 response = await fetch('/add-product', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(productData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData),
                 });
             }
-    
+
             if (response.ok) {
                 closeModal();
-                location.reload(); // Genindlæs siden for at opdatere produktlisten
+                location.reload();
             } else {
                 const error = await response.json();
-                console.error('Server error:', error);
                 alert('Kunne ikke gemme produktet: ' + error.message);
             }
         } catch (error) {
-            console.error('Network error:', error);
             alert('Netværksfejl. Prøv igen senere.');
         }
     }
@@ -256,6 +249,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch('/upload-image', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload image');
+            }
+
+            const data = await response.json();
+            return data.imageUrl; // Return the URL of the uploaded image
+        } catch (error) {
+            console.error('Image upload error:', error);
+            alert('Kunne ikke uploade billedet. Prøv igen.');
+            return null;
+        }
+    }
+
+    document.getElementById('productImage').addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = await uploadImage(file);
+            if (imageUrl) {
+                document.getElementById('imagePreview').innerHTML = `<img src="${imageUrl}" alt="Preview" />`;
+                document.getElementById('productImage').dataset.imageUrl = imageUrl; // Store the URL for later use
+            }
+        }
+    });
     
     function openModal() {
         modal.style.display = 'flex';
@@ -271,4 +297,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
     init();
 });
-
