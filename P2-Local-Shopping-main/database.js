@@ -82,22 +82,24 @@ async function initializeDatabase() {
         const tableNames = [...sql.matchAll(/CREATE TABLE IF NOT EXISTS\s+`?(\w+)`?/gi)].map(match => match[1]);
         console.log('Tables to check:', tableNames);
 
-        // Tjekker hver tabel, om den findes, og opretter den, hvis ikke
+        // For hvert tabelnavn, tjek om tabellen findes, og opret den kun hvis den ikke findes
         for (const tableName of tableNames) {
             const exists = await tableExists(tableName);
             if (!exists) {
                 console.log(`Table "${tableName}" does not exist. Creating...`);
-                // Hvis tabellen ikke findes, køres SQL-kommandoen for at oprette den
-                await connection.query(sql);
+                // Opretter kun den specifikke tabel fra SQL-filen
+                const createTableSQL = sql.match(new RegExp(`CREATE TABLE IF NOT EXISTS\s+${tableName}[^;]+;`, 'i'))[0];
+                await connection.query(createTableSQL);
                 console.log(`Table "${tableName}" created successfully.`);
             } else {
                 console.log(`Table "${tableName}" already exists. Skipping creation.`);
             }
         }
 
-        // Henter en liste over alle tabeller i databasen
+        // Henter en liste over alle tabeller i databasen for at se, hvad der findes
         const [tables] = await pool.query("SHOW TABLES");
         console.log('Current tables in DB:', tables);
+
     } catch (error) {
         console.error('Error initializing database:', error);
     } finally {
