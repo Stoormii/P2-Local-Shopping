@@ -89,11 +89,13 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//This function is used to redirect the user to the item page when they click on an image
-function redirect1(imageId){
-  window.location.href = `items/${imageId}`;
-  }
 
+
+
+// Serve the redirect.js file
+app.get('/js/redirect.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'redirect.js'));
+});
 // Route to serve item details - test af w
 app.get('/item/:id', async (req, res) => {
   const itemId = req.params.id;
@@ -120,12 +122,13 @@ app.get('/item/:id', async (req, res) => {
       </head>
       <body>
           <div class="logo">
-              <a href="frontpage.html"> <img src="img/logo.png" alt="vores logo"> </a>
+              <a href="frontpage.html"> <img src="/img/logo.png" alt="vores logo"> </a>
           </div>
 
           <div class="product">
               <h1>${item.item_name}</h1>
-              <img src="img/${item.item_picture}" alt="${item.item_name}">
+              
+              <img src="/img/${item.item_picture}" alt="${item.item_name}">
               <p><strong>Price: ${item.item_price} DKK</strong></p>
               <div class="form-group">
                   <label for="productCategory">Size:</label>
@@ -170,10 +173,7 @@ app.get('/item/:id', async (req, res) => {
 });
 
 
-//This function is used to redirect the user to the store page when they click on an image
-function redirect2(imageId){
-  window.location.href = `store/${imageId}`;
-  }
+
 
 // Route to serve store details
 app.get('/store/:id', async (req, res) => {
@@ -201,12 +201,13 @@ app.get('/store/:id', async (req, res) => {
       </head>
       <body>
           <div class="logo">
-              <a href="frontpage.html"> <img src="img/logo.png" alt="Our logo"> </a>
+              <a href="/frontpage.html"> <img src="/img/logo.png" alt="Our logo"> </a>
           </div>
 
           <div class="store">
               <h1>${store.store_name}</h1>
-              <img src="img/${store.store_image}" alt="${store.store_name}">
+              <img src="/img/${store.store_image}" alt="${store.store_name}">
+
               <p><strong>Location: ${store.store_location}</strong></p>
               <p>${store.store_description}</p>
           </div>
