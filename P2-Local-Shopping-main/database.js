@@ -87,10 +87,19 @@ async function initializeDatabase() {
             const exists = await tableExists(tableName);
             if (!exists) {
                 console.log(`Table "${tableName}" does not exist. Creating...`);
-                // Opretter kun den specifikke tabel fra SQL-filen
-                const createTableSQL = sql.match(new RegExp(`CREATE TABLE IF NOT EXISTS\s+${tableName}[^;]+;`, 'i'))[0];
-                await connection.query(createTableSQL);
-                console.log(`Table "${tableName}" created successfully.`);
+
+                // Ekstraher CREATE TABLE kommandoen for den specifikke tabel
+                const createTableSQLMatch = sql.match(new RegExp(`CREATE TABLE IF NOT EXISTS\s+${tableName}[^;]+;`, 'i'));
+
+                // Tjek om matchen returnerede noget
+                if (createTableSQLMatch) {
+                    const createTableSQL = createTableSQLMatch[0];
+                    await connection.query(createTableSQL);
+                    console.log(`Table "${tableName}" created successfully.`);
+                } else {
+                    console.error(`Failed to find CREATE TABLE statement for "${tableName}" in SQL file.`);
+                }
+
             } else {
                 console.log(`Table "${tableName}" already exists. Skipping creation.`);
             }
@@ -106,6 +115,7 @@ async function initializeDatabase() {
         if (connection) connection.release(); // Sørger for, at forbindelsen frigives til poolen
     }
 }
+
 
 // Kører databaseinitialisering ved scriptets opstart
 initializeDatabase();
