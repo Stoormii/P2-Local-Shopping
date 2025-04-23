@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import { pool } from './database.js'; // Importerer databaseforbindelse
+import './database.js'; // Initialiserer databaseforbindelse og opretter tabeller, hvis nødvendigt
 
 // Konverterer filsti for ES-moduler
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +24,7 @@ app.use(express.json());
 
 // CORS-konfiguration til at tillade anmodninger fra specifikt domæne
 app.use(cors({
-    origin: 'https://cs-25-sw-2-09.p2datsw.cs.aau.dk',
+    origin: ['https://cs-25-sw-2-09.p2datsw.cs.aau.dk', 'http://localhost:3399'],
 }));
 
 // Logger alle indgående anmodninger til fejlfinding

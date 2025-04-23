@@ -1,6 +1,6 @@
 -- Opret kun databasen, hvis den ikke allerede findes
-CREATE DATABASE IF NOT EXISTS cs_25_sw_2_09;
-USE cs_25_sw_2_09;
+-- CREATE DATABASE IF NOT EXISTS cs_25_sw_2_09;
+-- USE cs_25_sw_2_09;
 
 -- Opret kun tabellen, hvis den ikke allerede findes
 CREATE TABLE IF NOT EXISTS users (

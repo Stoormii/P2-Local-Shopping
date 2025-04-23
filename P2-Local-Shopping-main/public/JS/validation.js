@@ -1,5 +1,8 @@
-// validation.js
-
+// Definerer en konstant BASE_URL baseret på miljøet (lokalt eller server)
+// Hvis URL'en indeholder 'localhost', bruges en tom streng, ellers bruges '/node9'
+const BASE_URL = window.location.origin.includes('localhost')
+    ? '' // Lokalt miljø
+    : '/node9'; // Servermiljø
 // Hent formular- og inputelementer fra DOM
 const storeloginForm = document.getElementById('StoreLoginForm');
 const signupForm = document.getElementById('SignupForm');
@@ -43,7 +46,7 @@ if (signupForm) {
 
         try {
             console.log('Sending data to server:', userData);
-            const response = await fetch('/node9/signup', {
+            const response = await fetch(`${BASE_URL}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +67,7 @@ if (signupForm) {
 
             if (response.ok) {
                 // Omdiriger til login-siden ved succes
-                window.location.href = '/node9/login.html';
+                window.location.href = `${BASE_URL}/login.html`;
             } else {
                 // Vis serverfejl
                 error_message.innerText = result.error || 'An error occurred';
@@ -208,7 +211,7 @@ if (loginForm) {
 
         try {
             console.log('Sending data to server:', userData);
-            const response = await fetch('/node9/login', {
+            const response = await fetch(`${BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -229,7 +232,7 @@ if (loginForm) {
 
             if (response.ok) {
                 // Omdiriger til forsiden ved succes
-                window.location.href = '/node9/frontpage.html';
+                window.location.href = `${BASE_URL}/frontpage.html`;
             } else {
                 // Vis serverfejl
                 console.log('Error from server:', result.error);
