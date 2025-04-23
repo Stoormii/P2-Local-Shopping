@@ -89,15 +89,17 @@ async function initializeDatabase() {
                 console.log(`Table "${tableName}" does not exist. Creating...`);
 
                 // Ekstraher CREATE TABLE kommandoen for den specifikke tabel
-                const createTableSQLMatch = sql.match(new RegExp(`CREATE TABLE IF NOT EXISTS\s+${tableName}[^;]+;`, 'i'));
+                const createTableSQLMatch = sql.match(new RegExp(`CREATE TABLE IF NOT EXISTS\\s+${tableName}[^;]+;`, 'i'));
 
                 // Tjek om matchen returnerede noget
                 if (createTableSQLMatch) {
                     const createTableSQL = createTableSQLMatch[0];
+                    console.log('Executing SQL:', createTableSQL); // Logge den SQL, der bliver kørt
                     await connection.query(createTableSQL);
                     console.log(`Table "${tableName}" created successfully.`);
                 } else {
                     console.error(`Failed to find CREATE TABLE statement for "${tableName}" in SQL file.`);
+                    console.log('SQL content:', sql); // Log hele SQL-filen for at kunne fejlsøge
                 }
 
             } else {
@@ -115,6 +117,7 @@ async function initializeDatabase() {
         if (connection) connection.release(); // Sørger for, at forbindelsen frigives til poolen
     }
 }
+
 
 
 // Kører databaseinitialisering ved scriptets opstart
