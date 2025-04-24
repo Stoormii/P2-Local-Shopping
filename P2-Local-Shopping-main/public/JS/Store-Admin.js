@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function setupEventListeners() {
         addProductBtn.addEventListener('click', () => {
+            console.log('Tilføj produkt-knap blev trykket.');
             openModal();
         });
 

@@ -6,9 +6,10 @@ import { getUsers, createUser } from './database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import {  pool  } from './database.js'; // Importerer databaseforbindelse
+import { pool } from './database.js'; // Importerer databaseforbindelse
 import './database.js'; // Initialiserer databaseforbindelse og opretter tabeller, hvis nødvendigt
 import multer from 'multer'; // Import multer for image uploads
+import { initializeDatabase } from './database.js'; // Eksporter initializeDatabase fra database.js
 
 // Konverterer filsti for ES-moduler
 const __filename = fileURLToPath(import.meta.url);
@@ -281,8 +282,18 @@ app.use((err, req, res, next) => {
 
 // Starter serveren på 0.0.0.0 for at fungere med reverse proxy
 console.log('Port value:', PORT);
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-});
 
-const response = await fetch('http://localhost:3399/products');
+(async () => {
+    try {
+        console.log('Initialiserer databasen...');
+        await initializeDatabase(); // Vent på, at databasen bliver initialiseret
+        console.log('Databasen er initialiseret.');
+
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Fejl under databaseinitialisering:', error);
+        process.exit(1); // Stop serveren, hvis initialisering fejler
+    }
+})();
