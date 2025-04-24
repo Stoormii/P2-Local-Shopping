@@ -270,9 +270,8 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Brug en miljøvariabel til base-URL
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
-        const imageUrl = `/uploads/${req.file.filename}`;
+        // URL til at gemme billedet
+        const imageUrl = `https://cs-25-sw-2-09.p2datsw.cs.aau.dk/uploads/${req.file.filename}`;
         console.log('Generated image URL:', imageUrl);
 
         res.status(200).json({ imageUrl });
