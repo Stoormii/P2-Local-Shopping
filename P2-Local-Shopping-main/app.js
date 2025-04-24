@@ -45,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
 }));
 
 app.use('/img', express.static(path.join(__dirname, 'public/img')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Håndter anmodninger til /favicon.ico
 app.get('/favicon.ico', (req, res) => {
