@@ -104,9 +104,6 @@ async function initializeDatabase() {
     }
   }
 
-// Kører databaseinitialisering ved scriptets opstart
-initializeDatabase();
-
 // Funktion til at hente alle brugere ud fra databasen
 export async function getUsers() { 
     const[rows] = await pool.query("SELECT * FROM users") // SQL-Query for at hente alle brugere
