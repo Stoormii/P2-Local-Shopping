@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: JSON.stringify(productData),
                 });
             } else {
-                response = await fetch('/add-product', {
+                response = await fetch(`${baseUrl}/add-product`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(productData),
