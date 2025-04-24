@@ -262,19 +262,20 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.post('/upload-image', upload.single('image'), (req, res) => {
-  try {
-      if (!req.file) {
-          console.error('No file uploaded');
-          return res.status(400).json({ message: 'No file uploaded' });
-      }
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
 
-      const imageUrl = `/uploads/${req.file.filename}`;
-      console.log('File uploaded successfully:', imageUrl);
-      res.status(200).json({ imageUrl });
-  } catch (error) {
-      console.error('Error in /upload-image route:', error);
-      res.status(500).json({ message: 'Could not upload image' });
-  }
+        // Generer den fulde URL til billedet
+        const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        console.log('File uploaded successfully:', imageUrl);
+
+        res.status(200).json({ imageUrl });
+    } catch (error) {
+        console.error('Error in /upload-image route:', error);
+        res.status(500).json({ message: 'Could not upload image' });
+    }
 });
 
 // Global error handler
