@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 ); 
 
---Opret kun tabellen, hvis den ikke allerede findes (Products)
+-- Opret kun tabellen, hvis den ikke allerede findes (Products)
 CREATE TABLE IF NOT EXISTS product (
     Product_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
     Product_name VARCHAR(255) NOT NULL,
