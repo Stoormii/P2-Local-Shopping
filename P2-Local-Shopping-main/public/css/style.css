@@ -26,17 +26,18 @@ body {
     overflow: hidden;
 }
 
-.wrapper{
+.wrapper {
     box-sizing: border-box;
     background-color: white;
     height: 100vh;
-    width: max(40%,600px);
-    padding: 10 px;
+    width: max(40%, 600px);
+    padding: 20px;
     border-radius: 0 20px 20px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Centrerer indholdet lodret */
+    position: relative; /* Gør det muligt at placere elementer absolut */
 }
 
 h1{
@@ -155,4 +156,13 @@ form div.incorrect input{
 
 #error-message{
     color: #f06272;
+}
+
+.store-owner {
+    position: absolute;
+    bottom: 20px; /* Afstand fra bunden */
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    width: 100%; /* Sørger for, at teksten er centreret */
 }

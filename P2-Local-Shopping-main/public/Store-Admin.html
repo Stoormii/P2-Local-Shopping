@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <a href="StoreFrontPage.html"> <h3>Return to store page</h3> </a>
+    <div class="container">
+        <h1>Velkommen,""</h1>
+        
+        <h2>Dine Produkter</h2>
+        <div class="product-list" id="productList"></div>
+
+        <h2>Tilføj nyt produkt</h2>
+        <form class="product-form" id="productForm">
+            <div class="form-group">
+                <label for="productName">Produktnavn:</label>
+                <input type="text" id="productName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productPrice">Pris (DKK):</label>
+                <input type="number" id="productPrice" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productCategory">Kategori:</label>
+                <select id="productCategory" required>
+                    <option value="">Vælg kategori</option>
+                    <option value="???">????</option>
+                    <option value="??">????</option>
+                    <option value="???">????</option>
+                    <option value="???">??</option>
+                    <option value="andre">Andre</option>
+                </select>
+            </div>
 
     <nav class="navbar">
         <ul class="nav-links">
