@@ -262,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (!response.ok) {
+                console.error('Response status:', response.status); // Log statuskoden
                 throw new Error('Failed to upload image');
             }
 

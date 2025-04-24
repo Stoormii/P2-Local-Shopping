@@ -240,6 +240,34 @@ app.put('/products/:id', async (req, res) => {
     }
 });
 
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, 'public/uploads')); // Save images in the 'public/uploads' folder
+  },
+  filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + '-' + file.originalname);
+  },
+});
+const upload = multer({ storage });
+
+app.post('/upload-image', upload.single('image'), (req, res) => {
+  try {
+      if (!req.file) {
+          console.error('No file uploaded');
+          return res.status(400).json({ message: 'No file uploaded' });
+      }
+
+      const imageUrl = `/uploads/${req.file.filename}`;
+      console.log('File uploaded successfully:', imageUrl);
+      res.status(200).json({ imageUrl });
+  } catch (error) {
+      console.error('Error in /upload-image route:', error);
+      res.status(500).json({ message: 'Could not upload image' });
+  }
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
     console.error('Server error:', err.stack);
