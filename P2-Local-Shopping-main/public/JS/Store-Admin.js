@@ -64,21 +64,21 @@ document.addEventListener('DOMContentLoaded', function () {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             productCard.innerHTML = `
-    <img src="${product.image || 'img/default-image.jpg'}" alt="${product.Product_name}" class="product-image">
-    <div class="product-info">
-        <h3 class="product-title">${product.Product_name}</h3>
-        <div class="product-price">${parseFloat(product.Price).toFixed(2)} DKK</div>
-        <span class="product-category">${product.Category_name}</span>
-        <div class="product-actions">
-            <button class="action-btn edit-btn" data-id="${product.Product_ID}">
-                <i class="fas fa-edit"></i> Rediger
-            </button>
-            <button class="action-btn delete-btn" data-id="${product.Product_ID}">
-                <i class="fas fa-trash"></i> Slet
-            </button>
-        </div>
-    </div>
-`;
+            <img src="${product.image || 'img/default-image.jpg'}" alt="${product.Product_name}" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">${product.Product_name}</h3>
+                <div class="product-price">${parseFloat(product.Price).toFixed(2)} DKK</div>
+                <span class="product-category">${product.Category_name}</span>
+                <div class="product-actions">
+                    <button class="action-btn edit-btn" data-id="${product.Product_ID}">
+                        <i class="fas fa-edit"></i> Rediger
+                    </button>
+                    <button class="action-btn delete-btn" data-id="${product.Product_ID}">
+                        <i class="fas fa-trash"></i> Slet
+                    </button>
+                </div>
+            </div>
+        `;
             productList.appendChild(productCard);
         });
 
