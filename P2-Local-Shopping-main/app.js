@@ -38,6 +38,17 @@ app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
     next();
 }));
 
+// Håndter anmodninger til /favicon.ico
+app.get('/favicon.ico', (req, res) => {
+    const filePath = path.join(__dirname, 'public', 'favicon.ico');
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error('Error serving favicon.ico:', err);
+            res.status(404).end();
+        }
+    });
+});
+
 // API-rute til at hente alle brugere
 app.get('/users', async (req, res) => {
     try {
@@ -121,13 +132,13 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Fallback-rute: Serverer signup.html for alle ikke-matchet GET-anmodninger
+// Fallback-rute: Serverer signup.html for alle ikke-matchede GET-anmodninger
 app.get('*', (req, res) => {
+    console.log(`Fallback route accessed for: ${req.url}`);
     const filePath = path.join(__dirname, 'public', 'signup.html');
-    console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
     res.sendFile(filePath, (err) => {
         if (err) {
-            console.error('Error serving signup.html:', err);
+            console.error(`Error serving signup.html: ${err}`);
             res.status(404).send('File not found');
         }
     });
@@ -155,6 +166,7 @@ app.post('/add-product', async (req, res) => {
 
 app.get('/products', async (req, res) => {
     try {
+        console.log('Fetching products from database...');
         const [products] = await pool.query(`
             SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
                    c.Category_name, s.Store_Name
@@ -162,10 +174,11 @@ app.get('/products', async (req, res) => {
             JOIN Categories c ON p.Category_ID = c.Category_ID
             JOIN Store s ON p.Store_ID = s.Store_ID
         `);
-        res.status(200).json(products); // Returner JSON-data
+        console.log('Products fetched:', products);
+        res.status(200).json(products); // Return JSON data
     } catch (error) {
-        console.error('Database error:', error);
-        res.status(500).json({ message: 'Could not upload products.' });
+        console.error('Database error in /products:', error);
+        res.status(500).json({ message: 'Could not fetch products.' });
     }
 });
 
@@ -237,18 +250,6 @@ app.put('/products/:id', async (req, res) => {
         console.error('Database error:', error);
         res.status(500).json({ message: 'Could not update product.' });
     }
-});
-
-// Fallback route for frontend - server signup.html hvis ingen af de øvrige ruter matches
-app.get('*', (req, res) => {
-    const filePath = path.join(__dirname, 'public', 'signup.html');
-    console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            console.error(`Error serving signup.html: ${err}`);
-            res.status(404).send('File not found');
-        }
-    });
 });
 
 // Global error handler

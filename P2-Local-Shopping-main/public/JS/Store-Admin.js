@@ -26,18 +26,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchProducts() {
         try {
-            const response = await fetch('/products');
+            const response = await fetch('/products'); // Sørg for, at denne URL er korrekt
             console.log('Response status:', response.status); // Log statuskoden
+
             if (!response.ok) {
                 throw new Error(`Server returned status ${response.status}`);
             }
+
             const data = await response.json();
             console.log('Fetched products:', data); // Log dataen
             products = data; // Opdaterer den lokale `products`-variabel
             renderProducts();
         } catch (error) {
-            console.log('Error updating products:', error);
-            alert('Could not update products, try again later.');
+            console.error('Error fetching products:', error);
+            alert('Kunne ikke hente produkter. Tjek serveren eller prøv igen senere.');
         }
     }
 
