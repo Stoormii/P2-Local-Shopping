@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const response = await fetch(`/products/${productId}`, {
+            const response = await fetch(`${baseUrl}/products/${productId}`, {
                 method: 'DELETE',
             });
 
