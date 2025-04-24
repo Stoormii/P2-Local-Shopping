@@ -300,3 +300,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     init();
 });
+
+// Sørg for, at API-ruterne er defineret før fallback-ruten
+app.get('/products', async (req, res) => {
+    try {
+        const [products] = await pool.query(`
+            SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
+                   c.Category_name, s.Store_Name
+            FROM Product p
+            JOIN Categories c ON p.Category_ID = c.Category_ID
+            JOIN Store s ON p.Store_ID = s.Store_ID
+        `);
+        res.status(200).json(products); // Returner JSON-data
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'Could not upload products.' });
+    }
+});
+
+// Fallback-rute skal være sidst
+app.get('*', (req, res) => {
+    const filePath = path.join(__dirname, 'public', 'signup.html');
+    console.log(`Fallback route accessed for: ${req.url}, serving: ${filePath}`);
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error(`Error serving signup.html: ${err}`);
+            res.status(404).send('File not found');
+        }
+    });
+});
