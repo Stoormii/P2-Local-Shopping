@@ -280,4 +280,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+app.use('/node9', app); // Prefix alle ruter med /node9
+app.use('/node9', express.static(path.join(__dirname, 'public')));
+
 const response = await fetch('http://localhost:3399/products');

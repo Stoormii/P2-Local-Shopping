@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const addProductBtn = document.getElementById('addProductBtn');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    
+    const baseUrl = '/node9'; // Base-URL for serveren
+
     let products = [
         {
             Product_ID: 0,
@@ -26,16 +27,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchProducts() {
         try {
-            const response = await fetch('/products'); // Sørg for, at denne URL er korrekt
-            console.log('Response status:', response.status); // Log statuskoden
+            const response = await fetch(`${baseUrl}/products`); // Tilføj base-URL
+            console.log('Response status:', response.status);
 
             if (!response.ok) {
                 throw new Error(`Server returned status ${response.status}`);
             }
 
             const data = await response.json();
-            console.log('Fetched products:', data); // Log dataen
-            products = data; // Opdaterer den lokale `products`-variabel
+            console.log('Fetched products:', data);
+            products = data;
             renderProducts();
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -256,18 +257,18 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('image', file);
 
         try {
-            const response = await fetch('/upload-image', {
+            const response = await fetch(`${baseUrl}/upload-image`, { // Tilføj base-URL
                 method: 'POST',
                 body: formData,
             });
 
             if (!response.ok) {
-                console.error('Response status:', response.status); // Log statuskoden
+                console.error('Response status:', response.status);
                 throw new Error('Failed to upload image');
             }
 
             const data = await response.json();
-            return data.imageUrl; // Return the URL of the uploaded image
+            return data.imageUrl;
         } catch (error) {
             console.error('Image upload error:', error);
             alert('Kunne ikke uploade billedet. Prøv igen.');
