@@ -11,6 +11,32 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 ); 
 
+--Opret kun tabellen, hvis den ikke allerede findes (Products)
+CREATE TABLE IF NOT EXISTS product (
+    Product_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    Product_name VARCHAR(255) NOT NULL,
+    Category_ID INTEGER NOT NULL,
+    Store_ID INTEGER NOT NULL,
+    Description TEXT NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    image VARCHAR(255) NOT NULL
+);
+
+-- Opret kun tabellen, hvis den ikke allerede findes (Categories)
+CREATE TABLE IF NOT EXISTS Categories (
+    Category_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    Category_name VARCHAR(255) NOT NULL
+);
+
+-- Opret kun tabellen, hvis den ikke allerede findes (Stores)
+CREATE TABLE IF NOT EXISTS Store (
+    Store_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    Store_name VARCHAR(255) NOT NULL,
+    Store_address VARCHAR(255) NOT NULL,
+    Store_description TEXT NOT NULL
+);
+
+
 -- Indsæt kun testbrugere, hvis de ikke allerede findes
 -- INSERT IGNORE INTO users (firstname, email, password)
 
