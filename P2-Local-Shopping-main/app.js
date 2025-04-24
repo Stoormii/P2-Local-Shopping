@@ -271,8 +271,9 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         }
 
         // Brug en miljøvariabel til base-URL
-        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
-        const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const imageUrl = `/uploads/${req.file.filename}`;
+            res.status(200).json({ imageUrl });
         console.log('Generated image URL:', imageUrl);
 
         res.status(200).json({ imageUrl });
