@@ -142,14 +142,17 @@ app.post('/login', async (req, res) => {
 import { createItem } from './database.js';
 
 app.post('/add-product', async (req, res) => {
+    console.log('Request body:', req.body); // Debug-log
+
     const { Product_name, Category_Name, Store_Name, Quantity, Description, Price, image } = req.body;
 
     if (!Product_name || !Category_Name || !Store_Name || !Quantity || !Description || !Price) {
-        return res.status(400).json({ message: 'All fields needs to be filled.' });
+        return res.status(400).json({ message: 'All fields need to be filled.' });
     }
 
     try {
         const result = await createItem(Product_name, Category_Name, Store_Name, Quantity, Description, Price, image);
+        console.log('Product added successfully:', result); // Debug-log
         res.status(201).json({ message: 'Product added!', productId: result.insertId });
     } catch (error) {
         console.error('Database error:', error);
@@ -157,7 +160,7 @@ app.post('/add-product', async (req, res) => {
     }
 });
 
-app.use(`${baseUrl}/products`, async (req, res) => {
+app.get('/products', async (req, res) => {
     try {
         console.log('Fetching products from database...');
         const [products] = await pool.query(`
@@ -167,7 +170,7 @@ app.use(`${baseUrl}/products`, async (req, res) => {
             JOIN Categories c ON p.Category_ID = c.Category_ID
             JOIN Store s ON p.Store_ID = s.Store_ID
         `);
-        console.log('Products fetched:', products);
+        console.log('Products fetched:', products); // Debug-log
         res.status(200).json(products);
     } catch (error) {
         console.error('Database error in /products:', error);
