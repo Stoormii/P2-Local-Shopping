@@ -303,6 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Sørg for, at API-ruterne er defineret før fallback-ruten
 app.get('/products', async (req, res) => {
+    console.log('GET /products route accessed');
     try {
         const [products] = await pool.query(`
             SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
