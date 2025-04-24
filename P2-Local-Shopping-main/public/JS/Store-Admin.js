@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const addProductBtn = document.getElementById('addProductBtn');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    const baseUrl = ''; // Brug en tom streng eller hardkodet URL
+    const baseUrl = window.location.origin.includes('localhost')
+        ? '' // Lokalt miljø
+        : '/node9'; // Servermiljø
 
     let products = [
         {
