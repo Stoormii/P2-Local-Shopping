@@ -7,7 +7,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import { pool } from './database.js'; // Importerer databaseforbindelse
-import './database.js'; // Initialiserer databaseforbindelse og opretter tabeller, hvis nødvendigt
 import multer from 'multer'; // Import multer for image uploads
 import { initializeDatabase } from './database.js'; // Eksporter initializeDatabase fra database.js
 
