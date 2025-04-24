@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             let response;
             if (isEditing) {
-                response = await fetch(`/products/${currentProductId}`, {
+                response = await fetch(`${baseUrl}/products/${currentProductId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(productData),
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('image', file);
 
         try {
-            const response = await fetch(`${baseUrl}/upload-image`, { // Tilføj base-URL
+            const response = await fetch(`${baseUrl}/upload-image`, {
                 method: 'POST',
                 body: formData,
             });

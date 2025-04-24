@@ -44,6 +44,8 @@ app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
     next();
 }));
 
+app.use('/img', express.static(path.join(__dirname, 'public/img')));
+
 // Håndter anmodninger til /favicon.ico
 app.get('/favicon.ico', (req, res) => {
     const filePath = path.join(__dirname, 'public', 'favicon.ico');
@@ -178,22 +180,22 @@ app.get('/products', async (req, res) => {
 });
 
 app.delete('/products/:id', async (req, res) => {
-    const productId = req.params.id; // Hent produkt-ID fra URL'en
+    const productId = req.params.id;
 
     try {
-        const [result] = await pool.query(`
-            DELETE FROM Product 
-            WHERE Product_ID = ?;
-        `, [productId]);
+        const [result] = await pool.query(
+            `DELETE FROM Product WHERE Product_ID = ?`,
+            [productId]
+        );
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Product not found.' });
+            return res.status(404).json({ message: 'Produktet blev ikke fundet.' });
         }
 
-        res.status(200).json({ message: 'Product deleted successfully.' });
+        res.status(200).json({ message: 'Produktet blev slettet.' });
     } catch (error) {
-        console.error('Database error:', error);
-        res.status(500).json({ message: 'Could not delete product.' });
+        console.error('Fejl ved sletning af produkt:', error);
+        res.status(500).json({ message: 'Kunne ikke slette produktet.' });
     }
 });
 
