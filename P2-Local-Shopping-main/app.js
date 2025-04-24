@@ -270,12 +270,9 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Log protokol og host for at debugge
-        console.log('Protocol:', req.get('x-forwarded-proto') || req.protocol);
-        console.log('Host:', req.get('host'));
-
-        const protocol = req.get('x-forwarded-proto') || req.protocol;
-        const imageUrl = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        // Brug en miljøvariabel til base-URL
+        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
         console.log('Generated image URL:', imageUrl);
 
         res.status(200).json({ imageUrl });
