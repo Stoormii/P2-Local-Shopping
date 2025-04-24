@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 ); 
 
 -- Opret kun tabellen, hvis den ikke allerede findes (Products)
-CREATE TABLE IF NOT EXISTS product (
+CREATE TABLE IF NOT EXISTS Product (
     Product_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
     Product_name VARCHAR(255) NOT NULL,
     Quantity INTEGER NOT NULL,
