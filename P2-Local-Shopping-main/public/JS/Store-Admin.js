@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const addProductBtn = document.getElementById('addProductBtn');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
+    const baseUrl = ''; // Brug en tom streng eller hardkodet URL
 
     let products = [
         {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setupProductActionListeners();
     }
 
-     // Get category name from value
+    // Get category name from value
     function getCategoryName(categoryValue) {
         const categoryMap = {
             'tøj': 'Tøj',
