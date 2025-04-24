@@ -309,7 +309,7 @@ app.get('/products', async (req, res) => {
         const [products] = await pool.query(`
             SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
                    c.Category_name, s.Store_Name
-            FROM Product p
+            FROM product p
             JOIN Categories c ON p.Category_ID = c.Category_ID
             JOIN Store s ON p.Store_ID = s.Store_ID
         `);
