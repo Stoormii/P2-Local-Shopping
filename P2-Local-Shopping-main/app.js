@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 import { pool } from './database.js'; // Importerer databaseforbindelse
 import multer from 'multer'; // Import multer for image uploads
 import { initializeDatabase } from './database.js'; // Eksporter initializeDatabase fra database.js
+import { createItem } from './database.js'; // Importer createItem-funktionen
 
 // Konverterer filsti for ES-moduler
 const __filename = fileURLToPath(import.meta.url);
@@ -139,24 +140,22 @@ app.post('/login', async (req, res) => {
 
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
-import { createItem } from './database.js';
 
 app.post('/add-product', async (req, res) => {
-    console.log('Request body:', req.body); // Debug-log
-
     const { Product_name, Category_Name, Store_Name, Quantity, Description, Price, image } = req.body;
 
+    // Valider input
     if (!Product_name || !Category_Name || !Store_Name || !Quantity || !Description || !Price) {
-        return res.status(400).json({ message: 'All fields need to be filled.' });
+        return res.status(400).json({ message: 'Alle felter skal udfyldes.' });
     }
 
     try {
+        // Kald createItem-funktionen for at tilføje produktet til databasen
         const result = await createItem(Product_name, Category_Name, Store_Name, Quantity, Description, Price, image);
-        console.log('Product added successfully:', result); // Debug-log
-        res.status(201).json({ message: 'Product added!', productId: result.insertId });
+        res.status(201).json({ message: 'Produkt tilføjet succesfuldt.', productId: result.insertId });
     } catch (error) {
-        console.error('Database error:', error);
-        res.status(500).json({ message: 'Could not add item.' });
+        console.error('Fejl ved tilføjelse af produkt:', error);
+        res.status(500).json({ message: 'Kunne ikke tilføje produktet.' });
     }
 });
 
