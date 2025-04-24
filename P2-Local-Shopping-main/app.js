@@ -132,18 +132,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Fallback-rute: Serverer signup.html for alle ikke-matchede GET-anmodninger
-app.get('*', (req, res) => {
-    console.log(`Fallback route accessed for: ${req.url}`);
-    const filePath = path.join(__dirname, 'public', 'signup.html');
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            console.error(`Error serving signup.html: ${err}`);
-            res.status(404).send('File not found');
-        }
-    });
-});
-
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 import { createItem } from './database.js';
