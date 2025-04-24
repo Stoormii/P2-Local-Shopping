@@ -267,13 +267,14 @@ const upload = multer({ storage });
 app.post('/upload-image', upload.single('image'), (req, res) => {
     try {
         if (!req.file) {
+            console.error('No file uploaded');
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Brug en miljøvariabel til base-URL
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
-        const imageUrl = `/uploads/${req.file.filename}`;
-            res.status(200).json({ imageUrl });
+        console.log('Uploaded file:', req.file); // Log filoplysninger
+
+        const protocol = process.env.NODE_ENV === 'production' ? 'https' : req.protocol;
+        const imageUrl = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         console.log('Generated image URL:', imageUrl);
 
         res.status(200).json({ imageUrl });
