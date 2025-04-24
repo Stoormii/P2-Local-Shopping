@@ -142,6 +142,9 @@ export async function createUser(firstname, email, password) {
 // Eksportere poolen, så den kan bruges andre steder i applikationen
 export { pool };
 
+// Eksporter initializeDatabase
+export { initializeDatabase };
+
 //Dette herunder er funktionen til at tilføje produkter til databasen, samt ændringerne til Valde´s kode.
 // Get category ID from Categories table
 export async function getCategoryIdByName(categoryName) {
