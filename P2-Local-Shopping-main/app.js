@@ -16,7 +16,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
 
-const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
+const baseUrl = window.location.origin.includes('localhost')
+    ? '' // Lokalt miljø
+    : `${window.location.origin}/node9`; // Servermiljø
 
 // Opretter Express-applikation
 const app = express();
