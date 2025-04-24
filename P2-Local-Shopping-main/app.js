@@ -21,6 +21,8 @@ const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom str
 // Opretter Express-applikation
 const app = express();
 
+app.set('trust proxy', true); // Sørger for, at req.protocol respekterer X-Forwarded-Proto-headeren
+
 // Middleware til at parse JSON-data fra frontend
 app.use(express.json());
 
@@ -268,8 +270,9 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Generer den fulde URL til billedet
-        const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        // Brug req.protocol til at generere den korrekte URL
+        const protocol = req.protocol === 'http' && req.get('x-forwarded-proto') === 'https' ? 'https' : req.protocol;
+        const imageUrl = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         console.log('File uploaded successfully:', imageUrl);
 
         res.status(200).json({ imageUrl });
