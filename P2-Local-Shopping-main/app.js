@@ -16,9 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
 
-const baseUrl = window.location.origin.includes('localhost')
-    ? '' // Lokalt miljø
-    : `${window.location.origin}/node9`; // Servermiljø
+const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
 
 // Opretter Express-applikation
 const app = express();
@@ -272,9 +270,8 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Brug req.protocol til at generere den korrekte URL
-        const protocol = req.protocol === 'http' && req.get('x-forwarded-proto') === 'https' ? 'https' : req.protocol;
-        const imageUrl = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        // Generer den fulde URL til billedet
+        const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         console.log('File uploaded successfully:', imageUrl);
 
         res.status(200).json({ imageUrl });

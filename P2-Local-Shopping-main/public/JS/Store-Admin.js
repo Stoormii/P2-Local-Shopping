@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const data = await response.json();
-            return data.imageUrl;
+            return data.imageUrl; // Returner den fulde URL
         } catch (error) {
             console.error('Image upload error:', error);
             alert('Kunne ikke uploade billedet. Prøv igen.');
