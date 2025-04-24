@@ -15,6 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
 
+const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
+
 // Opretter Express-applikation
 const app = express();
 
@@ -31,6 +33,9 @@ app.use((req, res, next) => {
     console.log(`Received ${req.method} request for ${req.url}`);
     next();
 });
+
+// Middleware til at håndtere base-URL
+app.use(baseUrl, express.static(path.join(__dirname, 'public')));
 
 // Serverer statiske filer fra 'public'-mappen
 app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
@@ -152,7 +157,7 @@ app.post('/add-product', async (req, res) => {
     }
 });
 
-app.get('/products', async (req, res) => {
+app.use(`${baseUrl}/products`, async (req, res) => {
     try {
         console.log('Fetching products from database...');
         const [products] = await pool.query(`
@@ -163,7 +168,7 @@ app.get('/products', async (req, res) => {
             JOIN Store s ON p.Store_ID = s.Store_ID
         `);
         console.log('Products fetched:', products);
-        res.status(200).json(products); // Return JSON data
+        res.status(200).json(products);
     } catch (error) {
         console.error('Database error in /products:', error);
         res.status(500).json({ message: 'Could not fetch products.' });
@@ -279,8 +284,5 @@ console.log('Port value:', PORT);
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-app.use('/node9', app); // Prefix alle ruter med /node9
-app.use('/node9', express.static(path.join(__dirname, 'public')));
 
 const response = await fetch('http://localhost:3399/products');

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const addProductBtn = document.getElementById('addProductBtn');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    const baseUrl = '/node9'; // Base-URL for serveren
+    const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
 
     let products = [
         {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchProducts() {
         try {
-            const response = await fetch(`${baseUrl}/products`); // Tilføj base-URL
+            const response = await fetch(`${baseUrl}/products`);
             console.log('Response status:', response.status);
 
             if (!response.ok) {
