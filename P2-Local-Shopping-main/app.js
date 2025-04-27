@@ -300,6 +300,10 @@ console.log('Port value:', PORT);
         await initializeDatabase(); // Vent på, at databasen bliver initialiseret
         console.log('Databasen er initialiseret.');
 
+        app.get('/test-upload', (req, res) => {
+            res.sendFile(path.join(__dirname, 'public/uploads/1745761246205-59841908-Skrmbillede-2025-04-27-kl.-15.35.32.png'));
+        });
+        
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port ${PORT}`);
         });
