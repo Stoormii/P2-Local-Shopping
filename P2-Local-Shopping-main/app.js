@@ -52,17 +52,6 @@ app.use('/uploads', (req, res, next) => {
     next();
 }, express.static(path.join(__dirname, 'public/uploads')));
 
-// Håndter anmodninger til /favicon.ico
-app.get('/favicon.ico', (req, res) => {
-    const filePath = path.join(__dirname, 'public', 'favicon.ico');
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            console.error('Error serving favicon.ico:', err);
-            res.status(404).end();
-        }
-    });
-});
-
 // API-rute til at hente alle brugere
 app.get('/users', async (req, res) => {
     try {
