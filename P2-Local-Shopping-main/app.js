@@ -274,10 +274,10 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // URL til at gemme billedet
-        const imageUrl = `https://cs-25-sw-2-09.p2datsw.cs.aau.dk/uploads/${req.file.filename}`;
-        console.log('Generated image URL:', imageUrl);
+        // Bemærk ændringen fra /uploads/ til /node9/uploads/
+        const imageUrl = `https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/uploads/${req.file.filename}`;
 
+        console.log('Generated image URL:', imageUrl); // (godt til debugging)
         res.status(200).json({ imageUrl });
     } catch (error) {
         console.error('Error in /upload-image route:', error);
