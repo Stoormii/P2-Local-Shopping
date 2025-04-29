@@ -112,3 +112,20 @@ console.log("Port Value:", PORT);
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// route to get info from the data base
+app.get('/search', async (req, res) => {
+  const searchTerm = req.query.query;
+
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM product_db WHERE name LIKE ?",
+      [`%${searchTerm}%`]
+    );
+
+    res.json(rows); // returns items with name, maybe img, etc.
+  } catch (err) {
+    console.error("Search failed:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});

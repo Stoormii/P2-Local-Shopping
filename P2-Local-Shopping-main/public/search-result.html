@@ -15,76 +15,52 @@
       <h2>Search Results</h2>
       <div id="results"></div>
     </section>
-
     <script>
-      // Sample data (can be imported or fetched dynamically later)
-      const products = [
-        { name: "Black T-Shirt", location: "Garn 22", img: "img/black-tshirt.jpg" },
-        { name: "Black T-Shirt", location: "Isls", img: "img/black-tshirt.jpg" },
-        { name: "Black T-Shirt", location: "Athena", img: "img/black-tshirt.jpg" },
-        { name: "Black T-Shirt", location: "Nova", img: "img/black-tshirt.jpg" },
-        { name: "Black T-Shirt", location: "Zeus", img: "img/black-tshirt.jpg" },
-      ];
-
-      const shops = [
-        { name: "Garn 22", location: "2.4 km from you", img: "img/shops.png" },
-        { name: "Isls", location: "5.0 km from you", img: "img/shops.png" },
-        { name: "Athena", location: "500 m from you", img: "img/shops.png" },
-        { name: "Nova", location: "3.0 km from you", img: "img/shops.png" },
-        { name: "Zeus", location: "1.2 km from you", img: "img/shops.png" },
-      ];
-
       function getQueryParam() {
         const params = new URLSearchParams(window.location.search);
         return params.get("query")?.toLowerCase() || "";
       }
-
-      function displayResults(query) {
+    
+      async function fetchSearchResults(query) {
         const resultsDiv = document.getElementById("results");
         resultsDiv.innerHTML = "";
-
-        const matchingProducts = products.filter(p => p.name.toLowerCase().includes(query));
-        const matchingShops = shops.filter(s => s.name.toLowerCase().includes(query));
-
-        if (matchingProducts.length > 0) {
+    
+        try {
+          const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+          const data = await response.json();
+    
+          if (data.length === 0) {
+            resultsDiv.innerHTML = "<p>No results found.</p>";
+            return;
+          }
+    
           const productSection = document.createElement("div");
           productSection.innerHTML = "<h3>Matching Products</h3>";
-          matchingProducts.forEach(p => {
+    
+          data.forEach(p => {
             const item = document.createElement("div");
             item.className = "product";
             item.innerHTML = `
-              <img src="${p.img}" alt="${p.name}" width="100">
-              <div><strong>${p.name}</strong><br>${p.location}</div>
+              <img src="${p.img || 'img/black-tshirt.jpg'}" alt="${p.name}" width="100">
+              <div><strong>${p.name}</strong></div>
             `;
             productSection.appendChild(item);
           });
+    
           resultsDiv.appendChild(productSection);
-        }
-
-        if (matchingShops.length > 0) {
-          const shopSection = document.createElement("div");
-          shopSection.innerHTML = "<h3>Matching Shops</h3>";
-          matchingShops.forEach(s => {
-            const item = document.createElement("div");
-            item.className = "shop";
-            item.innerHTML = `
-              <img src="${s.img}" alt="${s.name}" width="100">
-              <div><strong>${s.name}</strong><br>${s.location}</div>
-            `;
-            shopSection.appendChild(item);
-          });
-          resultsDiv.appendChild(shopSection);
-        }
-
-        if (matchingProducts.length === 0 && matchingShops.length === 0) {
-          resultsDiv.innerHTML = "<p>No results found.</p>";
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+          resultsDiv.innerHTML = "<p>Error loading results.</p>";
         }
       }
-
-      // Run search on page load
+    
+      // Run on page load
       const query = getQueryParam();
-      displayResults(query);
+      if (query) {
+        fetchSearchResults(query);
+      }
     </script>
+    
   </div>
 </body>
 </html>
