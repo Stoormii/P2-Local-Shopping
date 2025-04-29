@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(60) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 ); 
-
 -- Opret kun tabellen, hvis den ikke allerede findes (Products)
 CREATE TABLE IF NOT EXISTS Product (
     Product_ID INTEGER PRIMARY KEY AUTO_INCREMENT,

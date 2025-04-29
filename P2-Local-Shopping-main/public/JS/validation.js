@@ -247,3 +247,97 @@ if (loginForm) {
         }
     });
 }
+
+function getstoreloginFormErrors(email, password) {
+    let errors = [];
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === '' || email == null) {
+        errors.push('Email is required');
+        if (email_input) {
+            email_input.parentElement.classList.add('incorrect');
+        }
+    } else if (!emailRegex.test(email)) {
+        errors.push('Invalid email format');
+        if (email_input) {
+            email_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    if (password === '' || password == null) {
+        errors.push('Password is required');
+        if (password_input) {
+            password_input.parentElement.classList.add('incorrect');
+        }
+    } else if (password.length < 8) {
+        errors.push('Password must have at least 8 characters');
+        if (password_input) {
+            password_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    return errors;
+}
+
+if (storeloginForm) {
+    storeloginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Forhindrer standard formularindsendelse
+        console.log('Form submitted');
+
+        // Valider input-data
+        let errors = getstoreloginFormErrors(email_input.value, password_input.value);
+
+        // Vis fejl, hvis der er nogen
+        if (errors.length > 0) {
+            error_message.innerText = errors.join(". ");
+            return;
+        }
+
+        // Opret objekt med brugerdata til serveren
+        const userData = {
+            email: email_input.value,
+            password: password_input.value
+        };
+
+        // Deaktiver knappen under anmodning
+        const storeloginButton = document.querySelector('button[type="submit"]');
+        storeloginButton.disabled = true;
+
+        try {
+            console.log('Sending data to server:', userData);
+            const response = await fetch(`${BASE_URL}/storelogin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            // Tjek om svaret er JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Received non-JSON response:', text);
+                throw new Error('Server returned an unexpected response format');
+            }
+
+            const result = await response.json();
+            console.log('Server response:', result);
+
+            if (response.ok) {
+                // Omdiriger til forsiden ved succes
+                window.location.href = `${BASE_URL}/StoreFrontPage.html`;
+            } else {
+                // Vis serverfejl
+                console.log('Error from server:', result.error);
+                error_message.innerText = result.error || 'An error occurred';
+                storeloginButton.disabled = false;
+            }
+        } catch (error) {
+            // Håndter netværks- eller JSON-parsingsfejl
+            console.error('Network error:', error);
+            error_message.innerText = 'An error occurred. Please try again later.';
+            storeloginButton.disabled = false;
+        }
+    });
+}
