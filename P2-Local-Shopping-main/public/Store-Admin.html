@@ -3,57 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShoppingLocal adminpage</title>
+    <title>ShoppingLocal Admin</title>
     <link rel="stylesheet" href="css/Valdestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <a href="StoreFrontPage.html"> <h3>Return to store page</h3> </a>
-    <div class="container">
-        <h1>Velkommen,""</h1>
+
+    <nav class="navbar">
+        <ul class="nav-links">
+          <li><a href="StoreFrontPage.html" id="home-link">Home</a></li>
+          <li><a href="Store-Admin.html" id="product-link">Products</a></li>
+          <li><a href="salesprojekt.html" id="neworder-link">New orders</a></li>
+          <li><a href="salesprojekt.html" id="stats-link">stats</a></li>
+        </ul>
+      </nav>
+      <script>
+        const navLinks = document.querySelectorAll('.nav-links a');
         
-        <h2>Dine Produkter</h2>
-        <div class="product-list" id="productList"></div>
+        navLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            
+            navLinks.forEach(nav => nav.classList.remove('active'));
+        
+            
+            link.classList.add('active');
+          });
+        });</script>
+        
+</body>
 
-        <h2>Tilføj nyt produkt</h2>
-        <form class="product-form" id="productForm">
-            <div class="form-group">
-                <label for="productName">Produktnavn:</label>
-                <input type="text" id="productName" required>
+        <div class="main-content">
+            
+            <header class="admin-header">
+                <h1>Your Products</h1>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Søg efter produkter...">
+                </div>
+            </header>
+
+            
+            <div class="product-grid" id="productList">
+                
             </div>
 
-            <div class="form-group">
-                <label for="productPrice">Pris (DKK):</label>
-                <input type="number" id="productPrice" step="0.01" required>
-            </div>
+            <button class="add-product-btn" id="addProductBtn">
+                <i class="fas fa-plus"></i> Tilføj nyt produkt
+            </button>
 
-            <div class="form-group">
-                <label for="productCategory">Kategori:</label>
-                <select id="productCategory" required>
-                    <option value="">Vælg kategori</option>
-                    <option value="???">????</option>
-                    <option value="??">????</option>
-                    <option value="???">????</option>
-                    <option value="???">??</option>
-                    <option value="andre">Andre</option>
-                </select>
-            </div>
+            <div class="modal" id="productModal">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
+                    <h2 id="modalTitle">Tilføj nyt produkt</h2>
+                    <form class="product-form" id="productForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productName">Produktnavn:</label>
+                                <input type="text" id="productName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Pris (DKK):</label>
+                                <input type="number" id="productPrice" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productCategory">Category:</label>
+                                <select id="productCategory" required>
+                                    <option value="">Vælg kategori</option>
+                                    <option value="Bukser">Bukser</option>
+                                    <option value="T-shirt">T-shirt</option>
+                                    <option value="Jakke">Jakke</option>
+                                    <option value="Smykker">Smykker</option>
+                                    <option value="Garn">Garn</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productStore">Butiksnavn:</label>
+                                <select id="productStore" required>
+                                    <option value="">Vælg butik</option>
+                                    <option value="ISIS">ISIS</option>
+                                    <option value="SOMETHING By Tine Lund">SOMETHING By Tine Lund</option>
+                                    <option value="Garn 22">Garn 22</option>
+                                    <option value="Butik 4">Butik 4</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productStock">ProductStock:</label>
+                                <input type="number" id="productStock" required>
+                            </div>
+                        </div>
 
-            <div class="form-group">
-                <label for="productDescription">Beskrivelse:</label>
-                <textarea id="productDescription" rows="4" required></textarea>
-            </div>
+                        <div class="form-group">
+                            <label for="productDescription">Beskrivelse:</label>
+                            <textarea id="productDescription" rows="4" required></textarea>
+                        </div>
 
-            <div class="form-group">
-                <label for="productImage">Produktbillede:</label>
-                <input type="file" id="productImage" accept="image/*">
-            </div>
+                        <div class="form-group">
+                            <label for="productImage">Produktbillede:</label>
+                            <div class="image-upload">
+                                <label for="productImage" class="upload-btn">
+                                    <i class="fas fa-cloud-upload-alt"></i> Vælg billede
+                                </label>
+                                <input type="file" id="productImage" accept="image/*">
+                                <div class="image-preview" id="imagePreview"></div>
+                            </div>
+                        </div>
 
-            <div class="form-group">
-                <button type="submit" class="button">Gem produkt</button>
+                        <div class="form-actions">
+                            <button type="button" class="button cancel-btn" id="cancelBtn">Annuller</button>
+                            <button type="submit" class="button save-btn">Gem produkt</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="JS/Store-Admin.js"></script>
 </body>
 </html>
