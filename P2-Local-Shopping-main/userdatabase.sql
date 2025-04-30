@@ -19,8 +19,7 @@ CREATE TABLE IF NOT EXISTS Product (
     Category_ID INTEGER NOT NULL,
     Store_ID INTEGER NOT NULL,
     Description TEXT NOT NULL,
-    Price DECIMAL(10, 2) NOT NULL,
-    image VARCHAR(255)
+    Price DECIMAL(10, 2) NOT NULL
 );
 
 -- Opret kun tabellen, hvis den ikke allerede findes (Categories)
@@ -34,7 +33,8 @@ CREATE TABLE IF NOT EXISTS Store (
     Store_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
     Store_name VARCHAR(255) NOT NULL,
     Store_address VARCHAR(255) NOT NULL,
-    Store_description TEXT NOT NULL
+    Store_description TEXT NOT NULL,
+    image VARCHAR(255)
 );
 
 
