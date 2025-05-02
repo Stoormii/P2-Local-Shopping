@@ -309,7 +309,7 @@ app.get('/store/:id', async (req, res) => {
 
  try {
    // Query the database for the store with the given ID
-   const [rows] = await pool.query("SELECT * FROM store WHERE Store_id = ?", [storeId]);
+   const [rows] = await pool.query("SELECT * FROM Store WHERE Store_id = ?", [storeId]);
 
 
    if (rows.length === 0) {
