@@ -176,7 +176,7 @@ app.get('/Product/:ID', async (req, res) => {
          <div class="product">
              <h1>${item.Product_name}</h1>
             
-             <img src="/img/${item.Product_picture}" alt="${item.Product_name}">
+             <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/${item.Product_picture}" alt="${item.Product_name}">
              <p><strong>Price: ${item.Price} DKK</strong></p>
              <div class="form-group">
                  <label for="productCategory">Size:</label>
@@ -340,7 +340,7 @@ app.get('/store/:id', async (req, res) => {
        <p class="description">${Store.Store_description}</p>
        <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
        </div>
-       <img src="/public/${Store.image}" alt="${Store.Store_name}">
+       <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/uploads/${Store.image}" alt="${Store.Store_name}">
    </div>
   
 </body>
