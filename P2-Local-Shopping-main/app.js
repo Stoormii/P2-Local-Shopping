@@ -177,7 +177,7 @@ app.get('/Product/:ID', async (req, res) => {
              <h1>${item.Product_name}</h1>
             
              <img src="/img/${item.Product_picture}" alt="${item.Product_name}">
-             <p><strong>Price: ${item.Product_price} DKK</strong></p>
+             <p><strong>Price: ${item.Price} DKK</strong></p>
              <div class="form-group">
                  <label for="productCategory">Size:</label>
                  <select id="productCategory" required>
