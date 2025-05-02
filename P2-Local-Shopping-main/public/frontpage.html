@@ -108,66 +108,9 @@
                     <dd><br></dd>
             </section>
         </section>
-        <section>
-                <div class="nearByShops-container"> 
-                    <div class="NearByShops-title">Stores near you !</div>
-                    <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
-                    <div class="carousel" id="carousel2">
-                        <div class="Shops" data-name="Garn 22">
-                           <img id=1 src="uploads/garn22.png"  onclick="redirect2(this.id)">
-                           <div class="shop-name">Garn 22</div>
-                           <div class="shop-location">Garn 22<br>2.4 km from you!</div>
-                           <div class="description">Description</div>
-                       </div>
-                       <div class="Shops" data-name="Isls">
-                           <img id=2 src="uploads/isis.png" onclick="redirect2(this.id)">
-                           <div class="shop-name" href="">Isls</div>
-                           <div class="shop-location">Isls<br>5.0 km from you!</div>
-                           <div class="description">Description</div>
-                       </div>
-                       <div class="Shops" data-name="Athena">
-                           <img id=3 src="uploads/Athena.png" onclick="redirect2(this.id)">
-                           <div class="shop-name">Athena</div>
-                           <div class="shop-location">Athena<br>500 m from you!</div>
-                           <div class="description">Description</div>
-                       </div>
-                       <div class="Shops">
-                           <img id=4 src="uploads/nova.png" onclick="redirect2(this.id)">
-                           <div class="shop-name">Nova</div>
-                           <div class="shop-location">Nova<br>3.0 km from you!</div>
-                           <div class="description">Description</div>
-                       </div>
-                       <div class="Shops">
-                           <img id=5 src="uploads/zeus.png" onclick="redirect2(this.id)">
-                           <div class="shop-name">zeus</div>
-                           <div class="shop-location">Zeus<br>1.2 km from you!</div>
-                           <div class="description">Description</div>
-                       </div>
-                    </div>
-                    <button class="arrow arrow-right" onclick="scrollRight()">›</button>
-                </div>
-                
-                <script>
-                    const carousel2 = document.getElementById("carousel2");
-                
-                    function scrollLeft() {
-                        carousel.scrollBy({ left: -200, behavior: "smooth" });
-                    }
-                
-                    function scrollRight() {
-                        carousel.scrollBy({ left: 200, behavior: "smooth" });
-                    }
-                </script>
-                <a><br></a>
-                <div class="bottomNav">
-                    <a class="active" href="#home">Shop Local</a>
-                </div>
-                <a href="salesprojekt.html"> <h3>See new orders</h3> </a>
-                <a href="Store-Admin.html"> <h3>Tilføjproduktside</h3> </a>
-        </section>
         </section>
     </div>
            <script type="text/javascript" src="JS/redirect.js" ></script>
-
+            <script src="JS/frontpageloadstore.js"></script>
     </body>
 </html>
