@@ -6,6 +6,10 @@
 
 const BASE_URL = window.location.origin.includes('localhost') */
 
+const baseUrl = window.location.origin.includes('localhost')
+? '' // Lokalt miljø
+: '/node9'; // Servermiljø
+
 async function fetchStores() {
     try {
         const response = await fetch(`${baseUrl}/store`); // Fetch data from the backend
