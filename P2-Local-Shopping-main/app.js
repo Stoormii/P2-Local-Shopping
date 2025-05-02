@@ -169,14 +169,14 @@ app.get('/Product/:ID', async (req, res) => {
      </head>
      <body>
          <div class="logo">
-             <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9${item.image}" alt="vores logo"> </a>
+             <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
          </div>
 
 
          <div class="product">
              <h1>${item.Product_name}</h1>
             
-             <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="${item.Product_name}">
+             <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img${item.image}" alt="${item.Product_name}">
              <p><strong>Price: ${item.Price} DKK</strong></p>
              <div class="form-group">
                  <label for="productCategory">Size:</label>
