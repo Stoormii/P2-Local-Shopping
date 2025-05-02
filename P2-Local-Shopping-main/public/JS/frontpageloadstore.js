@@ -42,7 +42,7 @@ function renderStores(stores) {
         storeDiv.className = 'Shops';
         storeDiv.setAttribute('data-name', store.store_name);
         storeDiv.innerHTML = `
-            <img id=store.store_ID src="${store.image}" alt="${store.store_name}" onclick="redirect2(this.id)">
+            <img id=${store.store_ID} src="${store.image}" alt="${store.store_name}" onclick="redirect2(this.id)">
             <div class="shop-name">${store.store_name}</div>
             <div class="shop-location">${store.store_address}</div>`;
         carousel.appendChild(storeDiv);
