@@ -298,3 +298,18 @@ console.log('Port value:', PORT);
         process.exit(1); // Stop serveren, hvis initialisering fejler
     }
 })();
+
+app.get('/store', async (req, res) => {
+    try {
+        console.log('Fetching stores from database...');
+        const [store] = await pool.query(`
+            SELECT store_id, store_name, store_address, description
+            FROM store
+        `);
+        console.log('Stores fetched:', store); // Debug-log
+        res.status(200).json(store);
+    } catch (error) {
+        console.error('Database error in /stores:', error);
+        res.status(500).json({ message: 'Could not fetch stores.' });
+    }
+});

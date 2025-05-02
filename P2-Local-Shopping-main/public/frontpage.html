@@ -35,7 +35,7 @@
         <img src="img/thx_u.png" style="width: 1000px;height: 500px;">
         <section>
             <h2>Recommended Products</h2>
-        <div class="recommended-container">
+        <div class="recommended -container">
             <div class="recommended-title">Recommended</div>
             <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
             <div class="carousel" id="carousel">
@@ -111,41 +111,14 @@
             </section>
         </section>
         <section>
-                <div class="nearByShops-container"> 
-                    <div class="NearByShops-title">Stores near you !</div>
-                    <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
-                    <div class="carousel" id="carousel2">
-                        <div class="Shops" data-name="Garn 22">
-                            <img src="img/shops.png">
-                            <div class="shop-name">Garn 22</div>
-                            <div class="shop-location">Garn 22<br>2.4 km from you!</div>
-                            <div class="description">Description</div>
-                        </div>
-                        <div class="Shops" data-name="Isls">
-                            <img src="img/shops.png">
-                            <div class="shop-name" href="">Isls</div>
-                            <div class="shop-location">Isls<br>5.0 km from you!</div>
-                            <div class="description">Description</div>
-                        </div>
-                        <div class="Shops" data-name="Athena">
-                            <img src="img/shops.png">
-                            <div class="shop-name">Athena</div>
-                            <div class="shop-location">Athena<br>500 m from you!</div>
-                            <div class="description">Description</div>
-                        </div>
-                        <div class="Shops">
-                            <img src="img/shops.png">
-                            <div class="shop-name">Nova</div>
-                            <div class="shop-location">Nova<br>3.0 km from you!</div>
-                            <div class="description">Description</div>
-                        </div>
-                        <div class="Shops">
-                            <img src="img/shops.png">
-                            <div class="shop-name">zeus</div>
-                            <div class="shop-location">Zeus<br>1.2 km from you!</div>
-                            <div class="description">Description</div>
-                        </div>
-                    </div>
+            <div class="nearByShops-container"> 
+                <div class="NearByShops-title">Stores near you!</div>
+                <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
+                <div class="carousel" id="carousel2">
+                    <!-- Store cards will be dynamically inserted here -->
+                </div>
+                <button class="arrow arrow-right" onclick="scrollRight()">›</button>
+            </div>
                     <button class="arrow arrow-right" onclick="scrollRight()">›</button>
                 </div>
                 
@@ -168,6 +141,8 @@
                 <a href="Store-Admin.html"> <h3>Tilføjproduktside</h3> </a>
         </section>
         </section>
+        </section>
     </div>
+    <script src="JS/frontpageloadstore.js"></script>
     </body>
 </html>

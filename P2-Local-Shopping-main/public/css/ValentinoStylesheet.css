@@ -278,24 +278,40 @@ h1{
 }
 
 /* ===== IMAGE CONTAINERS ===== */
-.container {
+
+.carousel {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 300px;
-  height: 200px;
-  overflow: hidden;
-  margin: 0 auto;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding: 10px;
 }
 
-.container img {
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+.Shops {
+  flex: 0 0 auto;
+  width: 150px;
+  transition: transform 0.3s;
+  text-align: center;
 }
+
+.Shops img {
+  width: 100%;
+  border-radius: 5px;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+}
+
+.shop-name {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.shop-location,
+.description {
+  font-size: 0.9em;
+  color: #555;
+}
+
 
 /* ===== BOTTOM NAVIGATION ===== */
 .bottomNav {
@@ -358,3 +374,4 @@ h1{
     height: 150px;
   }
 }
+
