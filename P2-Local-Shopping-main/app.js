@@ -169,7 +169,7 @@ app.get('/Product/:ID', async (req, res) => {
      </head>
      <body>
          <div class="logo">
-             <a href="/frontpage.html"> <img src="/img/logo.png" alt="vores logo"> </a>
+             <a href="/frontpage.html"> <img src=""https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
          </div>
 
 
@@ -201,7 +201,7 @@ app.get('/Product/:ID', async (req, res) => {
    <h1>Other products from...</h1>
    <div class="products-container">
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src=""https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Other Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="/IP2.html" class="btn">View</a></p>
@@ -209,14 +209,14 @@ app.get('/Product/:ID', async (req, res) => {
        </div>
       
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src=""https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
            <p><a href="#" class="btn">Add to Order</a></p>
        </div>
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src=""https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
@@ -236,7 +236,7 @@ app.get('/Product/:ID', async (req, res) => {
    <h1>Similar items</h1>
    <div class="products-container">
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Other Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
@@ -244,35 +244,35 @@ app.get('/Product/:ID', async (req, res) => {
        </div>
       
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
            <p><a href="#" class="btn">Add to Order</a></p>
        </div>
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
            <p><a href="#" class="btn">Add to Order</a></p>
        </div>
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
            <p><a href="#" class="btn">Add to Order</a></p>
        </div>
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
            <p><a href="#" class="btn">Add to Order</a></p>
        </div>
        <div class="product">
-           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
            <h2>Another Black Shirt</h2>
            <p><strong>Price: $99.99</strong></p>
            <p><a href="#" class="btn">View</a></p>
@@ -332,7 +332,7 @@ app.get('/store/:id', async (req, res) => {
 </head>
 <body>
    <div class="logo">
-       <a href="/frontpage.html"> <img src="/img/logo.png" alt="Our logo"> </a>
+       <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="Our logo"> </a>
    </div>
    <div class="store">
        <div class="text-container">
