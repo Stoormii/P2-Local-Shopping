@@ -295,13 +295,6 @@ app.get('/Product/:ID', async (req, res) => {
  }
 });
 
-
-
-
-
-
-
-
 // Route to serve store details
 app.get('/store/:id', async (req, res) => {
  const storeId = req.params.id; // Get the store ID from the URL parameter
