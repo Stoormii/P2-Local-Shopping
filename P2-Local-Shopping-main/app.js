@@ -340,7 +340,7 @@ app.get('/store/:id', async (req, res) => {
        <p class="description">${Store.Store_description}</p>
        <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
        </div>
-       <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/${Store.image}" alt="${Store.Store_name}">
+       <img src="${Store.image}" alt="${Store.Store_name}">
    </div>
   
 </body>
