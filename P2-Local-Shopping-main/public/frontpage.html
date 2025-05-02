@@ -109,6 +109,30 @@
             </section>
         </section>
         </section>
+        <section>
+            <div class="nearByShops-container"> 
+                <div class="NearByShops-title">Stores near you!</div>
+                <button class="arrow arrow-left" onclick="scrollLeft()">‹</button>
+                <div class="carousel" id="carousel2">
+                    /* Stores will be inserted here */
+                </div>
+                <button class="arrow arrow-right" onclick="scrollRight()">›</button>
+            </div>
+                    <button class="arrow arrow-right" onclick="scrollRight()">›</button>
+                </div>
+                
+                <script>
+                    const carousel2 = document.getElementById("carousel2");
+                
+                    function scrollLeft() {
+                        carousel.scrollBy({ left: -200, behavior: "smooth" });
+                    }
+                
+                    function scrollRight() {
+                        carousel.scrollBy({ left: 200, behavior: "smooth" });
+                    }
+                </script>
+        <section
     </div>
            <script type="text/javascript" src="JS/redirect.js" ></script>
             <script src="JS/frontpageloadstore.js"></script>
