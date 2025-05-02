@@ -8,7 +8,7 @@ const BASE_URL = window.location.origin.includes('localhost')
 
 async function fetchStores() {
     try {
-        const response = await fetch('/store'); // Fetch data from the backend
+        const response = await fetch('${BASE_URL}/store'); // Fetch data from the backend
         if (!response.ok) {
             throw new Error(`Server returned status ${response.status}`);
         }
