@@ -135,6 +135,228 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Serve the redirect.js file
+app.get('/js/redirect.js', (req, res) => {
+ res.sendFile(path.join(__dirname, 'redirect.js'));
+});
+// Route to serve item details - test af w
+app.get('/Product/:ID', async (req, res) => {
+ const ProductID = req.params.ID;
+
+
+ try {
+   // Query the database for the item with the given ID
+   const [rows] = await pool.query("SELECT * FROM Product WHERE Product_ID = ?", [ProductID]);
+
+
+   if (rows.length === 0) {
+     console.log(`Item with ID ${ProductID} not found`);
+     return res.status(404).send("Item not found");
+   }
+
+
+   const item = rows[0];
+
+
+ // Dynamically render the HTML template with the item data
+   const htmlContent = `
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <title>${item.Product_name}</title>
+         <link rel="stylesheet" href="/css/lassemedhattenstyles.css">
+     </head>
+     <body>
+         <div class="logo">
+             <a href="/frontpage.html"> <img src="/img/logo.png" alt="vores logo"> </a>
+         </div>
+
+
+         <div class="product">
+             <h1>${item.Product_name}</h1>
+            
+             <img src="/img/${item.Product_picture}" alt="${item.Product_name}">
+             <p><strong>Price: ${item.Product_price} DKK</strong></p>
+             <div class="form-group">
+                 <label for="productCategory">Size:</label>
+                 <select id="productCategory" required>
+                     <option value="">Choose Size</option>
+                     <option value="s">Small (S)</option>
+                     <option value="m">Medium (M)</option>
+                     <option value="l">Large (L)</option>
+                     <option value="xl">Extra Large (XL)</option>
+                 </select>
+                 <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+             </div>
+             <h2>Specifications:</h2>
+             <ul style="list-style: none; padding: 0;">
+                 <li><a href="#" class="btn">Fit</a></li>
+                 <li><a href="#" class="btn">Other info</a></li>
+             </ul>
+         </div>
+
+
+         <div class="other-products">
+   <h1>Other products from...</h1>
+   <div class="products-container">
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Other Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="/IP2.html" class="btn">View</a></p>
+           <p><a href="Basket.html" class="btn">Add to Order</a></p>
+       </div>
+      
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+     
+      
+   </div>
+</div>
+
+
+
+
+
+
+<div class="other-products">
+   <h1>Similar items</h1>
+   <div class="products-container">
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Other Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+      
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+       <div class="product">
+           <img src="/img/BlackShirt.jpg" alt="Black Shirt">
+           <h2>Another Black Shirt</h2>
+           <p><strong>Price: $99.99</strong></p>
+           <p><a href="#" class="btn">View</a></p>
+           <p><a href="#" class="btn">Add to Order</a></p>
+       </div>
+      
+   </div>
+</div>
+
+
+     </body>
+     </html>
+   `;
+
+
+   res.send(htmlContent);
+ } catch (error) {
+   console.error(`Error fetching item with ID ${ProductID}:`, error);
+   res.status(500).send("Internal Server Error");
+ }
+});
+
+
+
+
+
+
+
+
+// Route to serve store details
+app.get('/store/:id', async (req, res) => {
+ const storeId = req.params.id; // Get the store ID from the URL parameter
+
+
+ try {
+   // Query the database for the store with the given ID
+   const [rows] = await pool.query("SELECT * FROM store WHERE Store_id = ?", [storeId]);
+
+
+   if (rows.length === 0) {
+     console.log(`Store with ID ${storeId} not found`);
+     return res.status(404).send("Store not found");
+   }
+
+
+   const Store = rows[0]; // Get the first row from the query result
+
+
+   // Dynamically render the HTML template with the store data
+   const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>${Store.Store_Name}</title>
+   <link rel="stylesheet" href="/css/store-template.css">
+</head>
+<body>
+   <div class="logo">
+       <a href="/frontpage.html"> <img src="/img/logo.png" alt="Our logo"> </a>
+   </div>
+   <div class="store">
+       <div class="text-container">
+       <h1>${Store.Store_Name}</h1>
+       <p class="description">${Store.Description}</p>
+       <p class="location"><strong>Location: ${Store.Location}</strong></p>
+       </div>
+       <img src="${Store.Image}" alt="${Store.Store_Name}">
+   </div>
+  
+</body>
+</html>
+`;
+
+
+   res.send(htmlContent);
+  } catch (error) {
+    console.error(`Error fetching store with ID ${storeId}:`, error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 
