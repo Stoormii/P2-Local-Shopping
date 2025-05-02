@@ -525,8 +525,8 @@ app.get('/store', async (req, res) => {
     try {
         console.log('Fetching stores from database...');
         const [store] = await pool.query(`
-            SELECT store_id, store_name, store_address, description
-            FROM store
+            SELECT store_ID, store_name, store_address, store_description
+            FROM Store
         `);
         console.log('Stores fetched:', store); // Debug-log
         res.status(200).json(store);
