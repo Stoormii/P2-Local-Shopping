@@ -169,7 +169,7 @@ app.get('/Product/:ID', async (req, res) => {
      </head>
      <body>
          <div class="logo">
-             <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
+             <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9${item.image}" alt="vores logo"> </a>
          </div>
 
 
