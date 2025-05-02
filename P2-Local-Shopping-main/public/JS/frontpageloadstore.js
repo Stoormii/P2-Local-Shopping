@@ -1,3 +1,11 @@
+// Definerer en konstant BASE_URL baseret på miljøet (lokalt eller server)
+// Hvis URL'en indeholder 'localhost', bruges en tom streng, ellers bruges '/node9'
+const BASE_URL = window.location.origin.includes('localhost')
+    ? '' // Lokalt miljø
+    : '/node9'; // Servermiljø
+
+const BASE_URL = window.location.origin.includes('localhost')
+
 async function fetchStores() {
     try {
         const response = await fetch('/store'); // Fetch data from the backend
