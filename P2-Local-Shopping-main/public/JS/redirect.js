@@ -6,5 +6,5 @@ function redirect2(imageId){
 
    //This function is used to redirect the user to the item page when they click on an image
 function redirect1(imageId){
-   window.location.href = `item/${imageId}`;
+   window.location.href = `Product/${imageId}`;
    }
