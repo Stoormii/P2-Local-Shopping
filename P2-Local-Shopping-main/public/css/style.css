@@ -59,12 +59,12 @@ form{
 form > div{
     width:100%;
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
 }
 
 form label{
     flex-shrink: 0;
-    height: 50px;
+    height: auto;
     width: 50px;
     background-color: var(--accent-color);
     fill: var(--base-color);
@@ -100,9 +100,9 @@ form input:focus{
     border-color: var(--text-color);
 }
 
-div:has(input:focus) > label{
+form > div:focus-within > label {
     background-color: var(--text-color);
-}
+  }
 
 form input::placeholder{
     color:var(--accent-color);
@@ -130,6 +130,33 @@ form button:focus{
     outline: none;
     background-color: var(--text-color);
 }
+
+form textarea {
+    box-sizing: border-box;
+    flex-grow: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 1em;
+    font: inherit;
+    border-radius: 0 10px 10px 0;
+    border: 2px solid var(--input-color);
+    border-left: none;
+    background-color: var(--input-color);
+    min-height: 120px;    /* lidt større boks */
+    resize: vertical;     /* tillad bruger at ændre højde */
+    transition: 150ms ease;
+}
+
+form textarea:hover {
+    border-color: var(--accent-color);
+  }
+  
+form textarea:focus {
+    outline: none;
+    border-color: var(--text-color);
+  }
+
+
 
 a{
     text-decoration: none;

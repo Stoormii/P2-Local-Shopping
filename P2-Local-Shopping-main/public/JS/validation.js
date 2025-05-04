@@ -4,21 +4,121 @@ const BASE_URL = window.location.origin.includes('localhost')
     ? '' // Lokalt miljø
     : '/node9'; // Servermiljø
 // Hent formular- og inputelementer fra DOM
-const storeloginForm = document.getElementById('StoreLoginForm');
-const signupForm = document.getElementById('SignupForm');
-const loginForm = document.getElementById('LoginForm');
-const firstname_input = document.getElementById('firstname-input');
-const email_input = document.getElementById('email-input');
-const password_input = document.getElementById('password-input');
-const repeat_password_input = document.getElementById('repeat-password-input');
-const error_message = document.getElementById('error-message');
+
+// ======== Store Signup ========
+const storesignupForm               = document.getElementById('StoreSignupForm');
+const storeNameInput                = document.getElementById('store-name-input');
+const storeSignupEmailInput         = document.getElementById('store-signup-mail-input');
+const storeAddressInput             = document.getElementById('store-address-input');
+const storePasswordInput            = document.getElementById('store-password-input');
+const storeRepeatPasswordInput      = document.getElementById('repeat-store-password-input');
+const storeDescriptionInput         = document.getElementById('store-description-input');
+const storeSignupErrorMessage       = document.getElementById('storesignup-error-message');
+
+// ======== Store Login ========
+const storeLoginForm                = document.getElementById('StoreLoginForm');
+const storeLoginEmailInput          = document.getElementById('store-email-input');
+const storeLoginPasswordInput       = document.getElementById('store-login-password-input');
+const storeLoginErrorMessage        = document.getElementById('storelogin-error-message');
+
+// ======== User Signup ========
+const signupForm                    = document.getElementById('SignupForm');
+const firstnameInput                = document.getElementById('firstname-input');
+const signupEmailInput              = document.getElementById('email-input');
+const signupPasswordInput           = document.getElementById('password-input');
+const signupRepeatPasswordInput     = document.getElementById('repeat-password-input');
+const userSignupErrorMessage        = document.getElementById('usersignup-error-message');
+
+// ======== User Login ========
+const loginForm                     = document.getElementById('LoginForm');
+const loginEmailInput               = document.getElementById('email-input');
+const loginPasswordInput            = document.getElementById('password-input');
+const userLoginErrorMessage         = document.getElementById('error-message');
 
 // Tjek om error_message-elementet findes
 if (!error_message) {
     console.error('Error: Could not find element with ID "error-message"');
 }
 
-// Håndter tilmeldingsformular
+// ======== Store Signup Logic =========
+if (storesignupForm) {
+    storesignupForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Forhindrer standard formularindsendelse
+        console.log('Form submitted');
+
+        const name = storeNameInput.value.trim();
+        const email = storeSignupEmailInput.value.trim();
+        const address = storeAddressInput.value.trim();
+        const password = storePasswordInput.value.trim();
+        const repeatPassword = storeRepeatPasswordInput.value.trim();
+        const description = storeDescriptionInput.value;
+
+        const storeSignupErrors = getstoresignupFormErrors(name, email, address, password, repeatPassword, description); // Brug den korrekte fejlmeddelelse
+        if (storeSignupErrors.length > 0) {
+            storeSignupErrorMessage.innerText = storeSignupErrors.join('. ');
+            return;
+        }
+
+        // Valider input-data
+        let errors = getstoresignupFormErrors(name, email, address, password, repeatPassword, description);
+
+        // Vis fejl, hvis der er nogen
+        if (errors.length > 0) {
+            error_message.innerText = errors.join(". ");
+            return;
+        }
+
+        // Opret objekt med brugerdata til serveren
+        const storeData = {
+            Store_name: name,
+            Store_adress: address,
+            Store_description: description,
+            Store_email: email,
+            Store_password: password,
+        };
+
+        // Deaktiver knappen under anmodning
+        const signupButton = document.querySelector('button[type="submit"]');
+        signupButton.disabled = true;
+
+        try {
+            console.log('Sending data to server:', storeData);
+            const response = await fetch(`${BASE_URL}/store-signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            // Tjek om svaret er JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Received non-JSON response:', text);
+                throw new Error('Server returned an unexpected response format');
+            }
+
+            const result = await response.json();
+            console.log('Server response:', result);
+
+            if (response.ok) {
+                // Omdiriger til login-siden ved succes
+                window.location.href = `${BASE_URL}/login.html`;
+            } else {
+                // Vis serverfejl
+                error_message.innerText = result.error || 'An error occurred';
+                signupButton.disabled = false;
+            }
+        } catch (error) {
+            // Håndter netværks- eller JSON-parsingsfejl
+            console.error('Network error:', error);
+            error_message.innerText = 'An error occurred. Please try again later.';
+            signupButton.disabled = false;
+        }
+    });
+}
+
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Forhindrer standard formularindsendelse
@@ -273,6 +373,65 @@ function getstoreloginFormErrors(email, password) {
         errors.push('Password must have at least 8 characters');
         if (password_input) {
             password_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    return errors;
+}
+
+
+// Funktion til at validere tilmeldingsformularen
+function getstoresignupFormErrors(firstname, email, password, repeatPassword) {
+    let errors = [];
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (firstname === '' || firstname == null) {
+        errors.push('Firstname is required');
+        if (firstname_input) {
+            firstname_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    if (email === '' || email == null) {
+        errors.push('Email is required');
+        if (email_input) {
+            email_input.parentElement.classList.add('incorrect');
+        }
+    } else if (!emailRegex.test(email)) {
+        errors.push('Invalid email format');
+        if (email_input) {
+            email_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    if (password === '' || password == null) {
+        errors.push('Password is required');
+        if (password_input) {
+            password_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    if (password.length < 8) {
+        errors.push('Password must have at least 8 characters');
+        if (password_input) {
+            password_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    if (repeatPassword === '' || repeatPassword == null) {
+        errors.push('Repeat Password is required');
+        if (repeat_password_input) {
+            repeat_password_input.parentElement.classList.add('incorrect');
+        }
+    }
+
+    if (password !== repeatPassword) {
+        errors.push('Password does not match repeated password');
+        if (password_input) {
+            password_input.parentElement.classList.add('incorrect');
+        }
+        if (repeat_password_input) {
+            repeat_password_input.parentElement.classList.add('incorrect');
         }
     }
 
