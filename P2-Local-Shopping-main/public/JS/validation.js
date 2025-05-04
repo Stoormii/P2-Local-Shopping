@@ -4,18 +4,18 @@ const BASE_URL = window.location.origin.includes('localhost')
     ? '' // Lokalt miljø
     : '/node9'; // Servermiljø
 
-
 // ======== Store Signup ========
-const storesignupForm               = document.getElementById('StoreSignupForm');
-const storeNameInput                = document.getElementById('store-name-input');
-const storeSignupEmailInput         = document.getElementById('store-signup-mail-input');
-const storeAddressInput             = document.getElementById('store-address-input');
-const storePasswordInput            = document.getElementById('store-password-input');
-const storeRepeatPasswordInput      = document.getElementById('repeat-store-password-input');
-const storeDescriptionInput         = document.getElementById('store-description-input');
-const storeSignupErrorMessage       = document.getElementById('storesignup-error-message');
+const storesignupForm = document.getElementById('StoreSignupForm');
 
 if (storesignupForm) {
+    const storeNameInput           = document.getElementById('store-name-input');
+    const storeSignupEmailInput    = document.getElementById('store-signup-mail-input');
+    const storeAddressInput        = document.getElementById('store-address-input');
+    const storePasswordInput       = document.getElementById('store-password-input');
+    const storeRepeatPasswordInput = document.getElementById('repeat-store-password-input');
+    const storeDescriptionInput    = document.getElementById('store-description-input');
+    const storeSignupErrorMessage  = document.getElementById('storesignup-error-message');
+
     storesignupForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('Store Signup submitted');
@@ -23,7 +23,7 @@ if (storesignupForm) {
         const name           = storeNameInput.value.trim();
         const email          = storeSignupEmailInput.value.trim();
         const address        = storeAddressInput.value.trim();
-        const password       = storePasswordInput.value;            // lad pass stå som-is
+        const password       = storePasswordInput.value;            
         const repeatPassword = storeRepeatPasswordInput.value;
         const description    = storeDescriptionInput.value.trim();
 
@@ -89,12 +89,13 @@ if (storesignupForm) {
 
 
 // ======== Store Login ========
-const storeLoginForm                = document.getElementById('StoreLoginForm');
-const storeLoginEmailInput          = document.getElementById('store-email-input');
-const storeLoginPasswordInput       = document.getElementById('store-login-password-input');
-const storeLoginErrorMessage        = document.getElementById('storelogin-error-message');
+const storeLoginForm = document.getElementById('StoreLoginForm');
 
 if (storeLoginForm) {
+    const storeLoginEmailInput    = document.getElementById('store-email-input');
+    const storeLoginPasswordInput = document.getElementById('store-login-password-input');
+    const storeLoginErrorMessage  = document.getElementById('storelogin-error-message');
+
     storeLoginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('Store Login submitted');
@@ -156,14 +157,15 @@ if (storeLoginForm) {
 
 
 // ======== User Signup ========
-const signupForm                    = document.getElementById('SignupForm');
-const firstnameInput                = document.getElementById('firstname-input');
-const signupEmailInput              = document.getElementById('email-input');
-const signupPasswordInput           = document.getElementById('password-input');
-const signupRepeatPasswordInput     = document.getElementById('repeat-password-input');
-const userSignupErrorMessage        = document.getElementById('usersignup-error-message');
+const signupForm = document.getElementById('SignupForm');
 
 if (signupForm) {
+    const firstnameInput            = document.getElementById('firstname-input');
+    const signupEmailInput          = document.getElementById('email-input');
+    const signupPasswordInput       = document.getElementById('password-input');
+    const signupRepeatPasswordInput = document.getElementById('repeat-password-input');
+    const userSignupErrorMessage    = document.getElementById('usersignup-error-message');
+
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('User Signup submitted');
@@ -227,12 +229,13 @@ if (signupForm) {
 
 
 // ======== User Login ========
-const loginForm                     = document.getElementById('LoginForm');
-const loginEmailInput               = document.getElementById('email-input');
-const loginPasswordInput            = document.getElementById('password-input');
-const userLoginErrorMessage         = document.getElementById('error-message');
+const loginForm = document.getElementById('LoginForm');
 
 if (loginForm) {
+    const loginEmailInput       = document.getElementById('email-input');
+    const loginPasswordInput    = document.getElementById('password-input');
+    const userLoginErrorMessage = document.getElementById('error-message');
+
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('User Login submitted');

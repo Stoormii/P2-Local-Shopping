@@ -3,6 +3,7 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import { getUsers, createUser } from './database.js';
+import { createStore } from './database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
@@ -132,6 +133,46 @@ app.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error in /login route:', error);
         res.status(500).json({ error: 'Could not login' });
+    }
+});
+
+// API-rute til oprettelse af ny bruger
+app.post('/store-signup', async (req, res) => {
+    console.log('Store-Signup request received:', req.body);
+    const { Store_name, Store_address, Store_description, email, password } = req.body;
+
+    // Validerer at alle felter er udfyldt
+    if (!Store_name || !Store_address || !Store_description || !email || !password) {
+        console.log('Missing fields in request body');
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Validerer adgangskodelængde på serveren
+    if (password.length < 8) {
+        console.log('Password too short');
+        return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
+
+    try {
+        // Hash adgangskode
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log('Hashed password:', hashedPassword);
+        // Opret butikken i databasen
+        const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword);
+        console.log('User created successfully:', result);
+        res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
+    
+    } catch (error) {
+        console.error('Error during signup:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'Email already exists' });
+        }
+            // Her fanger vi alle andre fejl
+    return res.status(500).json({ 
+        error: 'Could not create store', 
+        details: error.message,
+        stack: error.stack,
+    });
     }
 });
 
