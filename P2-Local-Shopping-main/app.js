@@ -138,6 +138,19 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Konfiguration af multer til filuploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'public/uploads')); // Gemmer logoer i 'public/uploads'
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const sanitizedFilename = file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.\-_]/g, '');
+        cb(null, uniqueSuffix + '-' + sanitizedFilename);
+    },
+});
+const upload = multer({ storage });
+
 // API-rute til oprettelse af ny bruger
 app.post('/store-signup', async (req, res) => {
     console.log('Store-Signup request received:', req.body);
@@ -159,6 +172,14 @@ app.post('/store-signup', async (req, res) => {
         // Hash adgangskode
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log('Hashed password:', hashedPassword);
+
+        // Håndter logo-upload
+        let logoUrl = null;
+        if (req.file) {
+            logoUrl = `/uploads/${req.file.filename}`; // Gemmer stien til logoet
+            console.log('Uploaded logo URL:', logoUrl);
+        }
+        
         // Opret butikken i databasen
         const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword);
         console.log('User created successfully:', result);
@@ -560,7 +581,7 @@ app.put('/products/:id', async (req, res) => {
             [Store_Name]
         );
         if (storeRows.length === 0) {
-            return res.status(400).json({ message: `Store '${Store_Name}' not found.` });
+            rres.status(400).json({ message: `Store '${Store_Name}' not found.` });
         }
         const Store_ID = storeRows[0].Store_ID;
 
@@ -585,18 +606,7 @@ app.put('/products/:id', async (req, res) => {
     }
 });
 
-// Configure multer for image uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'public/uploads'));
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const sanitizedFilename = file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.\-_]/g, '');
-        cb(null, uniqueSuffix + '-' + sanitizedFilename);
-    },
-});
-const upload = multer({ storage });
+
 
 app.post('/upload-image', upload.single('image'), (req, res) => {
     try {
