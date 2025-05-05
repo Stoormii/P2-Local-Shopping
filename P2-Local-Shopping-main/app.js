@@ -348,6 +348,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
 });
 
 // Route to serve store details
+// Funktionen til at vise Google API maps
 app.get('/store/:id', async (req, res) => {
     const storeId = req.params.id;
 
