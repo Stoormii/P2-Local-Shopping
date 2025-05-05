@@ -20,53 +20,19 @@ if (storesignupForm) {
         e.preventDefault(); // Forhindrer standard formularindsendelse
         console.log('Store Signup submitted');
 
-        const name           = storeNameInput.value.trim();
-        const email          = storeSignupEmailInput.value.trim();
-        const address        = storeAddressInput.value.trim();
-        const password       = storePasswordInput.value;            
-        const repeatPassword = storeRepeatPasswordInput.value;
-        const description    = storeDescriptionInput.value.trim();
-
-        // Valider input-data
-        const storeSignupErrors = getStoreSignupFormErrors(
-            name, email, address, password, repeatPassword, description
-        );
-        if (storeSignupErrors.length > 0) {
-            storeSignupErrorMessage.innerText = storeSignupErrors.join('. ');
-            return;
-        }
-
-        // Opret objekt med brugerdata til serveren
-        const storeData = {
-            Store_name:        name,
-            Store_address:     address,
-            Store_description: description,
-            email:             email,
-            password:          password,
-            image:             logoUrl // Placeholder for logo URL
-        };
+        // Opretter FormData fra formularen
+        const formData = new FormData(storesignupForm);
 
         // Deaktiver knappen under anmodning
         const submitbutton = storesignupForm.querySelector('button[type="submit"]');
         submitbutton.disabled = true;
 
         try {
-            console.log('Sending data to server:', storeData);
+            console.log('Sending data to server:', formData);
             const response = await fetch(`${BASE_URL}/store-signup`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(storeData),
+                body: formData, // Sender FormData direkte
             });
-
-            // Tjek om svaret er JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                console.error('Received non-JSON response:', text);
-                throw new Error('Server returned an unexpected response format');
-            }
 
             const result = await response.json();
             console.log('Server response:', result);
