@@ -152,7 +152,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // API-rute til oprettelse af ny bruger
-app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
+app.post(`public/store-signup`, upload.single('logo'), async (req, res) => {
     console.log('Store-Signup request received:', req.body);
     const { Store_name, Store_address, Store_description, email, password } = req.body;
 
