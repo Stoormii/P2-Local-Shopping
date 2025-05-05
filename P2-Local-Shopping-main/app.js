@@ -296,7 +296,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
      <head>
          <meta charset="UTF-8">
          <title>${item.Product_name}</title>
-         <link rel="stylesheet" href="/css/lassemedhattenstyles.css">
+         <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/lassemedhattenstyles.css">
      </head>
      <body>
         <div class="logo">
