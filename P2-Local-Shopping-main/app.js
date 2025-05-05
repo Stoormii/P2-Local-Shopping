@@ -152,23 +152,49 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // API-rute til oprettelse af ny bruger
-app.post('/store-signup', upload.single('logo'), async (req, res) => {
+app.post('/store-signup', async (req, res) => {
+    console.log('Store-Signup request received:', req.body);
     const { Store_name, Store_address, Store_description, email, password } = req.body;
 
-    // Valider input
+    // Validerer at alle felter er udfyldt
     if (!Store_name || !Store_address || !Store_description || !email || !password) {
+        console.log('Missing fields in request body');
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const logoUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    // Validerer adgangskodelængde på serveren
+    if (password.length < 8) {
+        console.log('Password too short');
+        return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
 
-        const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword, logoUrl);
-        res.status(201).json({ message: 'Store created successfully!', storeId: result.insertId });
+    try {
+        // Hash adgangskode
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log('Hashed password:', hashedPassword);
+
+        // Håndter logo-upload
+        let logoUrl = null;
+        if (req.file) {
+            logoUrl = `/uploads/${req.file.filename}`; // Gemmer stien til logoet
+            console.log('Uploaded logo URL:', logoUrl);
+        }
+        // Opret butikken i databasen
+        const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword);
+        console.log('User created successfully:', result);
+        res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
+    
     } catch (error) {
-        console.error('Error during store signup:', error);
-        res.status(500).json({ error: 'Could not create store' });
+        console.error('Error during signup:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'Email already exists' });
+        }
+            // Her fanger vi alle andre fejl
+    return res.status(500).json({ 
+        error: 'Could not create store', 
+        details: error.message,
+        stack: error.stack,
+    });
     }
 });
 
