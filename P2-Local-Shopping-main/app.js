@@ -406,9 +406,6 @@ app.get('/store/:id', async (req, res) => {
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap"></script>
 </head>
 <body>
-    <div class="logo">
-        <a href="/frontpage.html"> <img src="${Store.image}" alt="Our logo"> </a>
-    </div>
     <div class="store">
         <div class="text-container">
             <h1>${Store.Store_name}</h1>
