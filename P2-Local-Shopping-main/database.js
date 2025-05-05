@@ -186,13 +186,13 @@ export async function createItem(Product_name, Category_Name, Store_Name, Quanti
     return result;
 }
 
-export async function createStore(Store_name, Store_address, Store_description, email, password) {
+export async function createStore(Store_name, Store_address, Store_description, email, password, image) {
     try {
         console.log('Inserting store into database:', { Store_name, email });
         const [result] = await pool.query(`
-            INSERT INTO Store (Store_name, Store_address, Store_description, email, password)
-            VALUES (?, ?, ?, ?, ?)`,
-            [Store_name, Store_address, Store_description, email, password]
+            INSERT INTO Store (Store_name, Store_address, Store_description, email, password, image)
+            VALUES (?, ?, ?, ?, ?, ?)`,
+            [Store_name, Store_address, Store_description, email, password, image]
         );
         console.log('Store inserted successfully:', result);
         return result;
