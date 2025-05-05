@@ -43,7 +43,7 @@ if (storesignupForm) {
             Store_description: description,
             email:             email,
             password:          password,
-            image:            'https://example.com/logo.png' // Placeholder for logo URL
+            image:             logoUrl // Placeholder for logo URL
         };
 
         // Deaktiver knappen under anmodning
