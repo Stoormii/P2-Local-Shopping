@@ -42,8 +42,7 @@ if (storesignupForm) {
             Store_address:     address,
             Store_description: description,
             email:             email,
-            password:          password,
-            image:             logoUrl // Placeholder for logo URL
+            password:          password
         };
 
         // Deaktiver knappen under anmodning
