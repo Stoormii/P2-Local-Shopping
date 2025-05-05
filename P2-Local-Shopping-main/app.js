@@ -384,8 +384,9 @@ app.get('/store/:id', async (req, res) => {
     <style>
         #map {
             height: 400px;
-            width: 100%;
+            width: 50%;
             margin-top: 20px;
+            align-items: center;
         }
     </style>
     <script>
@@ -406,7 +407,7 @@ app.get('/store/:id', async (req, res) => {
 </head>
 <body>
     <div class="logo">
-        <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="Our logo"> </a>
+        <a href="/frontpage.html"> <img src="${Store.image}" alt="Our logo"> </a>
     </div>
     <div class="store">
         <div class="text-container">
