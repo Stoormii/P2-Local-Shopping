@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Style for the logo section */
+  .logo {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .logo img {
+    max-width: 120px;
+  }
+  
+  /* Style for the return link */
+  a h3 {
+    text-align: start;
+    text-decoration: none;
+    color: #007bff;
+    margin: 10px 0;
+  }
+
+/* Store container styling */
+.store {
+    display: flex; /* Enables horizontal alignment */
+    flex-wrap: nowrap; /* Prevents content from wrapping to a new row */
+    align-items: flex-start; /* Align items to the top of their container */
+    max-width: 60%; /* Limits the container width */
+    margin: 40px auto; /* Centers the container */
+    gap: 20px; /* Adds space between the text and image */
+    overflow: hidden; /* Prevents overflow issues */
+  }
+  
+  /* Text container styling */
+  .text-container {
+    width: 50%; /* Takes up the left 50% */
+    max-width: 50%; /* Ensures the description stays within 50% */
+    overflow-wrap: break-word; /* Forces long words to break into a new line */
+    word-break: break-word; /* Handles long unbroken strings */
+  }
+  
+  .text-container h1 {
+    margin-bottom: 10px; /* Adds spacing between the name and description */
+    font-size: 2rem; /* Makes the name visually prominent */
+  }
+  
+  .text-container .description {
+    margin: 0; /* Removes unnecessary margins */
+    font-size: 1rem; /* Adjusts description font size */
+    line-height: 1.5; /* Increases readability */
+    text-align: justify; /* Justifies text alignment for a cleaner look */
+  }
+  
+  /* Store image styling */
+  .store img {
+    width: 50%; /* Set your desired width (e.g., 200px) */
+    height: auto; /* Maintain aspect ratio initially */
+    aspect-ratio: 1 / 1; /* Force a 1:1 ratio for width and height */
+    object-fit: cover; /* Ensures the image fills the square proportionally */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+  }
+  
+
+
+  
+  /* Location styling */
+  .location {
+    width: 100%; /* Spans the full width below other elements */
+    text-align: left; /* Centers the location text */
+    margin-top: 20px; /* Adds space above the location */
+    font-size: 1.3rem; /* Makes location text slightly larger */
+    font-weight: bold; /* Highlights the text */
+    color: #333; /* Neutral color for location text */
+  }
+  
