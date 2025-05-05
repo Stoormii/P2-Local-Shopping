@@ -145,6 +145,8 @@ app.get('/Product/:ID', async (req, res) => {
 
 
  try {
+     // Increment the view counter for the product
+    await pool.query("UPDATE Product SET views = views + 1 WHERE Product_ID = ?", [ProductID]);
    // Query the database for the item with the given ID
    const [rows] = await pool.query("SELECT * FROM Product WHERE Product_ID = ?", [ProductID]);
 
@@ -156,7 +158,58 @@ app.get('/Product/:ID', async (req, res) => {
 
 
    const item = rows[0];
+// Fetch top products from the same store
+   const [storeProducts] = await pool.query(
+    "SELECT * FROM Product WHERE Store_ID = ? AND Product_ID != ? ORDER BY views DESC LIMIT 10",
+    [item.Store_ID, ProductID]
+);
 
+// Fetch top products from the same category
+const [categoryProducts] = await pool.query(
+    "SELECT * FROM Product WHERE Category_ID = ? AND Product_ID != ? ORDER BY views DESC LIMIT 10",
+    [item.Category_ID, ProductID]
+);
+// Dynamically generate the size selection HTML based on Product_ID
+let sizeSelectionHTML = '';
+if (item.Category_ID === 1) {
+    sizeSelectionHTML = `
+
+        <div class="form-group">
+            <label for="productCategory">Size:</label>
+            <select id="productCategory" required>
+                <option value="">Choose Size</option>
+                <option value="s">Small (S)</option>
+                <option value="m">Medium (M)</option>
+                <option value="l">Large (L)</option>
+                <option value="xl">Extra Large (XL)</option>
+            </select>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="#" class="btn">Fit</a></li> 
+             </ul>
+            
+            
+        </div>
+    `;
+}
+// Generate HTML for the "Other products from the same store" carousel
+const storeProductsHTML = storeProducts.map(product => `
+    <div class="product">
+        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='/Product/${product.Product_ID}'">
+        <h2>${product.Product_name}</h2>
+        <p><strong>Price: ${product.Price} DKK</strong></p>
+        <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+    </div>
+`).join('');
+
+// Generate HTML for the "Similar items from the same category" carousel
+const categoryProductsHTML = categoryProducts.map(product => `
+    <div class="product">
+        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='/Product/${product.Product_ID}'">
+        <h2>${product.Product_name}</h2>
+        <p><strong>Price: ${product.Price} DKK</strong></p>
+        <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+    </div>
+`).join('');
 
  // Dynamically render the HTML template with the item data
    const htmlContent = `
@@ -168,7 +221,7 @@ app.get('/Product/:ID', async (req, res) => {
          <link rel="stylesheet" href="/css/lassemedhattenstyles.css">
      </head>
      <body>
-         <div class="logo">
+        <div class="logo">
              <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
          </div>
 
@@ -178,109 +231,28 @@ app.get('/Product/:ID', async (req, res) => {
             
              <img src="${item.image}" alt="${item.Product_name}">
              <p><strong>Price: ${item.Price} DKK</strong></p>
-             <div class="form-group">
-                 <label for="productCategory">Size:</label>
-                 <select id="productCategory" required>
-                     <option value="">Choose Size</option>
-                     <option value="s">Small (S)</option>
-                     <option value="m">Medium (M)</option>
-                     <option value="l">Large (L)</option>
-                     <option value="xl">Extra Large (XL)</option>
-                 </select>
-                 <p><a href="/Basket.html" class="btn">Add to Order</a></p>
-             </div>
+              ${sizeSelectionHTML} <!-- Insert size selection here -->
              <h2>Specifications:</h2>
              <ul style="list-style: none; padding: 0;">
-                 <li><a href="#" class="btn">Fit</a></li>
                  <li><a href="#" class="btn">Other info</a></li>
+                 <p><a href="/Basket.html" class="btn">Add to Order</a></p>
              </ul>
          </div>
 
 
-         <div class="other-products">
-   <h1>Other products from...</h1>
-   <div class="products-container">
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Other Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="/IP2.html" class="btn">View</a></p>
-           <p><a href="Basket.html" class="btn">Add to Order</a></p>
-       </div>
-      
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-     
-      
-   </div>
-</div>
+          <div class="other-products">
+                    <h1>Other products from the same store</h1>
+                    <div class="products-container">
+                        ${storeProductsHTML}
+                    </div>
+                </div>
 
-
-
-
-
-
-<div class="other-products">
-   <h1>Similar items</h1>
-   <div class="products-container">
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Other Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-      
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-       <div class="product">
-           <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/BlackShirt.jpg" alt="Black Shirt">
-           <h2>Another Black Shirt</h2>
-           <p><strong>Price: $99.99</strong></p>
-           <p><a href="#" class="btn">View</a></p>
-           <p><a href="#" class="btn">Add to Order</a></p>
-       </div>
-      
-   </div>
-</div>
+                <div class="other-products">
+                    <h1>Similar items from the same category</h1>
+                    <div class="products-container">
+                        ${categoryProductsHTML}
+                    </div>
+                </div>
 
 
      </body>
@@ -348,7 +320,53 @@ app.get('/store/:id', async (req, res) => {
   }
 });
 
+// Route to get the top 10 products with the highest views
+app.get('/top-products', async (req, res) => {
+    try {
+        // Query to fetch the top 5 products based on the views counter
+        const [rows] = await pool.query("SELECT * FROM Product ORDER BY views DESC LIMIT 10");
+        res.json(rows); // Send the products as JSON
+    } catch (error) {
+        console.error('Error fetching top products:', error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
+// Route to get the top 10 products for a specific store
+app.get('/top-products/:storeId', async (req, res) => {
+    const storeId = req.params.storeId; // Get the Store_ID from the URL parameter
+
+    try {
+        // Query to fetch the top 10 products from the specified store, ordered by views
+        const [rows] = await pool.query(
+            "SELECT * FROM Product WHERE Store_ID = ? ORDER BY views DESC LIMIT 10",
+            [storeId]
+        );
+
+        res.json(rows); // Send the products as JSON
+    } catch (error) {
+        console.error(`Error fetching top products for store ${storeId}:`, error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// Route to get the top 10 products from same category
+app.get('/top-products/:categoryId', async (req, res) => {
+    const categoryId = req.params.categoryId; // Get the Store_ID from the URL parameter
+
+    try {
+        // Query to fetch the top 10 products from the specified store, ordered by views
+        const [rows] = await pool.query(
+            "SELECT * FROM Product WHERE Category_ID = ? ORDER BY views DESC LIMIT 10",
+            [storeId]
+        );
+
+        res.json(rows); // Send the products as JSON
+    } catch (error) {
+        console.error(`Error fetching top products for store ${storeId}:`, error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
