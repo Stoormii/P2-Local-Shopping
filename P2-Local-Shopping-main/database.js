@@ -185,3 +185,19 @@ export async function createItem(Product_name, Category_Name, Store_Name, Quanti
 
     return result;
 }
+
+export async function createStore(Store_name, Store_address, Store_description, email, password) {
+    try {
+        console.log('Inserting store into database:', { Store_name, email });
+        const [result] = await pool.query(`
+            INSERT INTO Store (Store_name, Store_address, Store_description, email, password)
+            VALUES (?, ?, ?, ?, ?)`,
+            [Store_name, Store_address, Store_description, email, password]
+        );
+        console.log('Store inserted successfully:', result);
+        return result;
+    } catch (error) {
+        console.error('Error in createStore:', error);
+        throw error;
+    }
+}

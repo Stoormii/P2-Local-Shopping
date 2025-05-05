@@ -74,7 +74,7 @@ async function fetchTopProducts() {
 
 function renderTopProducts(products) {
     console.log('Rendering top products:', products); // Debugging log
-    const carousel = document.getElementById('carousel');
+    const carousel = document.getElementById('carousel3');
     carousel.innerHTML = ''; // Clear existing content
 
     if (products.length === 0) {

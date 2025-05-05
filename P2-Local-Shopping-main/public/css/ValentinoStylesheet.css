@@ -164,37 +164,108 @@ h1{
   display: block;
 }
 /* ===== CAROUSELS ===== */
-.recommended-container,
-.NearByShops-container {
-  max-width: 800px;
-  margin: auto;
-  position: relative;
-  overflow: hidden;
-  padding: 20px 0;
-}
-
-.recommended-title,
-.NearByShops-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-align: left;
-}
-
+/* General Carousel Styling */
 .carousel {
-  display: flex;
-  gap: 15px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 20px 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .carousel::-webkit-scrollbar {
-  display: none;
+    height: 8px;
 }
 
+.carousel::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+.carousel::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+/* Individual Product Styling */
+.product {
+    flex: 0 0 auto;
+    width: 200px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.product-location {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product a.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.product a.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Store Carousel Specific Styling */
+#store-carousel {
+    margin-top: 20px;
+    background-color: #eaf4fc;
+    border: 1px solid #cce7ff;
+}
+
+/* Category Carousel Specific Styling */
+#category-carousel {
+    margin-top: 20px;
+    background-color: #fceae6;
+    border: 1px solid #ffc8b2;
+}
+
+/* General Carousel Title Styling */
+.carousel-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 20px;
+}
 /* PRODUCT CAROUSEL */
 
 .carousel {
