@@ -195,8 +195,16 @@ h1{
   display: none;
 }
 
-/* ===== PRODUCT/SHOP CARDS ===== */
-.product,
+/* PRODUCT CAROUSEL */
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding: 10px;
+}
+
 .Shops {
   flex: 0 0 auto;
   width: 150px;
@@ -204,12 +212,6 @@ h1{
   text-align: center;
 }
 
-.product:hover,
-.Shops:hover {
-  transform: translateY(-5px);
-}
-
-.product img,
 .Shops img {
   width: 100%;
   border-radius: 5px;
@@ -217,23 +219,17 @@ h1{
   aspect-ratio: 1/1;
 }
 
-.product-name,
 .shop-name {
   font-weight: bold;
   margin-top: 5px;
 }
 
-.product-location,
-.shop-location {
-  color: lightgray;
-  font-size: 14px;
+.shop-location,
+.description {
+  font-size: 0.9em;
+  color: #555;
 }
 
-.description {
-  font-size: 13px;
-  margin-top: 5px;
-  color: #666;
-}
 
 /* ===== ARROW CONTROLS ===== */
 .arrow {

@@ -19,8 +19,7 @@ CREATE TABLE IF NOT EXISTS Product (
     Category_ID INTEGER NOT NULL,
     Store_ID INTEGER NOT NULL,
     Description TEXT NOT NULL,
-    Price DECIMAL(10, 2) NOT NULL,
-    image VARCHAR(255)
+    Price DECIMAL(10, 2) NOT NULL
 );
 
 -- Opret kun tabellen, hvis den ikke allerede findes (Categories)
@@ -37,5 +36,6 @@ CREATE TABLE IF NOT EXISTS Store (
     Store_description TEXT NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(60) NOT NULL
+    image VARCHAR(255)
 );
 

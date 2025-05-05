@@ -212,6 +212,240 @@ app.post('/storelogin', async (req, res) => {
         res.status(500).json({ error: 'Could not login' });
     }
 });
+
+// Serve the redirect.js file
+app.get('/js/redirect.js', (req, res) => {
+ res.sendFile(path.join(__dirname, 'redirect.js'));
+});
+// Route to serve item details - test af w
+app.get('/Product/:ID', async (req, res) => {
+ const ProductID = req.params.ID;
+
+
+ try {
+     // Increment the view counter for the product
+    await pool.query("UPDATE Product SET views = views + 1 WHERE Product_ID = ?", [ProductID]);
+   // Query the database for the item with the given ID
+   const [rows] = await pool.query("SELECT * FROM Product WHERE Product_ID = ?", [ProductID]);
+
+
+   if (rows.length === 0) {
+     console.log(`Item with ID ${ProductID} not found`);
+     return res.status(404).send("Item not found");
+   }
+
+
+   const item = rows[0];
+// Fetch top products from the same store
+   const [storeProducts] = await pool.query(
+    "SELECT * FROM Product WHERE Store_ID = ? AND Product_ID != ? ORDER BY views DESC LIMIT 10",
+    [item.Store_ID, ProductID]
+);
+
+// Fetch top products from the same category
+const [categoryProducts] = await pool.query(
+    "SELECT * FROM Product WHERE Category_ID = ? AND Product_ID != ? ORDER BY views DESC LIMIT 10",
+    [item.Category_ID, ProductID]
+);
+// Dynamically generate the size selection HTML based on Product_ID
+let sizeSelectionHTML = '';
+if (item.Category_ID === 1) {
+    sizeSelectionHTML = `
+
+        <div class="form-group">
+            <label for="productCategory">Size:</label>
+            <select id="productCategory" required>
+                <option value="">Choose Size</option>
+                <option value="s">Small (S)</option>
+                <option value="m">Medium (M)</option>
+                <option value="l">Large (L)</option>
+                <option value="xl">Extra Large (XL)</option>
+            </select>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="#" class="btn">Fit</a></li> 
+             </ul>
+            
+            
+        </div>
+    `;
+}
+// Generate HTML for the "Other products from the same store" carousel
+const storeProductsHTML = storeProducts.map(product => `
+    <div class="product">
+        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='/Product/${product.Product_ID}'">
+        <h2>${product.Product_name}</h2>
+        <p><strong>Price: ${product.Price} DKK</strong></p>
+        <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+    </div>
+`).join('');
+
+// Generate HTML for the "Similar items from the same category" carousel
+const categoryProductsHTML = categoryProducts.map(product => `
+    <div class="product">
+        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='/Product/${product.Product_ID}'">
+        <h2>${product.Product_name}</h2>
+        <p><strong>Price: ${product.Price} DKK</strong></p>
+        <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+    </div>
+`).join('');
+
+ // Dynamically render the HTML template with the item data
+   const htmlContent = `
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <title>${item.Product_name}</title>
+         <link rel="stylesheet" href="/css/lassemedhattenstyles.css">
+     </head>
+     <body>
+        <div class="logo">
+             <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
+         </div>
+
+
+         <div class="product">
+             <h1>${item.Product_name}</h1>
+            
+             <img src="${item.image}" alt="${item.Product_name}">
+             <p><strong>Price: ${item.Price} DKK</strong></p>
+              ${sizeSelectionHTML} <!-- Insert size selection here -->
+             <h2>Specifications:</h2>
+             <ul style="list-style: none; padding: 0;">
+                 <li><a href="#" class="btn">Other info</a></li>
+                 <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+             </ul>
+         </div>
+
+
+          <div class="other-products">
+                    <h1>Other products from the same store</h1>
+                    <div class="products-container">
+                        ${storeProductsHTML}
+                    </div>
+                </div>
+
+                <div class="other-products">
+                    <h1>Similar items from the same category</h1>
+                    <div class="products-container">
+                        ${categoryProductsHTML}
+                    </div>
+                </div>
+
+
+     </body>
+     </html>
+   `;
+
+
+   res.send(htmlContent);
+ } catch (error) {
+   console.error(`Error fetching item with ID ${ProductID}:`, error);
+   res.status(500).send("Internal Server Error");
+ }
+});
+
+// Route to serve store details
+app.get('/store/:id', async (req, res) => {
+ const storeId = req.params.id; // Get the store ID from the URL parameter
+
+
+ try {
+   // Query the database for the store with the given ID
+   const [rows] = await pool.query("SELECT * FROM Store WHERE Store_ID = ?", [storeId]);
+
+
+   if (rows.length === 0) {
+     console.log(`Store with ID ${storeId} not found`);
+     return res.status(404).send("Store not found");
+   }
+
+
+   const Store = rows[0]; // Get the first row from the query result
+
+
+   // Dynamically render the HTML template with the store data
+   const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>${Store.Store_name}</title>
+   <link rel="stylesheet" href="/css/store-template.css">
+</head>
+<body>
+   <div class="logo">
+       <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="Our logo"> </a>
+   </div>
+   <div class="store">
+       <div class="text-container">
+       <h1>${Store.Store_name}</h1>
+       <p class="description">${Store.Store_description}</p>
+       <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
+       </div>
+       <img src="${Store.image}" alt="${Store.Store_name}">
+   </div>
+  
+</body>
+</html>
+`;
+
+
+   res.send(htmlContent);
+  } catch (error) {
+    console.error(`Error fetching store with ID ${storeId}:`, error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Route to get the top 10 products with the highest views
+app.get('/top-products', async (req, res) => {
+    try {
+        // Query to fetch the top 5 products based on the views counter
+        const [rows] = await pool.query("SELECT * FROM Product ORDER BY views DESC LIMIT 10");
+        res.json(rows); // Send the products as JSON
+    } catch (error) {
+        console.error('Error fetching top products:', error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// Route to get the top 10 products for a specific store
+app.get('/top-products/:storeId', async (req, res) => {
+    const storeId = req.params.storeId; // Get the Store_ID from the URL parameter
+
+    try {
+        // Query to fetch the top 10 products from the specified store, ordered by views
+        const [rows] = await pool.query(
+            "SELECT * FROM Product WHERE Store_ID = ? ORDER BY views DESC LIMIT 10",
+            [storeId]
+        );
+
+        res.json(rows); // Send the products as JSON
+    } catch (error) {
+        console.error(`Error fetching top products for store ${storeId}:`, error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// Route to get the top 10 products from same category
+app.get('/top-products/:categoryId', async (req, res) => {
+    const categoryId = req.params.categoryId; // Get the Store_ID from the URL parameter
+
+    try {
+        // Query to fetch the top 10 products from the specified store, ordered by views
+        const [rows] = await pool.query(
+            "SELECT * FROM Product WHERE Category_ID = ? ORDER BY views DESC LIMIT 10",
+            [storeId]
+        );
+
+        res.json(rows); // Send the products as JSON
+    } catch (error) {
+        console.error(`Error fetching top products for store ${storeId}:`, error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 
@@ -375,3 +609,18 @@ console.log('Port value:', PORT);
         process.exit(1); // Stop serveren, hvis initialisering fejler
     }
 })();
+
+app.get('/store', async (req, res) => {
+    try {
+        console.log('Fetching stores from database...');
+        const [store] = await pool.query(`
+            SELECT store_ID, store_name, store_address, image
+            FROM Store
+        `);
+        console.log('Stores fetched:', store); // Debug-log
+        res.status(200).json(store);
+    } catch (error) {
+        console.error('Database error in /stores:', error);
+        res.status(500).json({ message: 'Could not fetch stores.' });
+    }
+});
