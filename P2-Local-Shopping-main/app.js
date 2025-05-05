@@ -3,6 +3,7 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import { getUsers, createUser } from './database.js';
+import { createStore } from './database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
@@ -131,6 +132,83 @@ app.post('/login', async (req, res) => {
         res.json({ message: 'Login successful', user });
     } catch (error) {
         console.error('Error in /login route:', error);
+        res.status(500).json({ error: 'Could not login' });
+    }
+});
+
+// API-rute til oprettelse af ny bruger
+app.post('/store-signup', async (req, res) => {
+    console.log('Store-Signup request received:', req.body);
+    const { Store_name, Store_address, Store_description, email, password } = req.body;
+
+    // Validerer at alle felter er udfyldt
+    if (!Store_name || !Store_address || !Store_description || !email || !password) {
+        console.log('Missing fields in request body');
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Validerer adgangskodelængde på serveren
+    if (password.length < 8) {
+        console.log('Password too short');
+        return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
+
+    try {
+        // Hash adgangskode
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log('Hashed password:', hashedPassword);
+        // Opret butikken i databasen
+        const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword);
+        console.log('User created successfully:', result);
+        res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
+    
+    } catch (error) {
+        console.error('Error during signup:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'Email already exists' });
+        }
+            // Her fanger vi alle andre fejl
+    return res.status(500).json({ 
+        error: 'Could not create store', 
+        details: error.message,
+        stack: error.stack,
+    });
+    }
+});
+
+app.post('/storelogin', async (req, res) => {
+    console.log('Login request received:', req.body);
+    const { email, password } = req.body;
+
+    // Validerer at alle felter er udfyldt
+    if (!email || !password) {
+        console.log('Missing email or password in request body');
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        // Hent bruger fra databasen baseret på email
+        const [rows] = await pool.query("SELECT * FROM Store WHERE email = ?", [email]);
+        console.log('Database query result:', rows);
+
+        if (rows.length === 0) {
+            console.log(' Store not found in database');
+            return res.status(404).json({ error: 'Store not found' });
+        }
+
+        const user = rows[0];
+        // Valider adgangskode
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log('Password validation result:', isPasswordValid);
+
+        if (!isPasswordValid) {
+            console.log('Invalid credentials');
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        res.json({ message: 'Login successful', user });
+    } catch (error) {
+        console.error('Error in /storelogin route:', error);
         res.status(500).json({ error: 'Could not login' });
     }
 });
