@@ -53,6 +53,8 @@ app.use('/uploads', (req, res, next) => {
     next();
 }, express.static(path.join(__dirname, 'public/uploads')));
 
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+
 // API-rute til at hente alle brugere
 app.get('/users', async (req, res) => {
     try {
@@ -367,9 +369,9 @@ app.get('/store/:id', async (req, res) => {
         const geocodeResponse = await fetch(geocodeUrl);
         const geocodeData = await geocodeResponse.json();
 
-        if (geocodeData.status !== 'OK') {
+        if (geocodeData.status !== 'OK' || !geocodeData.results.length) {
             console.error(`Geocoding API error: ${geocodeData.status}`);
-            return res.status(500).send("Could not fetch coordinates for the store address.");
+            return res.status(400).send("Invalid address. Could not fetch coordinates for the store address.");
         }
 
         const location = geocodeData.results[0].geometry.location; // Get latitude and longitude
@@ -391,7 +393,7 @@ app.get('/store/:id', async (req, res) => {
         }
     </style>
     <script>
-        function initMap() {
+        window.initMap = function() {
             const storeLocation = { lat: ${location.lat}, lng: ${location.lng} };
             const map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 15,
@@ -402,7 +404,7 @@ app.get('/store/:id', async (req, res) => {
                 map: map,
                 title: "${Store.Store_name}",
             });
-        }
+        };
     </script>
 </head>
 <body>
