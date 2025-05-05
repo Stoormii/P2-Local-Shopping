@@ -269,55 +269,87 @@ const categoryProductsHTML = categoryProducts.map(product => `
 
 // Route to serve store details
 app.get('/store/:id', async (req, res) => {
- const storeId = req.params.id; // Get the store ID from the URL parameter
+    const storeId = req.params.id; // Get the store ID from the URL parameter
 
+    try {
+        // Query the database for the store with the given ID
+        const [rows] = await pool.query("SELECT * FROM Store WHERE Store_ID = ?", [storeId]);
 
- try {
-   // Query the database for the store with the given ID
-   const [rows] = await pool.query("SELECT * FROM Store WHERE Store_ID = ?", [storeId]);
+        if (rows.length === 0) {
+            console.log(`Store with ID ${storeId} not found`);
+            return res.status(404).send("Store not found");
+        }
 
+        const Store = rows[0]; // Get the first row from the query result
 
-   if (rows.length === 0) {
-     console.log(`Store with ID ${storeId} not found`);
-     return res.status(404).send("Store not found");
-   }
+        // Use Google Maps Geocoding API to get coordinates from the address
+        const apiKey = 'AIzaSyC4b-MK0S4IejMk4x8rRTJyVkTadnbh5rQ'; // Replace with your actual API key
+        const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(Store.Store_address)}&key=${apiKey}`;
 
+        const geocodeResponse = await fetch(geocodeUrl);
+        const geocodeData = await geocodeResponse.json();
 
-   const Store = rows[0]; // Get the first row from the query result
+        if (geocodeData.status !== 'OK') {
+            console.error(`Geocoding API error: ${geocodeData.status}`);
+            return res.status(500).send("Could not fetch coordinates for the store address.");
+        }
 
+        const location = geocodeData.results[0].geometry.location; // Get latitude and longitude
 
-   // Dynamically render the HTML template with the store data
-   const htmlContent = `
+        // Dynamically render the HTML template with the store data and Google Maps
+        const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>${Store.Store_name}</title>
-   <link rel="stylesheet" href="/css/store-template.css">
+    <meta charset="UTF-8">
+    <title>${Store.Store_name}</title>
+    <link rel="stylesheet" href="/css/store-template.css">
+    <script async src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function initMap() {
+            const storeLocation = { lat: ${location.lat}, lng: ${location.lng} };
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: storeLocation,
+            });
+            new google.maps.Marker({
+                position: storeLocation,
+                map: map,
+                title: "${Store.Store_name}",
+            });
+        }
+    </script>
 </head>
 <body>
-   <div class="logo">
-       <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="Our logo"> </a>
-   </div>
-   <div class="store">
-       <div class="text-container">
-       <h1>${Store.Store_name}</h1>
-       <p class="description">${Store.Store_description}</p>
-       <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
-       </div>
-       <img src="${Store.image}" alt="${Store.Store_name}">
-   </div>
-  
+    <div class="logo">
+        <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="Our logo"> </a>
+    </div>
+    <div class="store">
+        <div class="text-container">
+            <h1>${Store.Store_name}</h1>
+            <p class="description">${Store.Store_description}</p>
+            <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
+        </div>
+        <img src="${Store.image}" alt="${Store.Store_name}">
+    </div>
+    <!-- Google Maps container -->
+    <div id="map"></div>
 </body>
 </html>
 `;
 
-
-   res.send(htmlContent);
-  } catch (error) {
-    console.error(`Error fetching store with ID ${storeId}:`, error);
-    res.status(500).send("Internal Server Error");
-  }
+        res.send(htmlContent);
+    } catch (error) {
+        console.error(`Error fetching store with ID ${storeId}:`, error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 // Route to get the top 10 products with the highest views
