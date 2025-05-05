@@ -349,10 +349,9 @@ const categoryProductsHTML = categoryProducts.map(product => `
 
 // Route to serve store details
 app.get('/store/:id', async (req, res) => {
-    const storeId = req.params.id; // Get the store ID from the URL parameter
+    const storeId = req.params.id;
 
     try {
-        // Query the database for the store with the given ID
         const [rows] = await pool.query("SELECT * FROM Store WHERE Store_ID = ?", [storeId]);
 
         if (rows.length === 0) {
@@ -360,10 +359,9 @@ app.get('/store/:id', async (req, res) => {
             return res.status(404).send("Store not found");
         }
 
-        const Store = rows[0]; // Get the first row from the query result
+        const Store = rows[0];
 
-        // Use Google Maps Geocoding API to get coordinates from the address
-        const apiKey = 'AIzaSyC4b-MK0S4IejMk4x8rRTJyVkTadnbh5rQ'; // Replace with your actual API key
+        const apiKey = 'AIzaSyC4b-MK0S4IejMk4x8rRTJyVkTadnbh5rQ';
         const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(Store.Store_address)}&key=${apiKey}`;
 
         const geocodeResponse = await fetch(geocodeUrl);
@@ -374,9 +372,8 @@ app.get('/store/:id', async (req, res) => {
             return res.status(400).send("Invalid address. Could not fetch coordinates for the store address.");
         }
 
-        const location = geocodeData.results[0].geometry.location; // Get latitude and longitude
+        const location = geocodeData.results[0].geometry.location;
 
-        // Dynamically render the HTML template with the store data and Google Maps
         const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -384,7 +381,6 @@ app.get('/store/:id', async (req, res) => {
     <meta charset="UTF-8">
     <title>${Store.Store_name}</title>
     <link rel="stylesheet" href="/css/store-template.css">
-    <script async src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap"></script>
     <style>
         #map {
             height: 400px;
@@ -393,7 +389,7 @@ app.get('/store/:id', async (req, res) => {
         }
     </style>
     <script>
-        window.initMap = function() {
+        function initMap() {
             const storeLocation = { lat: ${location.lat}, lng: ${location.lng} };
             const map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 15,
@@ -404,8 +400,9 @@ app.get('/store/:id', async (req, res) => {
                 map: map,
                 title: "${Store.Store_name}",
             });
-        };
+        }
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap"></script>
 </head>
 <body>
     <div class="logo">
@@ -419,7 +416,6 @@ app.get('/store/:id', async (req, res) => {
         </div>
         <img src="${Store.image}" alt="${Store.Store_name}">
     </div>
-    <!-- Google Maps container -->
     <div id="map"></div>
 </body>
 </html>
