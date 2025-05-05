@@ -409,7 +409,9 @@ app.get('/store/:id', async (req, res) => {
     <div class="store">
         <div class="text-container">
             <h1>${Store.Store_name}</h1>
-            <p class="description">${Store.Store_description}</p>
+            <p class="description">
+            Description: \n
+            ${Store.Store_description}</p>
             <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
         </div>
         <img src="${Store.image}" alt="${Store.Store_name}">
