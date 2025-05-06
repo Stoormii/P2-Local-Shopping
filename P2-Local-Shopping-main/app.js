@@ -180,7 +180,7 @@ app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
             console.log('Uploaded logo URL:', logoUrl);
         }
         // Opret butikken i databasen
-        const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword);
+        const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword, logoUrl);
         console.log('User created successfully:', result);
         res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
     
