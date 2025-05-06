@@ -15,7 +15,7 @@ if (storesignupForm) {
     const storeRepeatPasswordInput = document.getElementById('repeat-store-password-input');
     const storeDescriptionInput    = document.getElementById('store-description-input');
     const storeSignupErrorMessage  = document.getElementById('storesignup-error-message');
-    const storeLogoInput           = document.getElementById('shop-imaget');
+    const storeLogoInput           = document.getElementById('shop-image');
 
     storesignupForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Forhindrer standard formularindsendelse
@@ -27,7 +27,7 @@ if (storesignupForm) {
         const password       = storePasswordInput.value;            
         const repeatPassword = storeRepeatPasswordInput.value;
         const description    = storeDescriptionInput.value.trim();
-        const storeLogoInput = document.getElementById('shop-image');
+        const logoUrl        = storeLogoInput.value;
 
         // Valider input-data
         const storeSignupErrors = getStoreSignupFormErrors(
@@ -45,7 +45,8 @@ if (storesignupForm) {
             Store_description: description,
             email:             email,
             password:          password,
-            image:             storeLogoInput
+            image:             logoUrl
+            
         };
 
         // Deaktiver knappen under anmodning
