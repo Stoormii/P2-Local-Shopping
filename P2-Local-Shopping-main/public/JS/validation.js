@@ -38,52 +38,34 @@ if (storesignupForm) {
             return;
         }
 
-        // Opret objekt med brugerdata til serveren
-        const storeData = {
-            Store_name:        name,
-            Store_address:     address,
-            Store_description: description,
-            email:             email,
-            password:          password,
-            image:             logoUrl
-            
-        };
-
         // Deaktiver knappen under anmodning
         const submitbutton = storesignupForm.querySelector('button[type="submit"]');
         submitbutton.disabled = true;
 
+        const formData = new FormData();
+        formData.append('Store_name', name);
+        formData.append('Store_address', address);
+        formData.append('Store_description', description);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('logo', storeLogoInput.files[0]);
+
         try {
-            console.log('Sending data to server:', storeData);
             const response = await fetch(`${BASE_URL}/store-signup`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(storeData),
+                body: formData,
             });
-
-            // Tjek om svaret er JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                console.error('Received non-JSON response:', text);
-                throw new Error('Server returned an unexpected response format');
-            }
 
             const result = await response.json();
             console.log('Server response:', result);
 
             if (response.ok) {
-                // Omdiriger til butik-login-siden ved succes
                 window.location.href = `${BASE_URL}/storelogin.html`;
             } else {
-                // Vis serverfejl
                 storeSignupErrorMessage.innerText = result.error || 'An error occurred';
                 submitbutton.disabled = false;
             }
         } catch (error) {
-            // Håndter netværks- eller JSON-parsingsfejl
             console.error('Network error:', error);
             storeSignupErrorMessage.innerText = 'An error occurred. Please try again later.';
             submitbutton.disabled = false;
