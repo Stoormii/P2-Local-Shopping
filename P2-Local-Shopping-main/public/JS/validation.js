@@ -27,7 +27,7 @@ if (storesignupForm) {
         const password       = storePasswordInput.value;            
         const repeatPassword = storeRepeatPasswordInput.value;
         const description    = storeDescriptionInput.value.trim();
-        const logoUrl        = storeLogoInput.value;
+        const storeLogoInput = document.getElementById('shop-image');
 
         // Valider input-data
         const storeSignupErrors = getStoreSignupFormErrors(
@@ -45,7 +45,7 @@ if (storesignupForm) {
             Store_description: description,
             email:             email,
             password:          password,
-            image:             logoUrl,
+            image:             storeLogoInput
         };
 
         // Deaktiver knappen under anmodning
