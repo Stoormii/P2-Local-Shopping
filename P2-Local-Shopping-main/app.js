@@ -176,7 +176,7 @@ app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
         // Håndter logo-upload
         let logoUrl = null;
         if (req.file) {
-            logoUrl = `/uploads/${req.file.filename}`; // Gemmer stien til logoet
+            logoUrl = `/node9/uploads/${req.file.filename}`; //URL til logoet
             console.log('Uploaded logo URL:', logoUrl);
         }
         // Opret butikken i databasen
