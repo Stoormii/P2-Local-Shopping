@@ -342,3 +342,45 @@ function getUserLoginErrors(email, pw) {
     else if (pw.length < 8)          errs.push('Password must be at least 8 characters');
     return errs;
 }
+
+
+// ======== Logout / Session handling ========
+async function handleLoginStatus() {
+    try { 
+        const respos = await fetch(`${BASE_URL}/session`); 
+        const data = await respos.json();
+        console.log('Session data:', data);
+
+        const accountMenu  = document.getElementById('.account-menu');
+        accountMenu.innerHTML = ''; // Tøm menuen
+
+        if (data.LoggedIn) {
+            // Hvis brugeren er logget ind:
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent = 'Logout';
+            logoutLink.href = '#';
+            logoutLink.onclick = async (e) => {
+                e.preventDefault();
+                await fetch(`${BASE_URL}/logout`, { method: 'POST' });
+                window.location.reload(); // Genindlæs siden for at opdatere loginstatus
+            };
+            accountMenu.appendChild(logoutLink);
+        } else {
+            // Hvis brugeren ikke er logget ind:
+            const loginLink = document.createElement('a');
+            loginLink.textContent = 'Login';
+            loginLink.href = `${BASE_URL}/login.html`;
+                 
+            const signupLink = document.createElement('a');
+            signupLink.textContent = 'Signup';
+            signupLink.href = `${BASE_URL}/signup.html`;
+
+            accountMenu.appendChild(loginLink);
+            accountMenu.appendChild(signupLink);
+        }
+    } catch (error) {
+        console.error('Error checking session data:', error);
+    }
+}
+
+handleLoginStatus(); // Kald funktionen for at håndtere loginstatus ved indlæsning af siden
