@@ -2,6 +2,8 @@
 import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
+import session from 'express-session';
+import MySQLStore from 'connect-mysql2';
 import { getUsers, createUser } from './database.js';
 import { createStore } from './database.js';
 import path from 'path';
@@ -16,7 +18,6 @@ import { createItem } from './database.js'; // Importer createItem-funktionen
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
-
 const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
 
 // Opretter Express-applikation
@@ -30,6 +31,21 @@ app.use(express.json());
 // CORS-konfiguration til at tillade anmodninger fra specifikt domæne
 app.use(cors({
     origin: ['https://cs-25-sw-2-09.p2datsw.cs.aau.dk', 'http://localhost:3399'],
+}));
+
+const sessionStore = new MySQLStore({}, pool);
+
+app.use(session({
+    key: 'session_cookie_name', // Navnet på session-cookien
+    secret: 'your_secret_key', // Hemmelig nøgle til at signere sessionen
+    store: sessionStore, // Bruger MySQL som session store
+    resave: false, // Gør ikke sessionen om, hvis den ikke er ændret
+    saveUninitialized: false, // Gem ikke sessionen, før den er initialiseret
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24, // Sætter cookieens levetid til 1 dag
+        secure: false, // False pga HTPP
+        httpOnly: true, // Forhindrer adgang til cookien fra JavaScript
+    },
 }));
 
 // Logger alle indgående anmodninger til fejlfinding
