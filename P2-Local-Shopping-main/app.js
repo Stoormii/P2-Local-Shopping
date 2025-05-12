@@ -517,16 +517,6 @@ app.post('/add-product', async (req, res) => {
     }
 });
 
-// Dette er bare en test i forhold til POSTMAN
-app.get('/test-products', async (req, res) => {
-    try {
-        const [products] = await pool.query("SELECT * FROM Product");
-        res.json(products);
-    } catch (error) {
-        res.status(500).json({ error: "Database error", details: error.message });
-    }
-});
-
 app.get('/products', async (req, res) => {
     try {
         console.log('Fetching products with LEFT JOIN...');
