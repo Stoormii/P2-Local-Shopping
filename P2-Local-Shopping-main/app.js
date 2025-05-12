@@ -521,7 +521,7 @@ app.get('/products', async (req, res) => {
     try {
         console.log('Fetching products with LEFT JOIN...');
         const [products] = await pool.query(`
-            SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
+            SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, p.Store_ID,
                    c.Category_name, s.Store_Name
             FROM Product p
             LEFT JOIN Categories c ON p.Category_ID = c.Category_ID
