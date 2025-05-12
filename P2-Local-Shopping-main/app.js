@@ -529,15 +529,15 @@ app.get('/test-products', async (req, res) => {
 
 app.get('/products', async (req, res) => {
     try {
-        console.log('Fetching products from database...');
+        console.log('Fetching products with LEFT JOIN...');
         const [products] = await pool.query(`
             SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, 
                    c.Category_name, s.Store_Name
             FROM Product p
-            JOIN Categories c ON p.Category_ID = c.Category_ID
-            JOIN Store s ON p.Store_ID = s.Store_ID
+            LEFT JOIN Categories c ON p.Category_ID = c.Category_ID
+            LEFT JOIN Store s ON p.Store_ID = s.Store_ID
         `);
-        console.log('Products fetched:', products); // Debug-log
+        console.log('Products fetched:', products);
         res.status(200).json(products);
     } catch (error) {
         console.error('Database error in /products:', error);
