@@ -3,7 +3,7 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import session from 'express-session';
-import MySQLStore from 'connect-mysql2';
+import MySQLStoreFactory from 'express-mysql-session';
 import { getUsers, createUser } from './database.js';
 import { createStore } from './database.js';
 import path from 'path';
@@ -27,13 +27,18 @@ app.set('trust proxy', true); // Sørger for, at req.protocol respekterer X-Forw
 
 // Middleware til at parse JSON-data fra frontend
 app.use(express.json());
-
-// CORS-konfiguration til at tillade anmodninger fra specifikt domæne
+  
 app.use(cors({
     origin: ['https://cs-25-sw-2-09.p2datsw.cs.aau.dk', 'http://localhost:3399'],
 }));
 
-const sessionStore = new MySQLStore({}, pool);
+const MySQLStore = MySQLStoreFactory(session);
+const sessionStore = new MySQLStore({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+});
 
 app.use(session({
     key: 'session_cookie_name', // Navnet på session-cookien
@@ -145,6 +150,12 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
+        req.session.user = {
+        id: user.id,
+        firstname: user.firstname,
+        email: user.email
+        };
+
         res.json({ message: 'Login successful', user });
     } catch (error) {
         console.error('Error in /login route:', error);
@@ -228,6 +239,27 @@ app.post('/storelogin', async (req, res) => {
         res.status(500).json({ error: 'Could not login' });
     }
 });
+
+app.get('/session', (req, res) => {
+    if (req.session.user) {
+        res.json({ LoggedIn: true, user: req.session.user });
+    } else {
+        res.json({ LoggedIn: false });
+    }
+});
+
+// API-rute til at logge ud
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.status(500).json({ error: 'Could not log out' });
+        }
+        res.clearCookie('session_cookie_name'); // matcher din session config
+        res.json({ message: 'Logged out successfully' });
+    });
+});
+
 
 // Serve the redirect.js file
 app.get('/js/redirect.js', (req, res) => {

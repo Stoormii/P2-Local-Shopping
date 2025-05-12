@@ -351,14 +351,38 @@ async function handleLoginStatus() {
         const data = await respos.json();
         console.log('Session data:', data);
 
-        const accountMenu  = document.getElementById('.account-menu');
+        const accountMenu  = document.getElementById('account-menu');
+        if (!accountMenu) {
+            console.error('Elementet med id="account-menu" blev ikke fundet.');
+            return;
+        }
         accountMenu.innerHTML = ''; // Tøm menuen
 
         if (data.LoggedIn) {
             // Hvis brugeren er logget ind:
+            const greeting = document.createElement('span');
+            greeting.textContent = `Hello ${data.user.firstname}!`;
+            greeting.style.display = 'block';
+            greeting.style.textAlign = 'center';
+            greeting.style.fontWeight = 'bold'; // Gør teksten fed
+            greeting.style.color = '#333'; // Ændre farven til mørk grå
+            greeting.style.fontSize = '16px'; // Ændre skriftstørrelsen
+            accountMenu.appendChild(greeting);
+
+            // Opret en "My Account" link
+            const myAccountLink = document.createElement('a');
+            myAccountLink.textContent = 'My Account';
+            myAccountLink.href = '#';
+            myAccountLink.style.display = 'block';
+            myAccountLink.style.margin = '2px 0'; // Mindre vertikal afstand
+
+             accountMenu.appendChild(myAccountLink);
+
             const logoutLink = document.createElement('a');
             logoutLink.textContent = 'Logout';
             logoutLink.href = '#';
+            logoutLink.style.display = 'block';
+            logoutLink.style.margin = '2px 0'; // Samme her
             logoutLink.onclick = async (e) => {
                 e.preventDefault();
                 await fetch(`${BASE_URL}/logout`, { method: 'POST' });
