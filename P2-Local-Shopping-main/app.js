@@ -204,36 +204,31 @@ app.post('/store-signup', async (req, res) => {
 });
 
 app.post('/storelogin', async (req, res) => {
-    console.log('Login request received:', req.body);
     const { email, password } = req.body;
 
-    // Validerer at alle felter er udfyldt
     if (!email || !password) {
-        console.log('Missing email or password in request body');
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
-        // Hent bruger fra databasen baseret på email
         const [rows] = await pool.query("SELECT * FROM Store WHERE email = ?", [email]);
-        console.log('Database query result:', rows);
-
         if (rows.length === 0) {
-            console.log(' Store not found in database');
             return res.status(404).json({ error: 'Store not found' });
         }
 
-        const user = rows[0];
-        // Valider adgangskode
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        console.log('Password validation result:', isPasswordValid);
-
+        const store = rows[0];
+        const isPasswordValid = await bcrypt.compare(password, store.password);
         if (!isPasswordValid) {
-            console.log('Invalid credentials');
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
-        res.json({ message: 'Login successful', user });
+        req.session.store = {
+            id: store.Store_ID,
+            storename: store.Store_name,
+            email: store.email,
+        };
+
+        res.json({ message: 'Login successful', store: req.session.store });
     } catch (error) {
         console.error('Error in /storelogin route:', error);
         res.status(500).json({ error: 'Could not login' });
@@ -243,6 +238,8 @@ app.post('/storelogin', async (req, res) => {
 app.get('/session', (req, res) => {
     if (req.session.user) {
         res.json({ LoggedIn: true, user: req.session.user });
+    } else if (req.session.store) {
+        res.json({ LoggedIn: true, store: req.session.store });
     } else {
         res.json({ LoggedIn: false });
     }

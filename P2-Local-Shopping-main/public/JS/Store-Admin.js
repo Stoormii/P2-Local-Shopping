@@ -46,6 +46,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${baseUrl}/logout`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    window.location.href = 'storelogin.html';
+                } else {
+                    alert('Kunne ikke logge ud.');
+                }
+            } catch (error) {
+                console.error('Fejl ved logout:', error);
+                alert('Noget gik galt under logout.');
+            }
+        });
+    }ç
+
     function init() {
         fetchProducts(); 
         setupEventListeners();
@@ -334,3 +353,4 @@ app.get('*', (req, res) => {
         }
     });
 });
+
