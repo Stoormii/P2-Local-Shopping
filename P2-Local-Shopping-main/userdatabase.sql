@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Store (
     Store_address VARCHAR(255) NOT NULL,
     Store_description TEXT NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(60) NOT NULL
+    password VARCHAR(60) NOT NULL,
     image VARCHAR(255)
 );
 

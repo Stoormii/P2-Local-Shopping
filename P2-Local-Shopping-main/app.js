@@ -2,6 +2,8 @@
 import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
+import session from 'express-session';
+import MySQLStoreFactory from 'express-mysql-session';
 import { getUsers, createUser } from './database.js';
 import { createStore } from './database.js';
 import path from 'path';
@@ -16,7 +18,6 @@ import { createItem } from './database.js'; // Importer createItem-funktionen
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
-
 const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
 
 // Opretter Express-applikation
@@ -26,10 +27,30 @@ app.set('trust proxy', true); // Sørger for, at req.protocol respekterer X-Forw
 
 // Middleware til at parse JSON-data fra frontend
 app.use(express.json());
-
-// CORS-konfiguration til at tillade anmodninger fra specifikt domæne
+  
 app.use(cors({
     origin: ['https://cs-25-sw-2-09.p2datsw.cs.aau.dk', 'http://localhost:3399'],
+}));
+
+const MySQLStore = MySQLStoreFactory(session);
+const sessionStore = new MySQLStore({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+});
+
+app.use(session({
+    key: 'session_cookie_name', // Navnet på session-cookien
+    secret: 'your_secret_key', // Hemmelig nøgle til at signere sessionen
+    store: sessionStore, // Bruger MySQL som session store
+    resave: false, // Gør ikke sessionen om, hvis den ikke er ændret
+    saveUninitialized: false, // Gem ikke sessionen, før den er initialiseret
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24, // Sætter cookieens levetid til 1 dag
+        secure: false, // False pga HTPP
+        httpOnly: true, // Forhindrer adgang til cookien fra JavaScript
+    },
 }));
 
 // Logger alle indgående anmodninger til fejlfinding
@@ -131,6 +152,12 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
+        req.session.user = {
+        id: user.id,
+        firstname: user.firstname,
+        email: user.email
+        };
+
         res.json({ message: 'Login successful', user });
     } catch (error) {
         console.error('Error in /login route:', error);
@@ -199,41 +226,59 @@ app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
 });
 
 app.post('/storelogin', async (req, res) => {
-    console.log('Login request received:', req.body);
     const { email, password } = req.body;
 
-    // Validerer at alle felter er udfyldt
     if (!email || !password) {
-        console.log('Missing email or password in request body');
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
-        // Hent bruger fra databasen baseret på email
         const [rows] = await pool.query("SELECT * FROM Store WHERE email = ?", [email]);
-        console.log('Database query result:', rows);
-
         if (rows.length === 0) {
-            console.log(' Store not found in database');
             return res.status(404).json({ error: 'Store not found' });
         }
 
-        const user = rows[0];
-        // Valider adgangskode
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        console.log('Password validation result:', isPasswordValid);
-
+        const store = rows[0];
+        const isPasswordValid = await bcrypt.compare(password, store.password);
         if (!isPasswordValid) {
-            console.log('Invalid credentials');
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
-        res.json({ message: 'Login successful', user });
+        req.session.store = {
+            id: store.Store_ID,
+            storename: store.Store_name,
+            email: store.email,
+        };
+
+        res.json({ message: 'Login successful', store: req.session.store });
     } catch (error) {
         console.error('Error in /storelogin route:', error);
         res.status(500).json({ error: 'Could not login' });
     }
 });
+
+app.get('/session', (req, res) => {
+    if (req.session.user) {
+        res.json({ LoggedIn: true, user: req.session.user });
+    } else if (req.session.store) {
+        res.json({ LoggedIn: true, store: req.session.store });
+    } else {
+        res.json({ LoggedIn: false });
+    }
+});
+
+// API-rute til at logge ud
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.status(500).json({ error: 'Could not log out' });
+        }
+        res.clearCookie('session_cookie_name'); // matcher din session config
+        res.json({ message: 'Logged out successfully' });
+    });
+});
+
 
 // Serve the redirect.js file
 app.get('/js/redirect.js', (req, res) => {

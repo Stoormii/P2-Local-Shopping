@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalTitle = document.getElementById('modalTitle');
     const addProductBtn = document.getElementById('addProductBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const logoutBtn = document.getElementById('logout-btn')
+
 
     const baseUrl = window.location.origin.includes('localhost')
         ? '' // Lokalt miljø
@@ -45,6 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Kunne ikke hente produkter. Tjek serveren eller prøv igen senere.');
         }
     }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${baseUrl}/logout`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    window.location.href = 'storelogin.html';
+                } else {
+                    alert('Kunne ikke logge ud.');
+                }
+            } catch (error) {
+                console.error('Fejl ved logout:', error);
+                alert('Noget gik galt under logout.');
+            }
+        });
+    }ç
 
     function init() {
         fetchProducts(); 
@@ -334,3 +355,4 @@ app.get('*', (req, res) => {
         }
     });
 });
+

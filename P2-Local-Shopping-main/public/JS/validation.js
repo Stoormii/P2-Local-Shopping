@@ -328,3 +328,69 @@ function getUserLoginErrors(email, pw) {
     else if (pw.length < 8)          errs.push('Password must be at least 8 characters');
     return errs;
 }
+
+
+// ======== Logout / Session handling ========
+async function handleLoginStatus() {
+    try { 
+        const respos = await fetch(`${BASE_URL}/session`); 
+        const data = await respos.json();
+        console.log('Session data:', data);
+
+        const accountMenu  = document.getElementById('account-menu');
+        if (!accountMenu) {
+            console.error('Elementet med id="account-menu" blev ikke fundet.');
+            return;
+        }
+        accountMenu.innerHTML = ''; // Tøm menuen
+
+        if (data.LoggedIn) {
+            // Hvis brugeren er logget ind:
+            const greeting = document.createElement('span');
+            greeting.textContent = `Hello ${data.user.firstname}!`;
+            greeting.style.display = 'block';
+            greeting.style.textAlign = 'center';
+            greeting.style.fontWeight = 'bold'; // Gør teksten fed
+            greeting.style.color = '#333'; // Ændre farven til mørk grå
+            greeting.style.fontSize = '16px'; // Ændre skriftstørrelsen
+            accountMenu.appendChild(greeting);
+
+            // Opret en "My Account" link
+            const myAccountLink = document.createElement('a');
+            myAccountLink.textContent = 'My Account';
+            myAccountLink.href = '#';
+            myAccountLink.style.display = 'block';
+            myAccountLink.style.margin = '2px 0'; // Mindre vertikal afstand
+
+             accountMenu.appendChild(myAccountLink);
+
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent = 'Logout';
+            logoutLink.href = '#';
+            logoutLink.style.display = 'block';
+            logoutLink.style.margin = '2px 0'; // Samme her
+            logoutLink.onclick = async (e) => {
+                e.preventDefault();
+                await fetch(`${BASE_URL}/logout`, { method: 'POST' });
+                window.location.reload(); // Genindlæs siden for at opdatere loginstatus
+            };
+            accountMenu.appendChild(logoutLink);
+        } else {
+            // Hvis brugeren ikke er logget ind:
+            const loginLink = document.createElement('a');
+            loginLink.textContent = 'Login';
+            loginLink.href = `${BASE_URL}/login.html`;
+                 
+            const signupLink = document.createElement('a');
+            signupLink.textContent = 'Signup';
+            signupLink.href = `${BASE_URL}/signup.html`;
+
+            accountMenu.appendChild(loginLink);
+            accountMenu.appendChild(signupLink);
+        }
+    } catch (error) {
+        console.error('Error checking session data:', error);
+    }
+}
+
+handleLoginStatus(); // Kald funktionen for at håndtere loginstatus ved indlæsning af siden

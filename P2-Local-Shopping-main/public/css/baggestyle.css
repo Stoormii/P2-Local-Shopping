@@ -1,107 +1,108 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
 }
 
 a {
-    color: #3498db;
+  color: #3498db;
 }
 
 a:hover {
-    color: #1abc9c;
+  color: #1abc9c;
 }
 
 a h3 {
-    text-align: center;
-    margin: 0;
-    padding: 10px;
-    background-color: #ecf0f1;
-    border: 1px solid #dcdcdc;
-    border-radius: 5px;
-    display: inline-block;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+  background-color: #ecf0f1;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+  display: inline-block;
 }
 
 a h3:hover {
-    background-color: #dcdcdc;
-    color: #2c3e50;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #dcdcdc;
+  color: #2c3e50;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 
 p {
-    margin: 0 0 20px 20px;
-    font-size: 14px;
-    color: #7f8c8d;
+  margin: 0 0 20px 20px;
+  font-size: 14px;
+  color: #7f8c8d;
 }
-
 
 h1 {
-    text-align: center;
-    margin-top: 40px;
-    color: #2c3e50;
+  text-align: center;
+  margin-top: 40px;
+  color: #2c3e50;
 }
 
-
-body > a, body > p, h1, h2 {
-    margin: 20px;
+body > a,
+body > p,
+h1,
+h2 {
+  margin: 20px;
 }
 
 .scroll-container {
-    display: flex;
-    overflow-x: scroll; 
-    gap: 10px;          
-    padding: 10px;
-    padding-top: 50px;
-    max-width: 100%;   
-    height: 300px;      
-    scroll-behavior: smooth; 
-    margin-bottom: 50px;
-    border-radius: 10px;
-  }
-  
-  
-  .item {
-    min-width: 200px;   
-    text-align: center;
-    padding: 30px;
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-
-  .item img{
-    width: 120px;
-    height: 120px;
-  }
-
-  .stats {
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px;
-    border-radius: 5px;
-  }
-  
-  .stats h1 {
-    margin-bottom: 10px;
-  }
-  .chart-cl {
-    align-content: center; 
-    height: 400px; 
-    width: 70%; 
-    margin: 0 auto; 
-  }
-  .chart-cl h2 {
-   text-align: center;
-  }
-
-.stats-heading {
-    text-align: left; 
-    margin: 0;
-    
+  display: flex;
+  overflow-x: scroll;
+  gap: 10px;
+  padding: 10px;
+  padding-top: 50px;
+  max-width: 100%;
+  height: 300px;
+  scroll-behavior: smooth;
+  margin-bottom: 50px;
+  border-radius: 10px;
 }
 
+.item {
+  min-width: 200px;
+  text-align: center;
+  padding: 30px;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.item img {
+  width: 120px;
+  height: 120px;
+}
+
+.stats {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px;
+  border-radius: 5px;
+}
+
+.stats h1 {
+  margin-bottom: 10px;
+}
+
+.chart-cl {
+  align-content: center;
+  height: 400px;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.chart-cl h2 {
+  text-align: center;
+}
+
+.stats-heading {
+  text-align: left;
+  margin: 0;
+}
+
+/* Navbar layout med venstre og højre links */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -110,25 +111,35 @@ body > a, body > p, h1, h2 {
   color: #fff;
   border: 10px solid white;
   border-radius: 25px;
+  padding: 0 20px;
 }
-
 
 .nav-links {
   list-style: none;
   display: flex;
   gap: 15px;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links li {
-  display: inline;
+  display: inline-block;
 }
 
+.nav-links.left {
+  justify-content: flex-start;
+}
+
+.nav-links.right {
+  justify-content: flex-end;
+}
+
+/* Almindelige links */
 .nav-links a {
   text-decoration: none;
   color: #fff;
-  padding: 2px 15px;
+  padding: 14px 16px;
   border-radius: 5px;
-  
 }
 
 .nav-links a:hover {
@@ -137,6 +148,22 @@ body > a, body > p, h1, h2 {
 }
 
 .nav-links a.active {
-  color: #333aff; 
-  font-weight: bold; 
+  color: #333aff;
+  font-weight: bold;
+}
+
+/* Logout-knap */
+.logout-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.logout-button:hover {
+  background-color: #ddd;
+  color: black;
 }
