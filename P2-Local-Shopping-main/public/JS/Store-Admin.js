@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalTitle = document.getElementById('modalTitle');
     const addProductBtn = document.getElementById('addProductBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const logoutBtn = document.getElementById('logout-btn')
+
 
     const baseUrl = window.location.origin.includes('localhost')
         ? '' // Lokalt miljø
