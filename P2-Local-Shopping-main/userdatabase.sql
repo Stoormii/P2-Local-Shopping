@@ -39,3 +39,20 @@ CREATE TABLE IF NOT EXISTS Store (
     image VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS Orders (
+    Order_id INT NOT NULL ZEROFILL AUTO_INCREMENT,
+    id INT NOT NULL,
+    PRIMARY KEY (Order_id),
+    FOREIGN KEY (id) REFERENCES users(id)
+);
+CREATE TABLE IF NOT EXISTS Order_Product (
+    Order_product_id INT NOT NULL AUTO_INCREMENT,
+    Order_id INT DEFAULT NULL,
+    Store_id INT DEFAULT NULL,
+    Product_id INT NOT NULL,
+    Quantity INT NOT NULL,
+    PRIMARY KEY (Order_product_id),
+    FOREIGN KEY (Order_id) REFERENCES orders(Order_id),
+    FOREIGN KEY (Store_id) REFERENCES stores(Store_id),
+    FOREIGN KEY (Product_id) REFERENCES products(Product_id)
+);
