@@ -561,6 +561,37 @@ app.get('/search', async (req, res) => {
     }
 });
 
+// Route to get all orders for store - used in Orders.js for store
+app.get('/Orders', async (req, res) => {
+    if (!req.session.store) {
+        return res.status(401).json({ message: "Not logged in as a store." });
+    }
+
+    const storeId = req.session.store.id; // Get the Store_ID of the logged-in store
+
+    try {
+        // Query to fetch orders that have products from the logged-in store
+        const [rows] = await pool.query(
+            `
+            SELECT DISTINCT o.Order_id, o.id
+            FROM Orders o
+            JOIN Order_Product op ON o.Order_id = op.Order_id
+            WHERE op.Store_id = ?
+            ORDER BY o.Order_id DESC
+            `,
+            [storeId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "No orders found for this store." });
+        }
+
+        res.json(rows); // Send the filtered orders as JSON
+    } catch (error) {
+        console.error('Error fetching orders for store:', error);
+        res.status(500).json({ message: 'Database error! Could not fetch orders.' });
+    }
+});
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 
