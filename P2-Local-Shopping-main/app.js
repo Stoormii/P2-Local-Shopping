@@ -708,3 +708,50 @@ app.get('/store', async (req, res) => {
         res.status(500).json({ message: 'Could not fetch stores.' });
     }
 });
+
+app.get('/categories', async (req, res) => {
+    try {
+        console.log('Fetching categories from database...');
+        const [store] = await pool.query(`
+            SELECT Category_ID, Category_name, Parent_ID
+            FROM categories
+        `);
+        console.log('categories fetched:', store); // Debug-log
+        res.status(200).json(store);
+    } catch (error) {
+        console.error('Database error in /categories:', error);
+        res.status(500).json({ message: 'Could not fetch categories.' });
+    }
+});
+
+// Henter produkter baseret på én eller flere kategori-ID'er
+app.get('/products/by-category', async (req, res) => {
+    try {
+        const ids = req.query.category_ids;
+
+        if (!ids) {
+            return res.status(400).json({ message: 'No category_ids provided' });
+        }
+
+        // Laver ID-strengen til en liste: "5,6,7" → [5, 6, 7]
+        const idList = ids.split(',').map(id => parseInt(id)).filter(id => !isNaN(id));
+
+        if (idList.length === 0) {
+            return res.status(400).json({ message: 'Invalid category_ids' });
+        }
+
+        // Bruges med parameter-binding (?) for sikkerhed
+        const placeholders = idList.map(() => '?').join(',');
+        const query = `
+            SELECT * FROM product
+            WHERE Category_ID IN (${placeholders})
+        `;
+
+        const [products] = await pool.query(query, idList);
+
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Fejl i /products/by-category:', error);
+        res.status(500).json({ message: 'Kunne ikke hente produkter' });
+    }
+});
