@@ -714,7 +714,7 @@ app.get('/categories', async (req, res) => {
         console.log('Fetching categories from database...');
         const [store] = await pool.query(`
             SELECT Category_ID, Category_name, Parent_ID
-            FROM categories
+            FROM Categories
         `);
         console.log('categories fetched:', store); // Debug-log
         res.status(200).json(store);
@@ -743,7 +743,7 @@ app.get('/products/by-category', async (req, res) => {
         // Bruges med parameter-binding (?) for sikkerhed
         const placeholders = idList.map(() => '?').join(',');
         const query = `
-            SELECT * FROM product
+            SELECT * FROM Product
             WHERE Category_ID IN (${placeholders})
         `;
 
