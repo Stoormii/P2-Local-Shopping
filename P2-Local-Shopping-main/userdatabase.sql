@@ -48,11 +48,11 @@ CREATE TABLE IF NOT EXISTS Orders (
 CREATE TABLE IF NOT EXISTS Order_Product (
     Order_product_id INT NOT NULL AUTO_INCREMENT,
     Order_id INT ,
-    Store_id INT ,
-    Product_id INT NOT NULL,
+    Store_ID INT ,
+    Product_ID INT NOT NULL,
     Quantity INT NOT NULL,
     PRIMARY KEY (Order_product_id),
-    FOREIGN KEY (Order_id) REFERENCES orders(Order_id),
-    FOREIGN KEY (Store_id) REFERENCES stores(Store_id),
-    FOREIGN KEY (Product_id) REFERENCES products(Product_id)
+    FOREIGN KEY (Order_id) REFERENCES Orders(Order_id),
+    FOREIGN KEY (Store_ID) REFERENCES Store(Store_ID),
+    FOREIGN KEY (Product_ID) REFERENCES Product(Product_ID)
 );
