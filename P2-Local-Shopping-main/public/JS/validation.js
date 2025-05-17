@@ -332,55 +332,40 @@ function getUserLoginErrors(email, pw) {
 
 // ======== Logout / Session handling ========
 async function handleLoginStatus() {
-    try { 
-        const respos = await fetch(`${BASE_URL}/session`); 
+    const accountMenu = document.getElementById('account-menu');
+    if (!accountMenu) return; // <-- STOP, hvis vi ikke er på en side med menuen
+
+    try {
+        const respos = await fetch(`${BASE_URL}/session`);
         const data = await respos.json();
         console.log('Session data:', data);
 
-        const accountMenu  = document.getElementById('account-menu');
-        if (!accountMenu) {
-            console.error('Elementet med id="account-menu" blev ikke fundet.');
-            return;
-        }
         accountMenu.innerHTML = ''; // Tøm menuen
 
         if (data.LoggedIn) {
-            // Hvis brugeren er logget ind:
             const greeting = document.createElement('span');
-            greeting.textContent = `Hello ${data.user.firstname}!`;
+            greeting.textContent = `Hello ${data.user?.firstname || data.store?.storename || 'Guest'}!`;
             greeting.style.display = 'block';
             greeting.style.textAlign = 'center';
-            greeting.style.fontWeight = 'bold'; // Gør teksten fed
-            greeting.style.color = '#333'; // Ændre farven til mørk grå
-            greeting.style.fontSize = '16px'; // Ændre skriftstørrelsen
+            greeting.style.fontWeight = 'bold';
+            greeting.style.color = '#333';
+            greeting.style.fontSize = '16px';
             accountMenu.appendChild(greeting);
-
-            // Opret en "My Account" link
-            const myAccountLink = document.createElement('a');
-            myAccountLink.textContent = 'My Account';
-            myAccountLink.href = '#';
-            myAccountLink.style.display = 'block';
-            myAccountLink.style.margin = '2px 0'; // Mindre vertikal afstand
-
-             accountMenu.appendChild(myAccountLink);
 
             const logoutLink = document.createElement('a');
             logoutLink.textContent = 'Logout';
             logoutLink.href = '#';
-            logoutLink.style.display = 'block';
-            logoutLink.style.margin = '2px 0'; // Samme her
             logoutLink.onclick = async (e) => {
                 e.preventDefault();
                 await fetch(`${BASE_URL}/logout`, { method: 'POST' });
-                window.location.reload(); // Genindlæs siden for at opdatere loginstatus
+                window.location.reload();
             };
             accountMenu.appendChild(logoutLink);
         } else {
-            // Hvis brugeren ikke er logget ind:
             const loginLink = document.createElement('a');
             loginLink.textContent = 'Login';
             loginLink.href = `${BASE_URL}/login.html`;
-                 
+
             const signupLink = document.createElement('a');
             signupLink.textContent = 'Signup';
             signupLink.href = `${BASE_URL}/signup.html`;
@@ -393,4 +378,7 @@ async function handleLoginStatus() {
     }
 }
 
-handleLoginStatus(); // Kald funktionen for at håndtere loginstatus ved indlæsning af siden
+// Kør kun hvis elementet findes
+if (document.getElementById('account-menu')) {
+    handleLoginStatus();
+}
