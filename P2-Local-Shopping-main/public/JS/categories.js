@@ -166,11 +166,10 @@ function showProducts(productList) {
     }
 }
 
-// bruges til at redirecte til produktet<
+// Redirect to the product page when a product is clicked
 function redirectToProduct(productId) {
-    window.location.href = `/Product/${productId}`;
+    window.location.href = `${baseUrl}/Product/${productId}`;
 }
-
 
 // loader når siden starter
 document.addEventListener('DOMContentLoaded', () => {
