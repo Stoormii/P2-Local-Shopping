@@ -496,7 +496,7 @@ app.get('/store/:id', async (req, res) => {
 // Route to get the top 10 products with the highest views
 app.get('/top-products', async (req, res) => {
     try {
-        // Query to fetch the top 5 products based on the views counter
+        // Query to fetch the top 10 products based on the views counter
         const [rows] = await pool.query("SELECT * FROM Product ORDER BY views DESC LIMIT 10");
         res.json(rows); // Send the products as JSON
     } catch (error) {
@@ -537,6 +537,26 @@ app.get('/top-products/:categoryId', async (req, res) => {
         res.json(rows); // Send the products as JSON
     } catch (error) {
         console.error(`Error fetching top products for store ${storeId}:`, error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+//search route
+app.get('/search', async (req, res) => {
+    const searchQuery = req.query.q; // Get the search query from the URL parameter
+
+
+    try {
+        // Query the database for products matching the search query
+        const [rows] = await pool.query(
+            "SELECT * FROM Product WHERE Product_name LIKE ?",
+            [`%${searchQuery}%`]
+        );
+
+
+        res.json(rows); // Send the matching products as JSON
+    } catch (error) {
+        console.error('Error searching for products:', error);
         res.status(500).send("Internal Server Error");
     }
 });
