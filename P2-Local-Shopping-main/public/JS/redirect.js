@@ -8,3 +8,26 @@ function redirect2(imageId){
 function redirect1(imageId){
    window.location.href = `Product/${imageId}`;
    }
+
+  async function redirect3(imageId) {
+    console.log("redirect3 called with orderId:", imageId); // Debugging log
+
+    try {
+        // Fetch session data from the backend
+        const response = await fetch('/session');
+        const data = await response.json();
+
+        if (!data.LoggedIn || !data.store || !data.store.id) {
+            console.error("Store_ID is not available in session data.");
+            alert("Store_ID is not available. Please log in again.");
+            return;
+        }
+
+        const storeId = data.store.id; // Retrieve the Store_ID from the session data
+        console.log("Redirecting to:", `OrderProducts/${storeId}/${imageId}`); // Debugging log
+        window.location.href = `OrderProducts/${storeId}/${imageId}`; // Redirect to the OrderProducts page
+    } catch (error) {
+        console.error("Error fetching session data:", error);
+        alert("Could not fetch session data. Please try again later.");
+    }
+}
