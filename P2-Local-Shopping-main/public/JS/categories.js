@@ -130,7 +130,7 @@ function findLeafCategories(startId, categoryList) {
 function fetchProductsByCategory(categoryIds) {
     const query = categoryIds.join(','); // laver f.eks. "5,6,7"
 
-    fetch(`/products/by-category?category_ids=${query}`)
+    fetch(`${baseUrl}/products/by-category?category_ids=${query}`)
         .then(res => res.json())
         .then(showProducts)
         .catch(err => {
