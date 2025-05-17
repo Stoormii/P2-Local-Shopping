@@ -592,6 +592,90 @@ app.get('/Orders', async (req, res) => {
         res.status(500).json({ message: 'Database error! Could not fetch orders.' });
     }
 });
+
+/route for getting order products
+app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
+    const { Store_ID, Order_ID } = req.params;
+
+
+    try {
+        // Query the database for products in the given store and order
+        const [rows] = await pool.query(
+            `SELECT op.*, p.Product_name, p.Price, p.image
+             FROM Order_product op
+             JOIN Product p ON op.Product_ID = p.Product_ID
+             WHERE op.Store_ID = ? AND op.Order_ID = ?`,
+            [Store_ID, Order_ID]
+        );
+
+
+        if (rows.length === 0) {
+            return res.status(404).send("<h1>No products found for this store and order.</h1>");
+        }
+
+
+        // Generate HTML for the products
+        const productsHTML = rows.map(product => `
+            <div class="product">
+                <img src="${product.image}" alt="${product.Product_name}" style="width: 150px; height: 150px;">
+                <h2>${product.Product_name}</h2>
+                <p>Price: ${product.Price} DKK</p>
+                <p>Quantity: ${product.Quantity}</p>
+
+
+            </div>
+        `).join('');
+
+
+        // Generate the full HTML template
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Order Products</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 20px;
+                        padding: 0;
+                    }
+                    .product {
+                        border: 1px solid #ddd;
+                        border-radius: 10px;
+                        padding: 10px;
+                        margin: 10px;
+                        display: inline-block;
+                        text-align: center;
+                        width: 200px;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    }
+                    .product img {
+                        border-radius: 10px;
+                        margin-bottom: 10px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Products for Store ID: ${Store_ID}, Order ID: ${Order_ID}</h1>
+                <div class="products-container">
+                    ${productsHTML}
+
+
+                </div>
+               
+            </body>
+            </html>
+        `;
+
+
+        res.send(htmlContent); // Send the generated HTML as the response
+    } catch (error) {
+        console.error("Error fetching order products:", error);
+        res.status(500).send("<h1>Database error! Could not fetch products.</h1>");
+    }
+});
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 
