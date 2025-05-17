@@ -593,7 +593,7 @@ app.get('/Orders', async (req, res) => {
     }
 });
 
-/route for getting order products
+//route for getting order products
 app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
     const { Store_ID, Order_ID } = req.params;
 
