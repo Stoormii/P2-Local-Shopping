@@ -8,6 +8,20 @@
 </head>
 
 <body>
+    <script>
+    (async () => {
+        try {
+            const res = await fetch('/session');
+            const data = await res.json();
+            if (data.LoggedIn && data.store) {
+                window.location.href = 'StoreFrontPage.html';
+        }
+    } catch (e) {
+    console.error('Session check failed:', e);
+    }
+    })();
+    </script>
+    
     <div class="main-container">
     <div class="wrapper">
         <h1>Store login</h1>
