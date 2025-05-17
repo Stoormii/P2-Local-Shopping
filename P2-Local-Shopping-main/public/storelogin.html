@@ -10,18 +10,20 @@
 <body>
     <script>
     (async () => {
+        const BASE_URL = window.location.origin.includes('localhost') ? '' : '/node9';
         try {
-            const res = await fetch('/session');
+            const res = await fetch(`${BASE_URL}/session`);
             const data = await res.json();
             if (data.LoggedIn && data.store) {
-                window.location.href = 'StoreFrontPage.html';
+                window.location.href = `${BASE_URL}/StoreFrontPage.html`;
+            }
+        } catch (e) {
+            console.error('Session check failed:', e);
         }
-    } catch (e) {
-    console.error('Session check failed:', e);
-    }
     })();
     </script>
-    
+
+
     <div class="main-container">
     <div class="wrapper">
         <h1>Store login</h1>
