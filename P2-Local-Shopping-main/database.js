@@ -152,39 +152,37 @@ export async function getCategoryIdByName(categoryName) {
     return rows.length > 0 ? rows[0].Category_ID : null; // REt
 }
 
-// Get store ID from Store table
-export async function getStoreIdByName(storeName) {
-    const [rows] = await pool.query(
-        `SELECT Store_ID FROM Store WHERE Store_Name = ?`,
-        [storeName] // Brug butikkens navn fra Vald´s funktion
-    );
-    return rows.length > 0 ? rows[0].Store_ID : null; // Return ID, if found
+export async function createItem(
+  Product_name,
+  Category_Name,
+  Store_ID,      
+  Quantity,
+  Description,
+  Price,
+  image
+) {
+  // Find Category_ID som før
+  const Category_ID = await getCategoryIdByName(Category_Name);
+  if (!Category_ID) {
+    throw new Error(`Kategorien ${Category_Name} findes ikke i databasen.`);
+  }
+
+  // Tjek at vi har et gyldigt Store_ID
+  if (!Store_ID) {
+    throw new Error(`Ingen gyldigt Store_ID modtaget.`);
+  }
+
+  // Indsæt med ID’en
+  const [result] = await pool.query(
+    `INSERT INTO Product
+       (Product_name, Category_ID, Store_ID, Quantity, Description, Price, image)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [Product_name, Category_ID, Store_ID, Quantity, Description, Price, image]
+  );
+  return result;
 }
 
-export async function createItem(Product_name, Category_Name, Store_Name, Quantity, Description, Price, image) {
-    // Find Category_ID based on Category_Name
-    const Category_ID = await getCategoryIdByName(Category_Name);
-    if (!Category_ID) {
-        throw new Error(`Kategorien ${Category_Name} findes ikke i databasen.`);
-    }
 
-    // Find Store_ID based på Store_Name
-    const Store_ID = await getStoreIdByName(Store_Name);
-    if (!Store_ID) {
-        throw new Error(`Butikken ${Store_Name} findes ikke i databasen.`);
-    }
-
-    // insert product into the database
-    const [result] = await pool.query(
-        `
-        INSERT INTO Product (Product_name, Category_ID, Store_ID, Quantity, Description, Price, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        `,
-        [Product_name, Category_ID, Store_ID, Quantity, Description, Price, image]
-    );
-
-    return result;
-}
 
 export async function createStore(Store_name, Store_address, Store_description, email, password, logoUrl) {
     try {

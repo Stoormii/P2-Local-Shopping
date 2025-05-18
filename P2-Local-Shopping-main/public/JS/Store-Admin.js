@@ -1,4 +1,5 @@
 // Store-Admin.js
+let sessionStore = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
@@ -31,6 +32,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function fetchSessionStore() {
+    const res = await fetch(`${baseUrl}/session`);
+    if (!res.ok) {
+        throw new Error(`Kunne ikke hente session: ${res.status}`);
+    }
+    const data = await res.json();
+    if (data.store) {
+        sessionStore = data.store;
+    } else {
+        throw new Error('Ingen butik logget ind');
+    }
+}
+
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {
@@ -47,10 +61,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function init() {
-        fetchProducts();
+  async function init() {
+    try {
+        await fetchSessionStore();  // <- nyt
+        await fetchProducts();
         setupEventListeners();
+    } catch (err) {
+        alert('Du skal være logget ind som butik for at redigere produkter.');
+        console.error(err);
     }
+}
 
     function renderProducts(filteredProducts = null) {
         const productsToRender = filteredProducts || products;
@@ -136,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const productData = {
             Product_name: document.getElementById('productName').value,
             Category_Name: document.getElementById('productCategory').value,
-            Store_Name: document.getElementById('productStore').value,
             Quantity: parseInt(document.getElementById('productStock').value),
             Description: document.getElementById('productDescription').value,
             Price: parseFloat(document.getElementById('productPrice').value),
@@ -175,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('productName').value = product.Product_name;
         document.getElementById('productCategory').value = product.Category_name;
-        document.getElementById('productStore').value = product.Store_Name;
         document.getElementById('productStock').value = product.Quantity;
         document.getElementById('productDescription').value = product.Description;
         document.getElementById('productPrice').value = product.Price;
