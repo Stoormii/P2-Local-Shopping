@@ -736,10 +736,10 @@ app.post('/add-product', async (req, res) => {
   }
 
   const storeId = req.session.store.id;            // <-- her henter vi Store_ID
-  const { Product_name, Category_Name, Quantity, Description, Price, image } = req.body;
+  const { Product_name, Category_ID, Quantity, Description, Price, image } = req.body;
 
   // Valider at de påkrævede felter er med
-  if (!Product_name || !Category_Name || !Quantity || !Description || !Price) {
+  if (!Product_name || !Category_ID || !Quantity || !Description || !Price) {
     return res.status(400).json({ message: 'Alle felter skal udfyldes.' });
   }
 
@@ -747,8 +747,8 @@ app.post('/add-product', async (req, res) => {
     // Giv createItem dit storeId i stedet for et navn
     const result = await createItem(
       Product_name,
-      Category_Name,
-      storeId,      // <-- brug ID direkte
+      Category_ID,
+      storeId,      
       Quantity,
       Description,
       Price,
@@ -811,53 +811,44 @@ app.delete('/products/:id', async (req, res) => {
 });
 
 app.put('/products/:id', async (req, res) => {
-    const productId = req.params.id;
-    const { Product_name, Category_Name, Store_Name, Quantity, Description, Price, image } = req.body;
+  const productId = req.params.id;
+  const {
+    Product_name,
+    Category_ID,    // nu ID og ikke Name
+    Quantity,
+    Description,
+    Price,
+    image
+  } = req.body;
 
-    if (!Product_name || !Category_Name || !Store_Name || !Quantity || !Description || !Price) {
-        return res.status(400).json({ message: 'All fields need to be filled.' });
+  // Valider at de påkrævede felter er med
+  if (!Product_name || !Number.isInteger(Category_ID) || !Quantity || !Description || !Price) {
+    return res.status(400).json({ message: 'Alle felter skal udfyldes korrekt.' });
+  }
+
+  try {
+    // Udfør opdateringen med ID’er direkte
+    const [result] = await pool.query(
+      `UPDATE Product
+         SET Product_name = ?,
+             Category_ID  = ?,
+             Quantity     = ?,
+             Description  = ?,
+             Price        = ?,
+             image        = ?
+       WHERE Product_ID = ?`,
+      [Product_name, Category_ID, Quantity, Description, Price, image, productId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Produkt ikke fundet.' });
     }
 
-    try {
-        // Slå Category_ID op baseret på Category_Name
-        const [categoryRows] = await pool.query(
-            `SELECT Category_ID FROM Categories WHERE Category_name = ?`,
-            [Category_Name]
-        );
-        if (categoryRows.length === 0) {
-            return res.status(400).json({ message: `Category '${Category_Name}' not found.` });
-        }
-        const Category_ID = categoryRows[0].Category_ID;
-
-        // Slå Store_ID op baseret på Store_Name
-        const [storeRows] = await pool.query(
-            `SELECT Store_ID FROM Store WHERE Store_Name = ?`,
-            [Store_Name]
-        );
-        if (storeRows.length === 0) {
-            rres.status(400).json({ message: `Store '${Store_Name}' not found.` });
-        }
-        const Store_ID = storeRows[0].Store_ID;
-
-        // Udfør opdateringen
-        const [result] = await pool.query(
-            `
-            UPDATE Product
-            SET Product_name = ?, Category_ID = ?, Store_ID = ?, Quantity = ?, Description = ?, Price = ?, image = ?
-            WHERE Product_ID = ?;
-            `,
-            [Product_name, Category_ID, Store_ID, Quantity, Description, Price, image, productId]
-        );
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Product not found.' });
-        }
-
-        res.status(200).json({ message: 'Product updated successfully.' });
-    } catch (error) {
-        console.error('Database error:', error);
-        res.status(500).json({ message: 'Could not update product.' });
-    }
+    res.json({ message: 'Produkt opdateret.' });
+  } catch (err) {
+    console.error('Fejl ved opdatering af produkt:', err);
+    res.status(500).json({ message: 'Kunne ikke opdatere produktet.' });
+  }
 });
 
 

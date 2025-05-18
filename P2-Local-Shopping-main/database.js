@@ -143,18 +143,10 @@ export { pool };
 export { initializeDatabase };
 
 //Dette herunder er funktionen til at tilføje produkter til databasen, samt ændringerne til Valde´s kode.
-// Get category ID from Categories table
-export async function getCategoryIdByName(categoryName) {
-    const [rows] = await pool.query(
-        `SELECT Category_ID FROM Categories WHERE Category_name = ?`,
-        [categoryName] // Use category name from Valde's function
-    );
-    return rows.length > 0 ? rows[0].Category_ID : null; // REt
-}
 
 export async function createItem(
   Product_name,
-  Category_Name,
+  Category_ID,
   Store_ID,      
   Quantity,
   Description,
