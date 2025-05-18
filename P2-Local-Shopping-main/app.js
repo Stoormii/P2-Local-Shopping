@@ -364,7 +364,7 @@ const storeProductsHTML = storeProducts.map(product => `
 // Generate HTML for the "Similar items from the same category" carousel
 const categoryProductsHTML = categoryProducts.map(product => `
     <div class="product">
-        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="redirect1(this.id)"">
+        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="redirect1(this.id)">
         <h2>${product.Product_name}</h2>
         <p><strong>Price: ${product.Price} DKK</strong></p>
         <p><a href="/Basket.html" class="btn">Add to Order</a></p>
@@ -380,6 +380,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
          <title>${item.Product_name}</title>
          <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/lassemedhattenstyles.css">
      </head>
+     <script src="/js/redirect.js"></script>
      <body>
         <div class="logo">
              <a href="/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
@@ -414,7 +415,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                     </div>
                 </div>
 
-<script src="/js/redirect.js" defer></script>
+
      </body>
      </html>
    `;
