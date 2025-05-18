@@ -636,7 +636,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
         // Query the database for products in the given store and order
         const [rows] = await pool.query(
             `SELECT op.*, p.Product_name, p.Price, p.image
-             FROM Order_product op
+             FROM Order_Product op
              JOIN Product p ON op.Product_ID = p.Product_ID
              WHERE op.Store_ID = ? AND op.Order_ID = ?`,
             [Store_ID, Order_ID]
