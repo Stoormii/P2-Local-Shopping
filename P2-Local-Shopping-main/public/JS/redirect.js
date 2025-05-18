@@ -14,6 +14,7 @@ function redirect1(imageId){
 
     try {
         // Fetch session data from the backend
+        const baseUrl = window.location.origin.includes('localhost') ? '' : '/node9'; // Adjust for localhost vs server
         const response = await fetch('/session');
         const data = await response.json();
 
@@ -25,7 +26,7 @@ function redirect1(imageId){
 
         const storeId = data.store.id; // Retrieve the Store_ID from the session data
         console.log("Redirecting to:", `OrderProducts/${storeId}/${imageId}`); // Debugging log
-        window.location.href = `OrderProducts/${storeId}/${imageId}`; // Redirect to the OrderProducts page
+        window.location.href = `${baseUrl}/OrderProducts/${storeId}/${imageId}`; // Redirect to the OrderProducts page
     } catch (error) {
         console.error("Error fetching session data:", error);
         alert("Could not fetch session data. Please try again later.");
