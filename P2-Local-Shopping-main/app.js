@@ -395,10 +395,18 @@ const categoryProductsHTML = categoryProducts.map(product => `
              <h2>Specifications:</h2>
              <ul style="list-style: none; padding: 0;">
                  <li><a href="#" class="btn">Other info</a></li>
-                 <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+                  <P>
+                   <button 
+                     class="btn addCart" 
+                     data-id="${item.Product_ID}"
+                     data-name="${item.Product_name}"
+                     data-price="${item.Price}"
+                     data-image="${item.image}"
+                     >Add to Order 
+                     </button>
+                </P>
              </ul>
          </div>
-
 
           <div class="other-products">
                     <h1>Other products from the same store</h1>
