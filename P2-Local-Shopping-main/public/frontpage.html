@@ -10,12 +10,14 @@
         <header class="topnav">
             <a class="active" href="#home">Shop Local</a>
             <a href="categories.html">Categories</a>
-            <a class="search-container">
-                <form onsubmit="event.preventDefault(); searchItems();">
-                <input type="text" id="searchBar" placeholder="Search...">
-                <button type="submit" onclick="searchItems()">🔍</button>
+           <div class="search-container">
+                <form onsubmit="event.preventDefault(); searchItems();" class="search-form">
+                    <button type="submit" class="search-button">🔍</button>
+                    <input type="text" id="searchBar" class="search-input" placeholder="Search...">
                 </form>
-            </a>
+            </div>
+            
+            <div id="results" class="search-results"></div>
             <a href="#basket">basket</a>
             <div class="account-dropdown">
                 <button class="account-btn">
@@ -26,7 +28,7 @@
                 </div>
             </div>
         </header>
-        <script src="JS/searchbarre.js"></script>
+        <script src="JS/searchbarre.js" defer></script>
         <section>
             <h1>Discover Local Deals & Businesses Near You</h1>
             <a>Your one-stop platform to explore offers, support local shops, and connect with businesses in your community</a>
