@@ -382,7 +382,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
      </head>
      <body>
         <div class="logo">
-             <a href="${baseUrl}/frontpage.html"> <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
+             <a href="${baseUrl}/frontpage.html"> <${baseUrl}img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/logo.png" alt="vores logo"> </a>
          </div>
 
 
@@ -395,7 +395,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
              <h2>Specifications:</h2>
              <ul style="list-style: none; padding: 0;">
                  <li><a href="#" class="btn">Other info</a></li>
-                 <p><a href="/Basket.html" class="btn">Add to Order</a></p>
+                 <p><a href="${baseUrl}/Basket.html" class="btn">Add to Order</a></p>
              </ul>
          </div>
 
@@ -414,7 +414,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                     </div>
                 </div>
 
-     <script src="/js/redirect.js"></script>
+     <script src="${baseUrl}/js/redirect.js"></script>
      </body>
      </html>
    `;
