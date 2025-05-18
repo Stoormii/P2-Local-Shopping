@@ -317,7 +317,20 @@ const [categoryProducts] = await pool.query(
 );
 // Dynamically generate the size selection HTML based on Product_ID
 let sizeSelectionHTML = '';
-if (item.Category_ID === 1) {
+   
+if (item.Category_ID) {
+    // Query to check if the category has a parent with Parent_ID = 1 and the parent itself has Parent_ID IS NULL
+    const [categoryCheck] = await pool.query(
+        `
+        SELECT c1.Category_ID
+        FROM Categories c1
+        LEFT JOIN Categories c2 ON c1.Parent_ID = c2.Category_ID
+        WHERE c1.Category_ID = ? AND c2.Parent_ID IS NULL
+        `,
+        [item.Category_ID]
+    );
+
+    if (categoryCheck.length > 0 || item.Category_ID === 1) { 
     sizeSelectionHTML = `
 
         <div class="form-group">
@@ -336,6 +349,7 @@ if (item.Category_ID === 1) {
             
         </div>
     `;
+}
 }
 // Generate HTML for the "Other products from the same store" carousel
 const storeProductsHTML = storeProducts.map(product => `
