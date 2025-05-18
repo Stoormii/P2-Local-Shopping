@@ -495,3 +495,37 @@ h1{
   text-align: center;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
+
+/* Styling for each product container */
+.product-square {
+  display: flex; /* Use flexbox to align image and name horizontally */
+  align-items: center; /* Vertically align the image and name */
+  padding: 10px;
+  margin-bottom: 6px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: left; /* Align text to the left */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  gap: 10px; /* Add spacing between the image and name */
+}
+
+/* Styling for the product image */
+.product-image {
+  width: 50px; /* Set a fixed width for the image */
+  height: 50px; /* Set a fixed height for the image */
+  object-fit: cover; /* Ensure the image maintains its aspect ratio */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Indicate the image is clickable */
+}
+
+/* Styling for the product name */
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer; /* Indicate the name is clickable */
+  margin: 0; /* Remove default margin */
+  flex-grow: 1; /* Allow the name to take up remaining space */
+}
