@@ -732,7 +732,7 @@ app.post('/add-product', async (req, res) => {
 });
 
 //Route for products in storeadmin
-app.get('/products', async (req, res) => {
+app.get('/node9/products', async (req, res) => {
     if (!req.session.store) {
         return res.status(401).json({ message: "Not logged in as a store." });
     }
