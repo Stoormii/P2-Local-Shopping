@@ -414,7 +414,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                     </div>
                 </div>
 
-
+<script src="/js/redirect.js"></script>
      </body>
      </html>
    `;
