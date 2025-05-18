@@ -560,7 +560,41 @@ app.get('/search', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
+// Route to add new orders
+app.post('/Orders', async (req, res) => {
+    const orders = req.body.Orders; // Retrieve the basket items from the request body
+ 
+ 
+ 
+ 
+    try {
+        // Step 1: Insert a single entry into the Orders table
+        const insertOrderSQL = "INSERT INTO Orders (id) VALUES (?)";
+        const [orderResult] = await pool.query(insertOrderSQL, [orders[0].id]); // Use the first item's `id` for the order
+ 
+ 
+ 
+ 
+        const newOrderID = orderResult.insertId; // Get the newly created Order_ID
+ 
+ 
+ 
+ 
+        // Step 2: Insert all items into the Order_product table with the same Order_ID
+        const insertOrderProductSQL = "INSERT INTO Order_product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
+        for (let order of orders) {
+            await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID, order.Quantity]);
+        }
+ 
+ 
+ 
+ 
+        res.json({ message: "Order added successfully!", Order_ID: newOrderID });
+    } catch (error) {
+        console.error("Error inserting order:", error);
+        res.status(500).json({ error: "Database error!" });
+    }
+ });
 // Route to get all orders for store - used in Orders.js for store
 app.get('/Orders', async (req, res) => {
     if (!req.session.store) {
