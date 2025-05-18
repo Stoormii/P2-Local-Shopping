@@ -561,7 +561,7 @@ app.get('/search', async (req, res) => {
     }
 });
 // Route to add new orders
-app.post('/Orders', async (req, res) => {
+app.post('/node9/Orders', async (req, res) => {
     const orders = req.body.Orders; // Retrieve the basket items from the request body
  
  
@@ -596,7 +596,7 @@ app.post('/Orders', async (req, res) => {
     }
  });
 // Route to get all orders for store - used in Orders.js for store
-app.get('/Orders', async (req, res) => {
+app.get('/node9/Orders', async (req, res) => {
     if (!req.session.store) {
         return res.status(401).json({ message: "Not logged in as a store." });
     }
