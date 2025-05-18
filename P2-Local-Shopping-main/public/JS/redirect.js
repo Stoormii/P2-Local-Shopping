@@ -9,12 +9,20 @@ function redirect1(imageId){
    window.location.href = `Product/${imageId}`;
    }
 
-  async function redirect3(imageId) {
+ async function redirect3(imageId) {
     console.log("redirect3 called with orderId:", imageId); // Debugging log
 
     try {
-        // Fetch session data from the backend
-        const response = await fetch('${baseUrl}/session');
+        const baseUrl = window.location.origin.includes('localhost') ? '' : '/node9'; // Adjust for localhost vs server
+        const response = await fetch(`${baseUrl}/session`, {
+            method: 'GET',
+            credentials: 'include', // Include cookies with the request
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server returned status ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (!data.LoggedIn || !data.store || !data.store.id) {
@@ -24,8 +32,8 @@ function redirect1(imageId){
         }
 
         const storeId = data.store.id; // Retrieve the Store_ID from the session data
-        console.log("Redirecting to:", `OrderProducts/${storeId}/${imageId}`); // Debugging log
-        window.location.href = `OrderProducts/${storeId}/${imageId}`; // Redirect to the OrderProducts page
+        console.log("Redirecting to:", `${baseUrl}/OrderProducts/${storeId}/${imageId}`); // Debugging log
+        window.location.href = `${baseUrl}/OrderProducts/${storeId}/${imageId}`; // Redirect to the OrderProducts page
     } catch (error) {
         console.error("Error fetching session data:", error);
         alert("Could not fetch session data. Please try again later.");
