@@ -14,7 +14,7 @@ const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
 document.getElementById("reserveButton").addEventListener("click", function () {
     console.log("Reserve button clicked!"); // Debugging log
 
-    const storedBasket = JSON.parse(localStorage.getItem("basket")) || []; // Retrieve basket from localStorage
+    const storedBasket = JSON.parse(localStorage.getItem("cart")) || []; // Retrieve basket from localStorage
 
     if (storedBasket.length === 0) {
         alert("Your basket is empty. Add items before reserving.");
