@@ -25,9 +25,12 @@ CREATE TABLE IF NOT EXISTS Product (
 
 -- Opret kun tabellen, hvis den ikke allerede findes (Categories)
 CREATE TABLE IF NOT EXISTS Categories (
-    Category_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    Category_name VARCHAR(255) NOT NULL
+  Category_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+  Category_name VARCHAR(255) NOT NULL,
+  Parent_ID    INTEGER NULL,
+  FOREIGN KEY (Parent_ID) REFERENCES Categories(Category_ID)
 );
+
 
 -- Opret kun tabellen, hvis den ikke allerede findes (Stores)
 CREATE TABLE IF NOT EXISTS Store (
