@@ -354,7 +354,7 @@ if (item.Category_ID) {
 // Generate HTML for the "Other products from the same store" carousel
 const storeProductsHTML = storeProducts.map(product => `
     <div class="product">
-        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="redirect1(${product.Product_ID})">
+        <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='/Product/${product.Product_ID}'">
         <h2>${product.Product_name}</h2>
         <p><strong>Price: ${product.Price} DKK</strong></p>
         <p><a href="/Basket.html" class="btn">Add to Order</a></p>
