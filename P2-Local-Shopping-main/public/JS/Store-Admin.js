@@ -1,96 +1,61 @@
 // Store-Admin.js
+const baseUrl = window.location.origin.includes('localhost')
+  ? ''        // Lokalt
+  : '/node9'; // Produktion
 
-// Global state
 let sessionStore = null;
-let products = [];         // Alle produkter fra serveren
+let products      = [];
+let categories    = [];    // Alle kategorier (leaf)
 let currentProductId = null;
-let isEditing = false;
-let categories = [];       // Alle kategorier fra serveren (kun “leaf”)
+let isEditing       = false;
 
-// Kør når DOM er klar
 document.addEventListener('DOMContentLoaded', function () {
-    const searchInput      = document.getElementById('searchInput');
-    const productList      = document.getElementById('productList');
-    const productForm      = document.getElementById('productForm');
-    const modal            = document.getElementById('productModal');
-    const modalTitle       = document.getElementById('modalTitle');
-    const addProductBtn    = document.getElementById('addProductBtn');
-    const cancelBtn        = document.getElementById('cancelBtn');
-    const logoutBtn        = document.getElementById('logout-btn');
-    const BASE_URL         = window.location.origin.includes('localhost') ? '' : '/node9';
+    const searchInput   = document.getElementById('searchInput');
+    const productList   = document.getElementById('productList');
+    const productForm   = document.getElementById('productForm');
+    const modal         = document.getElementById('productModal');
+    const modalTitle    = document.getElementById('modalTitle');
+    const addProductBtn = document.getElementById('addProductBtn');
+    const cancelBtn     = document.getElementById('cancelBtn');
+    const logoutBtn     = document.getElementById('logout-btn');
+    const categorySelect= document.getElementById('productCategory');
 
-    // 1) Hent og udfyld kategorier
-    async function loadCategories() {
-        try {
-            const res = await fetch(`${baseUrl}/categories`, { credentials: 'include' });
-            if (!res.ok) {
-            // prøv at parse fejl-body
-                let errBody;
-                try { errBody = await res.json(); } catch(_){ errBody = await res.text(); }
-                console.error('Kategorien fetch fejlede, body:', errBody);
-                throw new Error(`Server returnerede status ${res.status}`);
-            }
-            categories = await res.json();         
-        } catch (error) {
-          console.error('Error fetching categories:', error);
-          alert('Kunne ikke hente kategorier. Se konsollen for detaljer.');
-        }
-    }
-
-
-    // 2) Hent butikkens session (skal være før overhovedet fetchProducts)
+    // Hent session
     async function fetchSessionStore() {
-        const res = await fetch(`${BASE_URL}/session`, { credentials: 'include' });
+        const res = await fetch(`${baseUrl}/session`, { credentials: 'include' });
         if (!res.ok) throw new Error(`Kunne ikke hente session: ${res.status}`);
         const data = await res.json();
-        if (data.store) {
-            sessionStore = data.store;
-        } else {
-            throw new Error('Ingen butik logget ind');
-        }
+        if (!data.store) throw new Error('Ingen butik logget ind');
+        sessionStore = data.store;
     }
 
-    // 3) Hent produkter
+    // Hent alle kategorier og filtrer dem til “leaf”
+    async function loadCategories() {
+        const res = await fetch(`${baseUrl}/categories`, { credentials: 'include' });
+        if (!res.ok) throw new Error(`Status ${res.status} ved hent af kategorier`);
+        const all = await res.json();
+        // “Leaf” = dem der ikke er parent for nogen anden
+        categories = all.filter(c =>
+            !all.some(o => o.Parent_ID === c.Category_ID)
+        );
+        // Fyld dropdown
+        categorySelect.innerHTML = `
+            <option value="">Pick Category</option>
+            ${categories.map(c =>
+                `<option value="${c.Category_ID}">${c.Category_name}</option>`
+            ).join('')}
+        `;
+    }
+
+    // Hent produkter
     async function fetchProducts() {
-        try {
-            const res = await fetch(`${BASE_URL}/products`, { credentials: 'include' });
-            if (!res.ok) throw new Error(`Server returned status ${res.status}`);
-            products = await res.json();
-            renderProducts();
-        } catch (error) {
-            console.error('Error fetching products:', error);
-            alert('Kunne ikke hente produkter. Prøv igen senere.');
-        }
+        const res = await fetch(`${baseUrl}/products`, { credentials: 'include' });
+        if (!res.ok) throw new Error(`Status ${res.status} ved hent af produkter`);
+        products = await res.json();
+        renderProducts();
     }
 
-    // 4) Opsæt knapper/interaktions-lyttere
-    function setupEventListeners() {
-        addProductBtn.addEventListener('click', openModal);
-        cancelBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-        productForm.addEventListener('submit', handleFormSubmit);
-
-        // Logout
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', async () => {
-                await fetch(`${BASE_URL}/logout`, { method: 'POST', credentials: 'include' });
-                window.location.href = 'storelogin.html';
-            });
-        }
-
-        // Søgefelt
-        searchInput.addEventListener('input', e => {
-            const term = e.target.value.toLowerCase();
-            const filtered = products.filter(p =>
-                p.Product_name.toLowerCase().includes(term) ||
-                p.Category_name.toLowerCase().includes(term) ||
-                p.Description.toLowerCase().includes(term)
-            );
-            renderProducts(filtered);
-        });
-    }
-
-    // 5) Tegn produkterne ud
+    // Tegn produkter
     function renderProducts(list = products) {
         productList.innerHTML = '';
         if (list.length === 0) {
@@ -106,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <h3>${p.Product_name}</h3>
                     <div>${parseFloat(p.Price).toFixed(2)} DKK</div>
                     <span>${p.Category_name}</span>
-                    <div>
+                    <div class="actions">
                         <button class="edit-btn" data-id="${p.Product_ID}">Rediger</button>
                         <button class="delete-btn" data-id="${p.Product_ID}">Slet</button>
                     </div>
@@ -114,56 +79,53 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
             productList.appendChild(card);
         });
-        // Tilføj lyttere til rediger/slet
         document.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', handleEditProduct));
         document.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', handleDeleteProduct));
     }
 
-    // 6) Åbn/luk modal
-    function openModal() {
-        modal.style.display = 'flex';
-        isEditing = false;
-        currentProductId = null;
-        modalTitle.textContent = 'Tilføj nyt produkt';
-        productForm.reset();
-    }
-    function closeModal() {
-        modal.style.display = 'none';
+    // Upload billede
+    async function uploadImage(file) {
+        const fd = new FormData();
+        fd.append('image', file);
+        const res = await fetch(`${baseUrl}/upload-image`, {
+            method: 'POST', body: fd, credentials: 'include'
+        });
+        if (!res.ok) throw new Error('Upload fejlede');
+        return (await res.json()).imageUrl;
     }
 
-    // 7) Håndter “submit” (opret/ændr)
+    // Håndter formular submit
     async function handleFormSubmit(e) {
         e.preventDefault();
         const imageUrl = document.getElementById('productImage').dataset.imageUrl || null;
         const payload = {
-            Product_name:  document.getElementById('productName').value,
-            Category_ID:   parseInt(document.getElementById('productCategory').value, 10),
-            Quantity:      parseInt(document.getElementById('productStock').value, 10),
-            Description:   document.getElementById('productDescription').value,
-            Price:         parseFloat(document.getElementById('productPrice').value),
-            image:         imageUrl,
+            Product_name: document.getElementById('productName').value,
+            Category_ID:  parseInt(categorySelect.value, 10),
+            Quantity:     parseInt(document.getElementById('productStock').value, 10),
+            Description:  document.getElementById('productDescription').value,
+            Price:        parseFloat(document.getElementById('productPrice').value),
+            image:        imageUrl,
         };
-        const url    = isEditing ? `${BASE_URL}/products/${currentProductId}` : `${BASE_URL}/add-product`;
+        const url    = isEditing
+            ? `${baseUrl}/products/${currentProductId}`
+            : `${baseUrl}/add-product`;
         const method = isEditing ? 'PUT' : 'POST';
-        try {
-            const res = await fetch(url, {
-                method,
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!res.ok) {
-                const { message } = await res.json();
-                throw new Error(message);
-            }
-            closeModal();
-            await fetchProducts();
-        } catch (err) {
-            alert('Kunne ikke gemme produkt: ' + err.message);
+
+        const res = await fetch(url, {
+            method,
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Ukendt fejl');
         }
+        closeModal();
+        await fetchProducts();
     }
 
-    // 8) Fyld modal med eksisterende data ved redigering
+    // Rediger produkt
     function handleEditProduct(e) {
         const id = e.target.dataset.id;
         const p  = products.find(x => x.Product_ID == id);
@@ -172,45 +134,87 @@ document.addEventListener('DOMContentLoaded', function () {
         currentProductId = id;
         modalTitle.textContent = 'Rediger produkt';
         document.getElementById('productName').value        = p.Product_name;
-        document.getElementById('productCategory').value    = p.Category_ID;
+        categorySelect.value                                = p.Category_ID;
         document.getElementById('productStock').value       = p.Quantity;
         document.getElementById('productDescription').value = p.Description;
         document.getElementById('productPrice').value       = p.Price;
         openModal();
     }
 
-    // 9) Slet produkt
+    // Slet produkt
     async function handleDeleteProduct(e) {
-        if (!confirm('Vil du virkelig slette?')) return;
+        if (!confirm('Vil du virkelig slette dette produkt?')) return;
         const id = e.target.dataset.id;
-        await fetch(`${BASE_URL}/products/${id}`, {
-            method: 'DELETE',
-            credentials: 'include'
+        await fetch(`${baseUrl}/products/${id}`, {
+            method: 'DELETE', credentials: 'include'
         });
         await fetchProducts();
     }
 
-    // 10) Upload billede
-    async function uploadImage(file) {
-        const fd = new FormData();
-        fd.append('image', file);
-        const res = await fetch(`${BASE_URL}/upload-image`, {
-            method: 'POST', body: fd, credentials: 'include'
-        });
-        if (!res.ok) throw new Error('Upload fejlede');
-        return (await res.json()).imageUrl;
+    // Åbn/luk modal
+    function openModal() {
+        modal.style.display    = 'flex';
+        isEditing              = false;
+        currentProductId       = null;
+        modalTitle.textContent = 'Add new product';
+        productForm.reset();
     }
-    // Lyttere til fil-input
-    const imgInput = document.getElementById('productImage');
-    if (imgInput) {
+    function closeModal() {
+        modal.style.display = 'none';
+        productForm.reset();
+        isEditing = false;
+        currentProductId = null;
+        modalTitle.textContent = 'Add new product';
+
+    }
+
+
+    // Setup knapper & upload‐lyttere
+    function setupEventListeners() {
+        addProductBtn.addEventListener('click', openModal);
+        cancelBtn.addEventListener('click', closeModal);
+
+        
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+
+        // **Luk når man klikker på krydset**
+        const closeBtn = modal.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeModal);
+            } 
+            
+        productForm.addEventListener('submit', handleFormSubmit);
+        // Logout‐knap
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                await fetch(`${baseUrl}/logout`, { method:'POST', credentials:'include' });
+                window.location.href = 'storelogin.html';
+            });
+        }
+
+        // Upload‐lytteren til billede
+        const imgInput = document.getElementById('productImage');
         imgInput.addEventListener('change', async ev => {
             const url = await uploadImage(ev.target.files[0]);
             document.getElementById('imagePreview').innerHTML = `<img src="${url}" />`;
             imgInput.dataset.imageUrl = url;
         });
+
+        // Søgefelt
+        searchInput.addEventListener('input', e => {
+            const term = e.target.value.toLowerCase();
+            const filtered = products.filter(p =>
+                p.Product_name.toLowerCase().includes(term) ||
+                p.Category_name.toLowerCase().includes(term) ||
+                p.Description.toLowerCase().includes(term)
+            );
+            renderProducts(filtered);
+        });
     }
 
-    // 11) Init — rækkefølgen er vigtig!
+    // Init — rækkefølgen er vigtig
     (async function init() {
         try {
             await fetchSessionStore();
@@ -223,4 +227,5 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = 'storelogin.html';
         }
     })();
-});
+
+});  
