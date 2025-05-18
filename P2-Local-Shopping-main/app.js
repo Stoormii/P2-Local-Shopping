@@ -325,7 +325,7 @@ if (item.Category_ID) {
         SELECT c1.Category_ID
         FROM Categories c1
         LEFT JOIN Categories c2 ON c1.Parent_ID = c2.Category_ID
-        WHERE c1.Category_ID = ? AND c2.Parent_ID IS NULL AND c2.Categori_ID = 1
+        WHERE c1.Category_ID = ? AND c2.Parent_ID IS NULL
         `,
         [item.Category_ID]
     );
