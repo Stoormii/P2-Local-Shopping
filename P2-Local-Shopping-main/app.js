@@ -731,7 +731,13 @@ app.post('/add-product', async (req, res) => {
     }
 });
 
+//Route for products in storeadmin
 app.get('/products', async (req, res) => {
+    if (!req.session.store) {
+        return res.status(401).json({ message: "Not logged in as a store." });
+    }
+    const storeId = req.session.store.id; // Get the Store_ID of the logged-in store
+
     try {
         console.log('Fetching products with LEFT JOIN...');
         const [products] = await pool.query(`
@@ -740,7 +746,8 @@ app.get('/products', async (req, res) => {
             FROM Product p
             LEFT JOIN Categories c ON p.Category_ID = c.Category_ID
             LEFT JOIN Store s ON p.Store_ID = s.Store_ID
-        `);
+            WHERE p.Store_ID = ?
+        `, [storeId]);
         console.log('Products fetched:', products);
         res.status(200).json(products);
     } catch (error) {
