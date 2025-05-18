@@ -153,8 +153,7 @@ export async function createItem(
   Price,
   image
 ) {
-  // Find Category_ID som før
-  const Category_ID = await getCategoryIdByName(Category_Name);
+
   if (!Category_ID) {
     throw new Error(`Kategorien ${Category_Name} findes ikke i databasen.`);
   }
