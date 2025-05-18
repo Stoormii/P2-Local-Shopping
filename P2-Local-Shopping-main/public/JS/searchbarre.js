@@ -29,7 +29,7 @@ async function searchItems() {
   
   // Function to render search results dynamically
   function renderSearchResults(products) {
-    const resultsContainer = document.getElementById('results'); // Ensure this ID matches your HTML
+    const resultsContainer = document.getElementById('results');
     if (!resultsContainer) {
         console.error("Results container not found in the DOM.");
         return;
