@@ -7,21 +7,6 @@
   <title>Store</title>
 </head>
 <body>
-  <script>
-    (async () => {
-      try {
-        const res = await fetch('/session');
-        const data = await res.json();
-
-        if (!data.store) {
-          window.location.href = 'storelogin.html';
-        }
-      } catch (err) {
-        console.error('Fejl ved sessionscheck:', err);
-        window.location.href = 'storelogin.html';
-      }
-    })();
-  </script>
 
 <nav class="navbar">
   <ul class="nav-links left">
@@ -34,35 +19,7 @@
     <li><button id="logout-btn" class="logout-button">Logout</button></li>
   </ul>
 </nav>
-
   <h1 id="welcome-heading">Welcome</h1>
-
-  <script>
-    const navLinks = document.querySelectorAll('.nav-links a');
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.forEach(nav => nav.classList.remove('active'));
-        link.classList.add('active');
-      });
-    });
-
-    // Opdater "Welcome" med butiknavn
-    async function updateStoreWelcome() {
-      try {
-        const response = await fetch('/session');
-        const data = await response.json();
-        if (data.store) {
-          const heading = document.getElementById('welcome-heading');
-          heading.textContent = `Welcome ${data.store.storename}`;
-        }
-      } catch (error) {
-        console.error('Could not fetch session data:', error);
-      }
-    }
-
-    updateStoreWelcome();
-  </script>
-<script src="JS/Store-Admin.js"></script>
+<script src="JS/storefrontpage.js"></script>
 </body>
 </html>
