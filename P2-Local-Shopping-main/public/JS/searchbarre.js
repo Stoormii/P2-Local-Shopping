@@ -47,7 +47,8 @@ async function searchItems() {
         const productDiv = document.createElement('div');
         productDiv.className = 'product-square';
         productDiv.innerHTML = `
-            <h3>${product.Product_name}</h3>
+                             <img class="product-image" id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="redirect1(this.id)">
+                <h3 class="product-name" onclick="redirect1(${product.Product_ID})">${product.Product_name}</h3>
         `;
         resultsContainer.appendChild(productDiv);
     });
