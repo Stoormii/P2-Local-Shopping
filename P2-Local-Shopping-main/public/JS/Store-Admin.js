@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Noget gik galt under logout.');
             }
         });
-    }ç
+    }
 
     function init() {
         fetchProducts(); 
