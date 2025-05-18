@@ -30,6 +30,7 @@ app.use(express.json());
   
 app.use(cors({
     origin: ['https://cs-25-sw-2-09.p2datsw.cs.aau.dk', 'http://localhost:3399'],
+    credentials: true 
 }));
 
 const MySQLStore = MySQLStoreFactory(session);
@@ -713,22 +714,41 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 
+// Tilføj produkt — automatisk knyttet til det loggede storeId
 app.post('/add-product', async (req, res) => {
-    const { Product_name, Category_Name, Store_Name, Quantity, Description, Price, image } = req.body;
+  // Tjek at butikken er logget ind
+  if (!req.session.store) {
+    return res.status(401).json({ message: 'Du skal være logget ind som butik.' });
+  }
 
-    // Valider input
-    if (!Product_name || !Category_Name || !Store_Name || !Quantity || !Description || !Price) {
-        return res.status(400).json({ message: 'Alle felter skal udfyldes.' });
-    }
+  const storeId = req.session.store.id;            // <-- her henter vi Store_ID
+  const { Product_name, Category_Name, Quantity, Description, Price, image } = req.body;
 
-    try {
-        // Kald createItem-funktionen for at tilføje produktet til databasen
-        const result = await createItem(Product_name, Category_Name, Store_Name, Quantity, Description, Price, image);
-        res.status(201).json({ message: 'Produkt tilføjet succesfuldt.', productId: result.insertId });
-    } catch (error) {
-        console.error('Fejl ved tilføjelse af produkt:', error);
-        res.status(500).json({ message: 'Kunne ikke tilføje produktet.' });
-    }
+  // Valider at de påkrævede felter er med
+  if (!Product_name || !Category_Name || !Quantity || !Description || !Price) {
+    return res.status(400).json({ message: 'Alle felter skal udfyldes.' });
+  }
+
+  try {
+    // Giv createItem dit storeId i stedet for et navn
+    const result = await createItem(
+      Product_name,
+      Category_Name,
+      storeId,      // <-- brug ID direkte
+      Quantity,
+      Description,
+      Price,
+      image
+    );
+
+    res.status(201).json({
+      message: 'Produkt tilføjet succesfuldt.',
+      productId: result.insertId
+    });
+  } catch (error) {
+    console.error('Fejl ved tilføjelse af produkt:', error);
+    res.status(500).json({ message: 'Kunne ikke tilføje produktet.' });
+  }
 });
 
 //Route for products in storeadmin
