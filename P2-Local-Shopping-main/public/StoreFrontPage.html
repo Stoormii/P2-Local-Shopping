@@ -13,7 +13,7 @@
         const res = await fetch('/session');
         const data = await res.json();
 
-        if (!data.LoggedIn || !data.store) {
+        if (!data.store) {
           window.location.href = 'storelogin.html';
         }
       } catch (err) {
