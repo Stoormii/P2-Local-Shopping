@@ -143,6 +143,9 @@ h2 {
   color: #fff;
   padding: 14px 16px;
   border-radius: 5px;
+    text-align: center; /* Center-align text */
+  display: inline-block; /* Ensure links behave like buttons */
+  width: 100px; /* Fixed width for consistent alignment */
 }
 
 .nav-links a:hover {
