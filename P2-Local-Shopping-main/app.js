@@ -394,8 +394,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
               ${sizeSelectionHTML} <!-- Insert size selection here -->
              <h2>Specifications:</h2>
              <ul style="list-style: none; padding: 0;">
-                 <li><a data-desccription="${item.Description}"</a></li>
-                  <P>
+            <li><strong>Description:</strong> ${item.Description}</li>                  
                    <button 
                      class="btn addCart" 
                      data-id="${item.Product_ID}"
