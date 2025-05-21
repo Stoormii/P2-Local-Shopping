@@ -112,6 +112,9 @@ h2 {
   border: 10px solid white;
   border-radius: 25px;
   padding: 0 20px;
+    height: 70px; /* Set a fixed height */
+  padding: 0 20px; /* Add consistent padding */
+  box-sizing: border-box; /* Ensure padding does not affect height */
 }
 
 .nav-links {
