@@ -405,8 +405,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                      >Add to Order 
                      </button>
                 </P>
-                 <p><a href="Basket.html" class="btn">Add to Order</a></p>
-             </ul>
+                </ul>
          </div>
 
           <div class="other-products">
