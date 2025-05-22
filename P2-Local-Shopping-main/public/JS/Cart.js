@@ -54,7 +54,7 @@ document.body.addEventListener('click', (e) => {
 function addToCart(productId, name, price, image, storeId, id) {
     // Check if the product already exists in the cart
     const existingItem = cart.find(item =>
-        item.product_id == productId 
+        item.Product_ID == productId 
 
     );
 
