@@ -644,7 +644,7 @@ app.post('/Orders', async (req, res) => {
  
  
         // Step 2: Insert all items into the Order_product table with the same Order_ID
-        const insertOrderProductSQL = "INSERT INTO Order_product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
+        const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
         for (let order of orders) {
             await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID, order.Quantity]);
         }
