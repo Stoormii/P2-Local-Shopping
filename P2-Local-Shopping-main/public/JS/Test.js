@@ -1,16 +1,4 @@
-// Store items in localStorage
-/*const basketItems = [
-    { Product_ID: 1, Store_ID: 1, id: 1, Quantity: 2 },
-    { Product_ID: 2, Store_ID: 2, id: 1, Quantity: 1 },
-    { Product_ID: 3, Store_ID: 1, id: 1, Quantity: 4 }
-];
 
-localStorage.setItem("basket", JSON.stringify(basketItems));
-
-// Retrieve stored data and send to backend
-const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
-*/
-//Skal nok bruge base url som i app.js/store-admin.js. dette sender bare items til backend og gemmer dem i databasen.
 if (typeof baseUrl === 'undefined') {
     var baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 }
