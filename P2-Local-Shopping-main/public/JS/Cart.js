@@ -3,7 +3,7 @@ const cartIconSpan = document.querySelector('.icon-cart span');
 const listCartHTML = document.querySelector('.listCart');
 const body = document.body;
 
-
+let id = null;
 //getting user id
 async function fetchUserId() {
     try {
@@ -12,7 +12,7 @@ async function fetchUserId() {
         const data = await response.json();
 
         if (data.LoggedIn && data.user) {
-            const id = data.user.id; // Store the user ID globally
+             id = data.user.id; // Store the user ID globally
         } else {
             console.error('User not logged in.');
         }
@@ -21,6 +21,7 @@ async function fetchUserId() {
     }
 }
 // Toggle Cart Visibility and shows the cart when icon is clicked and close when close button is clicked
+fetchUserId();
 
 document.querySelector('.icon-cart').addEventListener('click', () => {
     body.classList.toggle('showCart');
