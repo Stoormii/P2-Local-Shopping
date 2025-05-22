@@ -74,36 +74,7 @@ h1{
   color: white;
 }
 
-/* ===== SEARCH BAR ===== */
-.search-container {
-  display: flex;
-  align-items: center;
-  border: 2px solid #ccc;
-  border-radius: 25px;
-  padding: 5px 10px;
-  transition: border-color 0.3s;
-  margin: 0 10px;
-  width: 150px;
-}
 
-.search-container:focus-within {
-  border-color: #04AA6D;
-}
-
-.search-container input {
-  border: none;
-  outline: none;
-  padding: 8px;
-  width: 100%;
-  border-radius: 25px;
-}
-
-.search-container button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
 
 /* ===== ACCOUNT DROPDOWN ===== */
 .account-dropdown {
