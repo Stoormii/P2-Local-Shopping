@@ -39,5 +39,4 @@ document.getElementById("reserveButton").addEventListener("click", function () {
 });
 
 
-app.listen(3399, () => console.log("Server running on port 3399"));
 //slut indsæt orders i databasen
