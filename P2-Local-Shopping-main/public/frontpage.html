@@ -145,7 +145,7 @@
     const response = await fetch(`${baseUrl}/session`); // Fetch session data from the backend
     const data = await response.json();
 
-    if (data.LoggedIn && data.store) {
+    if (data.LoggedIn && data.user) {
       const storeIdDisplay = document.getElementById('store-id-display');
       storeIdDisplay.textContent = `Store ID: ${data.user.id}`; // Update the placeholder with the Store_ID
     } else {
