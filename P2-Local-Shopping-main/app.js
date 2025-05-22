@@ -333,7 +333,7 @@ if (item.Category_ID) {
         FROM Categories c
         INNER JOIN category_path cp ON c.Category_ID = cp.Parent_ID
         )
-        SELECT 1 FROM Categories c WHERE Category_ID = 1 LIMIT 1;
+        SELECT 1 FROM category_path c WHERE Category_ID = 1 LIMIT 1;
         `,
         [item.Category_ID]
     );
