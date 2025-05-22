@@ -328,3 +328,13 @@ body.showCart .cartTab {
 .account-dropdown:hover .account-menu {
   display: block;
 }
+
+.main-container {
+  max-width: 1200px;
+  margin: auto;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  min-height: 100vh;
+  border-radius: 8px;
+}
