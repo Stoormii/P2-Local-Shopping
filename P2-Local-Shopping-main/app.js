@@ -381,6 +381,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
          <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/lassemedhattenstyles.css">
      </head>
      <body>
+     <div class="main-container">
         <header class="topnav">
             <a class="active" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/frontpage.html">Shop Local</a>
             <a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/categories.html">Categories</a>
@@ -418,6 +419,8 @@ const categoryProductsHTML = categoryProducts.map(product => `
                     <!--Bliver opdateret dunamisk i validation.js -->
                 </div>
             </div>
+                            </div>
+
         </header>
         <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/Cart.js" defer></script>
         <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/searchbarre.js" defer></script>
