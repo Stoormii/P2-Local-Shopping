@@ -419,7 +419,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                     <!--Bliver opdateret dunamisk i validation.js -->
                 </div>
             </div>
-                            </div>
+                            
 
         </header>
         <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/Cart.js" defer></script>
@@ -459,7 +459,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                         ${categoryProductsHTML}
                     </div>
                 </div>
-
+</div>
      <script src="/JS/redirect.js"></script>
      </body>
      </html>
