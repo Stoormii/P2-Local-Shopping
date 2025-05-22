@@ -3,6 +3,22 @@ const cartIconSpan = document.querySelector('.icon-cart span');
 const listCartHTML = document.querySelector('.listCart');
 const body = document.body;
 
+//getting user id
+async function fetchUserId() {
+    try {
+        const baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
+        const response = await fetch(`${baseUrl}/session`);
+        const data = await response.json();
+
+        if (data.LoggedIn && data.user) {
+            id = data.id; // Store the user ID globally
+        } else {
+            console.error('User not logged in.');
+        }
+    } catch (error) {
+        console.error('Error fetching user ID:', error);
+    }
+}
 // Toggle Cart Visibility and shows the cart when icon is clicked and close when close button is clicked
 
 document.querySelector('.icon-cart').addEventListener('click', () => {
@@ -26,17 +42,18 @@ document.body.addEventListener('click', (e) => {
     const size = document.getElementById('productCategory')?.value || null;
     const image = btn.dataset.image || ''; 
     const storeId = btn.dataset.storeId;
+    
 
     //add produt to cart and show cart
-    addToCart(productId, size, name, price, image, storeId);
+    addToCart(productId, name, price, image, storeId, id);
     body.classList.add('showCart');
 });
 
 // Cart Logic
-function addToCart(productId, size, name, price, image, storeId) {
+function addToCart(productId, name, price, image, storeId, id) {
     // Check if the product already exists in the cart
     const existingItem = cart.find(item =>
-        item.product_id == productId && item.size === size
+        item.product_id == productId 
 
     );
 
@@ -49,8 +66,8 @@ function addToCart(productId, size, name, price, image, storeId) {
             Quantity: 1,
             Name: name,
             Price: price,
-            Image: image, 
-            size: size,    
+            Image: image,  
+            id: id,
         });
     }
     updateCart();
@@ -72,9 +89,6 @@ function renderCart() {
                 <img src="${item.Image}" alt="${item.name}">
                 <div>
                     <h3>${item.Name}</h3>
-                    ${item.size
-                        ? `<small>Size: ${item.size.toUpperCase()}</small>`
-                       : ''}
                     <div class="price">${(item.Price * item.Quantity).toFixed(2)} DKK</div>
                 </div>
                 <div class="Quantity">
