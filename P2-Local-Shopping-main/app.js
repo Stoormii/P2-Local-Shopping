@@ -322,10 +322,18 @@ if (item.Category_ID) {
     // Query to check if the category has a parent with Parent_ID = 1 and the parent itself has Parent_ID IS NULL
     const [categoryCheck] = await pool.query(
         `
-        SELECT c1.Category_ID
-        FROM Categories c1
-        LEFT JOIN Categories c2 ON c1.Parent_ID = c2.Category_ID
-        WHERE c1.Category_ID = ? AND c2.Parent_ID IS NULL AND c2.Category_ID = 1
+        WITH RECURSIVE  category_path (Category_ID, Parent_ID) AS (
+        SELECT Category_ID, Parent_ID
+        FROM Categories 
+        WHERE Category_ID = ? 
+
+        UNION ALL
+
+        SELECT c.Category_ID, c.Parent_ID
+        FROM Categories c
+        INNER JOIN category_path cp ON c.Category_ID = cp.Parent_ID
+        )
+        SELECT * FROM Categories c WHERE Category_ID = 1;
         `,
         [item.Category_ID]
     );
