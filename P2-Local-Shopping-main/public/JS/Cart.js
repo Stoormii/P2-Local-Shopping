@@ -12,7 +12,7 @@ async function fetchUserId() {
         const data = await response.json();
 
         if (data.LoggedIn && data.user) {
-            id = data.user.id; // Store the user ID globally
+            const id = data.user.id; // Store the user ID globally
         } else {
             console.error('User not logged in.');
         }
