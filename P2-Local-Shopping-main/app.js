@@ -419,7 +419,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                 </div>
             </div>
         </header>
-        <script src="JS/searchbarre.js" defer></script>
+        <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/Cart.js" defer></script>
 
 
          <div class="product">
