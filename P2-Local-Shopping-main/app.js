@@ -382,8 +382,8 @@ const categoryProductsHTML = categoryProducts.map(product => `
      </head>
      <body>
         <header class="topnav">
-            <a class="active" href="#home">Shop Local</a>
-            <a href="categories.html">Categories</a>
+            <a class="active" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/frontpage.html">Shop Local</a>
+            <a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/categories.html">Categories</a>
             <div class="icon-cart">
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
@@ -410,7 +410,6 @@ const categoryProductsHTML = categoryProducts.map(product => `
             </div>
             
             <div id="results" class="search-results"></div>
-            <a href="#basket">basket</a>
             <div class="account-dropdown">
                 <button class="account-btn">
                     <img src="img/person_24dp_000000_FILL1_wght400_GRAD200_opsz24.png" alt="Account" width="35" height="35">
