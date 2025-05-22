@@ -3,7 +3,7 @@ const cartIconSpan = document.querySelector('.icon-cart span');
 const listCartHTML = document.querySelector('.listCart');
 const body = document.body;
 
-let id = null;
+let userid = null;
 //getting user id
 async function fetchUserId() {
     try {
@@ -12,7 +12,7 @@ async function fetchUserId() {
         const data = await response.json();
 
         if (data.LoggedIn && data.user) {
-            id = data.user.id; // Store the user ID globally
+            userid = data.user.id; // Store the user ID globally
         } else {
             console.error('User not logged in.');
         }
@@ -43,7 +43,7 @@ document.body.addEventListener('click', (e) => {
     const size = document.getElementById('productCategory')?.value || null;
     const image = btn.dataset.image || ''; 
     const storeId = btn.dataset.storeId;
-    
+    const id = btn.userid;
 
     //add produt to cart and show cart
     addToCart(productId, name, price, image, storeId, id);
