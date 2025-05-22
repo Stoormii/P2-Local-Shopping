@@ -6,10 +6,9 @@
 
 const BASE_URL = window.location.origin.includes('localhost') */
 
-const baseUrl = window.location.origin.includes('localhost')
-? '' // Lokalt miljø
-: '/node9'; // Servermiljø
-
+if (typeof baseUrl === 'undefined') {
+    var baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
+}
 // henterer kategorierne fra app.js
 
 // henterer kategorierne fra app.js
