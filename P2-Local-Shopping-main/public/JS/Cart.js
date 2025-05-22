@@ -2,7 +2,9 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 const cartIconSpan = document.querySelector('.icon-cart span');
 const listCartHTML = document.querySelector('.listCart');
 const body = document.body;
-
+? '' // Lokalt miljø
+: '/node9'; // Servermiljø
+let Id = null;
 //getting user id
 async function fetchUserId() {
     try {
