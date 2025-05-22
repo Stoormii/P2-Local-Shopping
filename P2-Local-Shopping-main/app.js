@@ -357,8 +357,15 @@ const storeProductsHTML = storeProducts.map(product => `
         <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='${product.Product_ID}'">
         <h2>${product.Product_name}</h2>
         <p><strong>Price: ${product.Price} DKK</strong></p>
-        <p><a href="/Basket.html" class="btn">Add to Order</a></p>
-    </div>
+<button 
+                     class="btn addCart" 
+                     data-id="${item.Product_ID}"
+                     data-name="${item.Product_name}"
+                     data-price="${item.Price}"
+                     data-image="${item.image}"                    
+                     data-store-id="${item.Store_ID}"
+                     >Add to Order 
+                     </button>    </div>
 `).join('');
 
 // Generate HTML for the "Similar items from the same category" carousel
@@ -367,8 +374,15 @@ const categoryProductsHTML = categoryProducts.map(product => `
         <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='${product.Product_ID}'">
         <h2>${product.Product_name}</h2>
         <p><strong>Price: ${product.Price} DKK</strong></p>
-        <p><a href="/Basket.html" class="btn">Add to Order</a></p>
-    </div>
+<button 
+                     class="btn addCart" 
+                     data-id="${item.Product_ID}"
+                     data-name="${item.Product_name}"
+                     data-price="${item.Price}"
+                     data-image="${item.image}"                    
+                     data-store-id="${item.Store_ID}"
+                     >Add to Order 
+                     </button>    </div>
 `).join('');
 
  // Dynamically render the HTML template with the item data
