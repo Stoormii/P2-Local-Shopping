@@ -338,7 +338,7 @@ if (item.Category_ID) {
         [item.Category_ID]
     );
 
-    if (categoryCheck.length > 0 || item.Category_ID === 1) { 
+    if (categoryCheck.length > 0 ) { 
     sizeSelectionHTML = `
 
         <div class="form-group">
