@@ -441,7 +441,8 @@ const categoryProductsHTML = categoryProducts.map(product => `
                      data-id="${item.Product_ID}"
                      data-name="${item.Product_name}"
                      data-price="${item.Price}"
-                     data-image="${item.image}"
+                     data-image="${item.image}"                    
+                     data-store-id="${item.Store_ID}"
                      >Add to Order 
                      </button>
                 </P>
