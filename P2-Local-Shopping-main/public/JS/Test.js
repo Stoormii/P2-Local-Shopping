@@ -11,6 +11,9 @@ localStorage.setItem("basket", JSON.stringify(basketItems));
 const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
 */
 //Skal nok bruge base url som i app.js/store-admin.js. dette sender bare items til backend og gemmer dem i databasen.
+const baseUrl = window.location.origin.includes('localhost')
+? '' // Lokalt miljø
+: '/node9'; // Servermiljø
 document.getElementById("reserveButton").addEventListener("click", function () {
     console.log("Reserve button clicked!"); // Debugging log
 
