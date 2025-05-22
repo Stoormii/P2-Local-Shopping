@@ -41,6 +41,12 @@ document.getElementById("reserveButton").addEventListener("click", function () {
             console.log("Order reserved successfully!", data);
             alert(`Your order has been reserved successfully! Order ID: ${data.Order_ID}`);
         })
+
+ cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+});
+        
         .catch(error => {
             console.error("Error reserving order:", error);
             alert("Could not reserve order. Please try again later.");
