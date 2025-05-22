@@ -126,8 +126,4 @@ listCartHTML.addEventListener('click', (e) => {
 });
 
 renderCart();
-document.querySelector('.reserve')?.addEventListener('click', () => {
-    cart = [];
-    localStorage.setItem('cart', JSON.stringify(cart));
-    renderCart();
-});
+
