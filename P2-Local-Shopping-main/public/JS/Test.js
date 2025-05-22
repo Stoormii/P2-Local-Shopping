@@ -47,30 +47,6 @@ document.getElementById("reserveButton").addEventListener("click", function () {
         });
 });
 
-//start: indsæt orders i databasen
-const express = require('express');
-const app = express();
 
-app.use(express.json()); // Enable JSON parsing
-
-app.post(`${baseUrl}/Orders`, async (req, res) => {
-    const orders = req.body.orders;
-
-    try {
-        for (let order of orders) {
-            // Insert into Orders table
-            const insertOrderSQL = "INSERT INTO Orders (id) VALUES (?)";
-            const [orderResult] = await db.promise().query(insertOrderSQL, [order.id]);
-
-            // Insert into Order_product table
-            const insertOrderProductSQL = "INSERT INTO Order_product (Order_ID, Store_ID, Product_ID) VALUES (?, ?, ?)";
-            await db.promise().query(insertOrderProductSQL, [orderResult.insertId, order.Store_ID, order.Product_ID]);
-        }
-        res.json({ message: "Orders added successfully!" });
-    } catch (error) {
-        console.error("Error inserting orders:", error);
-        res.status(500).json({ error: "Database error!" });
-    }
-});
 app.listen(3399, () => console.log("Server running on port 3399"));
 //slut indsæt orders i databasen
