@@ -58,25 +58,17 @@ function renderOrders(Orders) {
 
            
             `;
-        statusBtn.addEventListener("click", async function () {
-    // Toggle status
-    const newStatus = statusBtn.innerText === "Reserved" ? "Picked up" : "Reserved";
-    // Update on server
-    try {
-        const response = await fetch(`${baseUrl}/Orders/${Orders.Order_id}/status`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: newStatus })
-        });
-        if (response.ok) {
-            statusBtn.innerText = newStatus;
-        } else {
-            alert("Failed to update status");
-        }
-    } catch (err) {
-        alert("Network error");
-    }
+  const statusBtn = OrderDiv.querySelector(`#statusBtn-${Orders.Order_id}`);
+            statusBtn.addEventListener("click", function () {
+  if (statusBtn.innerText === "Reserved") {
+    statusBtn.innerText = "Picked up";
+  } else {
+    statusBtn.innerText = "Reserved";
+  }
 });
+        carousel.appendChild(OrderDiv);
+    });
+}
         carousel.appendChild(OrderDiv);
     });
 }
