@@ -69,10 +69,7 @@ function renderOrders(Orders) {
         carousel.appendChild(OrderDiv);
     });
 }
-        carousel.appendChild(OrderDiv);
-    });
-}
-
+     
 
 document.addEventListener('DOMContentLoaded', fetchOrders);''
 
