@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', fetchOrders);''
 // Fetch the order products based on the selected order ID
 async function fetchOrderProducts(Order_ID) {
     try {
-        const response = await fetch(`${baseUrl}/OrderProducts/${Order_ID}`);
+        const response = await fetch(`${baseUrl}/OrderProducts/${Store_ID}/${Order_ID}`);
         if (!response.ok) {
             throw new Error(`Server returned status ${response.status}`);
         }
