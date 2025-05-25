@@ -787,7 +787,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
 
 
                 </div>
- <script src="/cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/js/updateStatus.js"></script>
+ <script src="/cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/updateStatus.js"></script>
 
             </body>
             </html>
