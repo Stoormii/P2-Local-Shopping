@@ -787,21 +787,28 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
 
 
                 </div>
-               <script>
+      <script>
     async function updateStatus(orderId, productId, storeId, button) {
-        const newStatus = button.innerText === 'Pick up' ? 'picked_up' : 'reserved';
-        const response = await fetch(`/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status: newStatus })
-        });
+        const currentLabel = button.innerText.trim().toLowerCase();
+        const newStatus = currentLabel === 'pick up' ? 'picked_up' : 'reserved';
 
-        if (response.ok) {
-            button.innerText = newStatus === 'picked_up' ? 'Picked up' : 'Pick up';
-        } else {
-            alert("Failed to update status.");
+        try {
+            const response = await fetch(`/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+
+            if (response.ok) {
+                button.innerText = newStatus === 'picked_up' ? 'Picked up' : 'Pick up';
+            } else {
+                alert("Failed to update status.");
+            }
+        } catch (err) {
+            console.error("Network or server error:", err);
+            alert("Could not update status due to a network error.");
         }
     }
 </script>
