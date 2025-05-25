@@ -724,6 +724,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             `SELECT op.*, p.Product_name, p.Price, p.image
              FROM Order_Product op
              JOIN Product p ON op.Product_ID = p.Product_ID
+             JOIN Store s ON op.Store_ID = s.Store_ID
              WHERE op.Store_ID = ? AND op.Order_ID = ?`,
             [Store_ID, Order_ID]
         );
@@ -779,7 +780,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
                 </style>
             </head>
             <body>
-                <h1>Products for Store ID: ${Store_ID}, Order ID: ${Order_ID}</h1>
+                <h1>Products for ${rows[0].Store_name}, Order ID: ${Order_ID}</h1>
                 <div class="products-container">
                     ${productsHTML}
 
