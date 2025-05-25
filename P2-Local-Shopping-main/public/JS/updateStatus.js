@@ -1,7 +1,14 @@
 async function updateStatus(orderId, productId, storeId, button) {
     const currentLabel = button.innerText.trim().toLowerCase();
-    const newStatus = currentLabel === 'pick up' ? 'picked_up' : 'reserved';
-
+let newStatus;
+if (currentLabel === 'reserved') {
+    newStatus = 'picked_up';
+} else if (currentLabel === 'picked up') {
+    newStatus = 'reserved';
+} else {
+    alert('Unknown status');
+    return;
+}
     try {
         const baseUrl = ''; // or 'http://localhost:3000' for testing
         const response = await fetch(baseUrl + '/OrderProducts/' + orderId + '/' + productId + '/' + storeId + '/status', {
