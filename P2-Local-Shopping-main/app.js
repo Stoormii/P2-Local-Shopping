@@ -796,6 +796,29 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
         res.status(500).send("<h1>Database error! Could not fetch products.</h1>");
     }
 });
+// to change Status on button click
+app.put('/OrderProducts/:Order_ID/:Product_ID/:Store_ID/status', async (req, res) => {
+    const { Order_ID, Product_ID, Store_ID } = req.params;
+    const { status } = req.body;
+
+    try {
+        const [result] = await pool.query(
+            `UPDATE Order_Product
+             SET Status = ?
+             WHERE Order_id = ? AND Product_ID = ? AND Store_ID = ?`,
+            [status, Order_ID, Product_ID, Store_ID]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "No matching record found." });
+        }
+
+        res.json({ message: "Status updated successfully." });
+    } catch (error) {
+        console.error("Error updating status:", error);
+        res.status(500).json({ message: "Database error." });
+    }
+});
 // Global fejlhåndtering
 // Tilføjelse, for at tilføje produkter til databasen
 
