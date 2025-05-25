@@ -11,7 +11,7 @@ if (currentLabel === 'reserved') {
 }
     try {
         const baseUrl = ''; // or 'http://localhost:3000' for testing
-        const response = await fetch(`${baseUrl}/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
+        const response = await fetch(`/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
