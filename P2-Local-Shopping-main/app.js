@@ -741,8 +741,9 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
                 <h2>${product.Product_name}</h2>
                 <p>Price: ${product.Price} DKK</p>
                 <p>Quantity: ${product.Quantity}</p>
-
-
+                <button onclick="updateStatus(${product.Order_id}, ${product.Product_ID}, ${product.Store_ID}, this)">
+                ${product.Status === 'picked_up' ? 'Picked up' : 'Pick up'}
+                </button>
             </div>
         `).join('');
 
