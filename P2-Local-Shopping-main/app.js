@@ -781,6 +781,28 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
                 </style>
             </head>
             <body>
+            <nav class="navbar">
+  <ul class="nav-links">
+    <li><a href="StoreFrontPage.html" id="home-link">Home</a></li>
+    <li><a href="Store-Admin.html" id="product-link">Products</a></li>
+    <li><a href="salesprojekt.html" id="neworder-link">New orders</a></li>
+  </ul>
+</nav>
+<script>
+const navLinks = document.querySelectorAll('.nav-links a');
+
+
+navLinks.forEach(link => {
+link.addEventListener('click', () => {
+ 
+  navLinks.forEach(nav => nav.classList.remove('active'));
+
+
+ 
+  link.classList.add('active');
+});
+});</script>
+
                 <h1>Products for ${StoreName}, Order ID: ${Order_ID}</h1>
                 <div class="products-container">
                     ${productsHTML}
