@@ -696,7 +696,7 @@ app.get('/Orders', async (req, res) => {
             SELECT DISTINCT o.Order_id, o.id
             FROM Orders o
             JOIN Order_Product op ON o.Order_id = op.Order_id
-            WHERE op.Store_id = ?
+            WHERE op.Store_id = ? AND op.STATUS = 'reserved'
             ORDER BY o.Order_id DESC
             `,
             [storeId]
