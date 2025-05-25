@@ -1,0 +1,24 @@
+async function updateStatus(orderId, productId, storeId, button) {
+    const currentLabel = button.innerText.trim().toLowerCase();
+    const newStatus = currentLabel === 'pick up' ? 'picked_up' : 'reserved';
+
+    try {
+        const baseUrl = ''; // or 'http://localhost:3000' for testing
+        const response = await fetch(baseUrl + '/OrderProducts/' + orderId + '/' + productId + '/' + storeId + '/status', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+
+        if (response.ok) {
+            button.innerText = newStatus === 'picked_up' ? 'Picked up' : 'Pick up';
+        } else {
+            alert("Failed to update status.");
+        }
+    } catch (err) {
+        console.error("❌ Network or server error:", err.message || err);
+        alert("Could not update status due to a network error.");
+    }
+}
