@@ -748,6 +748,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             </div>
         `).join('');
 
+        const StoreName = rows[0].Store_name;
 
         // Generate the full HTML template
         const htmlContent = `
@@ -780,7 +781,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
                 </style>
             </head>
             <body>
-                <h1>Products for ${rows[0].Store_name}, Order ID: ${Order_ID}</h1>
+                <h1>Products for ${StoreName}, Order ID: ${Order_ID}</h1>
                 <div class="products-container">
                     ${productsHTML}
 
