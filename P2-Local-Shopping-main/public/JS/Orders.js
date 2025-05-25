@@ -122,7 +122,28 @@ function renderOrderProducts(orderProducts) {
             <div class="Product-name">${product.Product_name}</div>
             <div class="Product-price">Price: ${product.Price} DKK</div>
             <div class="Product-quantity">Quantity: ${product.Quantity}</div>
+             <button class="pickup-btn" data-order="${product.Order_id}" data-product="${product.Product_ID}" data-store="${product.Store_ID}">
+            ${product.Status === 'picked_up' ? 'Picked up' : 'Pick up'}
+        </button>
         `;
+         const button = productDiv.querySelector('.pickup-btn');
+    button.addEventListener('click', async () => {
+        const orderId = button.getAttribute('data-order');
+        const productId = button.getAttribute('data-product');
+        const storeId = button.getAttribute('data-store');
+
+        const response = await fetch(`${baseUrl}/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'picked_up' })
+        });
+
+        if (response.ok) {
+            button.innerText = 'Picked up';
+        } else {
+            alert('Failed to update status');
+        }
+    });
         carousel.appendChild(productDiv);
     });
 }
