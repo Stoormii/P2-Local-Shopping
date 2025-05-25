@@ -793,7 +793,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
         const newStatus = currentLabel === 'pick up' ? 'picked_up' : 'reserved';
 
         try {
-const response = await fetch(baseUrl + '/OrderProducts/' + orderId + '/' + productId + '/' + storeId + '/status', {
+const response = await fetch(${baseUrl} + '/OrderProducts/' + orderId + '/' + productId + '/' + storeId + '/status', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
