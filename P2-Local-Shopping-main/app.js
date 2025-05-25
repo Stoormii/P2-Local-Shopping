@@ -787,13 +787,13 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
 
 
                 </div>
-      <script>
+  <script>
     async function updateStatus(orderId, productId, storeId, button) {
         const currentLabel = button.innerText.trim().toLowerCase();
         const newStatus = currentLabel === 'pick up' ? 'picked_up' : 'reserved';
 
         try {
-            const response = await fetch(`/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
+            const response = await fetch('/OrderProducts/' + orderId + '/' + productId + '/' + storeId + '/status', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
