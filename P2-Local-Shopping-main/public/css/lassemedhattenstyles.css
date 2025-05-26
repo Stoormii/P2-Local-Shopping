@@ -320,3 +320,216 @@ body.showCart .cartTab {
   min-height: 100vh;
   border-radius: 8px;
 }
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+  .topnav {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .topnav a {
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .search-container {
+    width: 100%;
+    margin: 10px 0;
+  }
+  
+  .indent-1 section {
+    flex: 1 1 100%;
+  }
+  
+  .arrow-left {
+    left: 10px;
+  }
+  
+  .arrow-right {
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product,
+  .Shops {
+    width: 120px;
+  }
+  
+  .container {
+    height: 150px;
+  }
+}
+/* Search area container */
+.search-container {
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-form {
+  display: flex;
+  width: 100%;
+  border: none;            /* Remove the gray border */
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: transparent; /* No background ring */
+  box-shadow: none;        /* Remove any shadow */
+}
+
+/* Button */
+.search-button {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Input field */
+.search-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;            /* No border */
+  outline: none;           /* No blue outline on focus */
+  background-color: #f9f9f9; /* Light background for visibility */
+  border-radius: 0;        /* No radius unless you want it */
+}
+
+/* Search results appear below input */
+.search-results {
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 240px; /* fits ~3 items */
+  overflow-y: auto;
+  margin-top: 4px;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+/* Each result item */
+.product-square {
+  padding: 10px;
+  margin-bottom: 6px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Styling for each product container */
+.product-square {
+  display: flex; /* Use flexbox to align image and name horizontally */
+  align-items: center; /* Vertically align the image and name */
+  padding: 10px;
+  margin-bottom: 6px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: left; /* Align text to the left */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  gap: 10px; /* Add spacing between the image and name */
+}
+
+/* Styling for the product image */
+.product-image {
+  width: 50px; /* Set a fixed width for the image */
+  height: 50px; /* Set a fixed height for the image */
+  object-fit: cover; /* Ensure the image maintains its aspect ratio */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Indicate the image is clickable */
+}
+
+/* Styling for the product name */
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer; /* Indicate the name is clickable */
+  margin: 0; /* Remove default margin */
+  flex-grow: 1; /* Allow the name to take up remaining space */
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.product-location {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product a.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.product a.btn:hover {
+    background-color: #0056b3;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+#product-list.product-grid {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.categories-products-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+#category-list {
+    min-width: 180px;
+    max-width: 250px;
+    background: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+}
