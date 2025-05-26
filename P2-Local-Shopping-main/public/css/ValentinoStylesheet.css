@@ -588,12 +588,13 @@ h1{
 
 .product-left img {
     width: 100%;
-    height: auto;
+    max-height: 400px; /* ✅ Limit height */
+    object-fit: contain; /* ✅ Prevent distortion */
     border-radius: 10px;
-    object-fit: cover;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: block;
+    margin: 0 auto;
 }
-
 .product-right h1 {
     font-size: 2rem;
     margin-bottom: 10px;
