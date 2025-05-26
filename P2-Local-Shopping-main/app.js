@@ -334,8 +334,7 @@ let sizeSelectionHTML =  `
             
         </div>
     `;
-}
-}
+
 // Generate HTML for the "Other products from the same store" carousel
 const storeProductsHTML = storeProducts.map(product => `
     <div class="product-card">
