@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`${baseUrl}/logout`, { method: 'POST' });
         if (response.ok) {
          
-      window.location.href = 'storelogin.html';
+      window.location.href = '${baseUrl}/storelogin.html';
 
         } else {
           alert('Logout fejlede.');
