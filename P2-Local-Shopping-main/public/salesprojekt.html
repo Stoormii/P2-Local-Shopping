@@ -38,7 +38,7 @@ link.addEventListener('click', () => {
 
 </body>
 <body>
-  <button id="reserveButton">Reserve</button>
+
 
 
   <h2><center>New Orders</center></h2>
@@ -48,7 +48,6 @@ link.addEventListener('click', () => {
 
     <section>
      
-      <p id="store-id-display">Store ID: </p> <!-- Placeholder for Store_ID -->
        
         <div class="carouselx" id="carouselx">
             <!-- Orders will be dynamically inserted here -->
@@ -57,30 +56,8 @@ link.addEventListener('click', () => {
  
   <script src="JS/redirect.js" ></script>
   <script src="JS/Orders.js"></script>
-  <script>
-   async function displayStoreID() {
-  try {
-    const baseUrl = window.location.origin.includes('localhost') ? '' : '/node9'; // Adjust for localhost vs server
-    const response = await fetch(`${baseUrl}/session`); // Fetch session data from the backend
-    const data = await response.json();
 
-    if (data.LoggedIn && data.store) {
-      const storeIdDisplay = document.getElementById('store-id-display');
-      storeIdDisplay.textContent = `Store ID: ${data.store.id}`; // Update the placeholder with the Store_ID
-    } else {
-      console.error('No store is logged in.');
-      document.getElementById('store-id-display').textContent = 'Store ID: Not logged in';
-    }
-  } catch (error) {
-    console.error('Error fetching session data:', error);
-    document.getElementById('store-id-display').textContent = 'Store ID: Error fetching data';
-  }
-}
-  
-    // Call the function when the page loads
-    document.addEventListener('DOMContentLoaded', displayStoreID);
-  </script>
-
+<script src="JS/storefrontpage.js"></script>
  
 
 
