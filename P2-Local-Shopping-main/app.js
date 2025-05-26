@@ -437,7 +437,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
             <div id="results" class="search-results"></div>
             <div class="account-dropdown">
                 <button class="account-btn">
-                    <img src="img/person_24dp_000000_FILL1_wght400_GRAD200_opsz24.png" alt="Account" width="35" height="35">
+                    <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/person_24dp_000000_FILL1_wght400_GRAD200_opsz24.png" alt="Account" width="35" height="35">
                 </button>
                 <div class="account-menu" id="account-menu">
                     <!--Bliver opdateret dunamisk i validation.js -->
