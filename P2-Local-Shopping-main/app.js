@@ -361,7 +361,7 @@ if (item.Category_ID) {
 }
 // Generate HTML for the "Other products from the same store" carousel
 const storeProductsHTML = storeProducts.map(product => `
-    <div class="product">
+    <div class="product-card">
         <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='${product.Product_ID}'">
         <h2>${product.Product_name}</h2>
         <p><strong>Price: ${product.Price} DKK</strong></p>
@@ -378,7 +378,7 @@ const storeProductsHTML = storeProducts.map(product => `
 
 // Generate HTML for the "Similar items from the same category" carousel
 const categoryProductsHTML = categoryProducts.map(product => `
-    <div class="product">
+    <div class="product-card">
         <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="window.location.href='${product.Product_ID}'">
         <h2>${product.Product_name}</h2>
         <p><strong>Price: ${product.Price} DKK</strong></p>
