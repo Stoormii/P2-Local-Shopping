@@ -535,7 +535,7 @@ app.get('/store/:id', async (req, res) => {
 <head>
     <meta charset="UTF-8">
     <title>${Store.Store_name}</title>
-    <link rel="stylesheet" href="/css/store-template.css">
+   
     <link rel="stylesheet" href="/css/ValentinoStylesheet.css">
     <style>
         #map {
