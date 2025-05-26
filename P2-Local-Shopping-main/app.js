@@ -561,6 +561,51 @@ app.get('/store/:id', async (req, res) => {
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap"></script>
 </head>
 <body>
+  <div class="main-container">
+        <header class="topnav">
+            <a class="active" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/frontpage.html">Shop Local</a>
+            <a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/categories.html">Categories</a>
+            <div class="icon-cart">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
+                </svg>
+                <span>0</span>
+            </div>
+
+            <div class="cartTab">
+            <h1>Shopping Cart</h1>
+            <div class="listCart"></div>
+            <div class="btn">
+                <button class="close">CLOSE</button>
+                <button class="reserve" id="reserveButton">Reserve items</button>
+            </div>
+        </div>
+
+
+           <div class="search-container">
+
+                <form onsubmit="event.preventDefault(); searchItems();" class="search-form">
+                    <button type="submit" class="search-button">🔍</button>
+                    <input type="text" id="searchBar" class="search-input" placeholder="Search...">
+                </form>
+            </div>
+            
+            <div id="results" class="search-results"></div>
+            <div class="account-dropdown">
+                <button class="account-btn">
+                    <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/person_24dp_000000_FILL1_wght400_GRAD200_opsz24.png" alt="Account" width="35" height="35">
+                </button>
+                <div class="account-menu" id="account-menu">
+                    <!--Bliver opdateret dunamisk i validation.js -->
+                </div>
+            </div>
+                            
+
+        </header>
+        <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/Cart.js" defer></script>
+        <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/searchbarre.js" defer></script>
+                <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/Test.js" defer></script>
+                <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/validation.js" defer></script>
     <div class="store">
         <div class="text-container">
             <h1>${Store.Store_name}</h1>
@@ -569,6 +614,7 @@ app.get('/store/:id', async (req, res) => {
             <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
         </div>
         <img src="${Store.image}" alt="${Store.Store_name}">
+    </div>
     </div>
     <div id="map"></div>
 </body>
