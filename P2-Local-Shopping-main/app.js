@@ -316,30 +316,7 @@ const [categoryProducts] = await pool.query(
     [item.Category_ID, ProductID]
 );
 // Dynamically generate the size selection HTML based on Product_ID
-let sizeSelectionHTML = '';
-   
-if (item.Category_ID) {
-    // Query to check if the category has a parent with Parent_ID = 1 and the parent itself has Parent_ID IS NULL
-    const [categoryCheck] = await pool.query(
-        `
-        WITH RECURSIVE  category_path (Category_ID, Parent_ID) AS (
-        SELECT Category_ID, Parent_ID
-        FROM Categories 
-        WHERE Category_ID = ? 
-
-        UNION ALL
-
-        SELECT c.Category_ID, c.Parent_ID
-        FROM Categories c
-        INNER JOIN category_path cp ON c.Category_ID = cp.Parent_ID
-        )
-        SELECT 1 FROM category_path c WHERE Category_ID = 1 LIMIT 1;
-        `,
-        [item.Category_ID]
-    );
-
-    if (categoryCheck.length > 0 ) { 
-    sizeSelectionHTML = `
+let sizeSelectionHTML =  `
 
         <div class="form-group">
             <label for="productCategory">Size:</label>
