@@ -786,7 +786,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/Order.css">
+                <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/baggestyle.css">
                 <title>Order Products</title>
                 <style>
                     body {
