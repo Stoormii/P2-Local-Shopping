@@ -451,7 +451,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                 <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/validation.js" defer></script>
 
 
-                <div class="product">
+             <div class="product">
   <div class="product-left">
     <img src="${item.image}" alt="${item.Product_name}">
   </div>
@@ -463,14 +463,12 @@ const categoryProductsHTML = categoryProducts.map(product => `
     <ul>
       <li>${item.Description}</li>
     </ul>
-    <button 
-      class="btn addCart" 
-      data-id="${item.Product_ID}"
-      data-name="${item.Product_name}"
-      data-price="${item.Price}"
-      data-image="${item.image}"                    
-      data-store-id="${item.Store_ID}"
-    >
+    <button class="btn addCart" 
+            data-id="${item.Product_ID}"
+            data-name="${item.Product_name}"
+            data-price="${item.Price}"
+            data-image="${item.image}"                    
+            data-store-id="${item.Store_ID}">
       Add to Order
     </button>
   </div>
