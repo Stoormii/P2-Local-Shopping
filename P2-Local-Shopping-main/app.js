@@ -452,26 +452,29 @@ const categoryProductsHTML = categoryProducts.map(product => `
 
 
                 <div class="product">
-             <h1>${item.Product_name}</h1>
-            
-             <img src="${item.image}" alt="${item.Product_name}">
-             <p><strong>Price: ${item.Price} DKK</strong></p>
-              ${sizeSelectionHTML} <!-- Insert size selection here -->
-             <h2>Specifications:</h2>
-             <ul style="list-style: none; padding: 0;">
-            <li> ${item.Description}</li>                  
-                   <button 
-                     class="btn addCart" 
-                     data-id="${item.Product_ID}"
-                     data-name="${item.Product_name}"
-                     data-price="${item.Price}"
-                     data-image="${item.image}"                    
-                     data-store-id="${item.Store_ID}"
-                     >Add to Order 
-                     </button>
-                </P>
-                </ul>
-         </div>
+  <div class="product-left">
+    <img src="${item.image}" alt="${item.Product_name}">
+  </div>
+  <div class="product-right">
+    <h1>${item.Product_name}</h1>
+    <p><strong>Price: ${item.Price} DKK</strong></p>
+    ${sizeSelectionHTML}
+    <h2>Specifications:</h2>
+    <ul>
+      <li>${item.Description}</li>
+    </ul>
+    <button 
+      class="btn addCart" 
+      data-id="${item.Product_ID}"
+      data-name="${item.Product_name}"
+      data-price="${item.Price}"
+      data-image="${item.image}"                    
+      data-store-id="${item.Store_ID}"
+    >
+      Add to Order
+    </button>
+  </div>
+</div>
 
           <div class="other-products">
                     <h1>Other products from the same store</h1>
