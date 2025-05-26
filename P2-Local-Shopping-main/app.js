@@ -782,10 +782,14 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             </head>
             <body>
             <nav class="navbar">
-  <ul class="nav-links">
+  <nav class="navbar">
+  <ul class="nav-links left">
     <li><a href="StoreFrontPage.html" id="home-link">Home</a></li>
     <li><a href="Store-Admin.html" id="product-link">Products</a></li>
     <li><a href="salesprojekt.html" id="neworder-link">New orders</a></li>
+  </ul>
+  <ul class="nav-links right">
+    <li><button id="logout-btn" class="logout-button">Logout</button></li>
   </ul>
 </nav>
 <script>
