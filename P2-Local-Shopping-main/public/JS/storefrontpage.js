@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const response = await fetch(`${baseUrl}/logout`, { method: 'POST' });
         if (response.ok) {
-          window.location.href = '${baseUrl}/storelogin.html';
+          window.location.href = 'storelogin.html';
+            location.reload(); // Refresh page first
         } else {
           alert('Logout fejlede.');
         }
