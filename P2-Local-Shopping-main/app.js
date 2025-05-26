@@ -367,11 +367,11 @@ const storeProductsHTML = storeProducts.map(product => `
         <p><strong>Price: ${product.Price} DKK</strong></p>
 <button 
                      class="btn addCart" 
-                     data-id="${Product.Product_ID}"
-                     data-name="${Product.Product_name}"
-                     data-price="${Product.Price}"
-                     data-image="${Product.image}"                    
-                     data-store-id="${Product.Store_ID}"
+                     data-id="${product.Product_ID}"
+                     data-name="${product.Product_name}"
+                     data-price="${product.Price}"
+                     data-image="${product.image}"                    
+                     data-store-id="${product.Store_ID}"
                      >Add to Order 
                      </button>    </div>
 `).join('');
@@ -384,11 +384,11 @@ const categoryProductsHTML = categoryProducts.map(product => `
         <p><strong>Price: ${product.Price} DKK</strong></p>
 <button 
                      class="btn addCart" 
-                     data-id="${Product.Product_ID}"
-                     data-name="${Product.Product_name}"
-                     data-price="${Product.Price}"
-                     data-image="${Product.image}"                    
-                     data-store-id="${Product.Store_ID}"
+                     data-id="${product.Product_ID}"
+                     data-name="${product.Product_name}"
+                     data-price="${product.Price}"
+                     data-image="${product.image}"                    
+                     data-store-id="${product.Store_ID}"
                      >Add to Order 
                      </button>    </div>
 `).join('');
