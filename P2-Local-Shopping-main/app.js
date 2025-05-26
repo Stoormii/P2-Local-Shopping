@@ -451,7 +451,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                 <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/validation.js" defer></script>
 
 
-             <div class="product">
+            <div class="product-detail">
   <div class="product-left">
     <img src="${item.image}" alt="${item.Product_name}">
   </div>
