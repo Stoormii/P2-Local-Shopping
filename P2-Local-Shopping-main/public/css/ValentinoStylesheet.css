@@ -577,7 +577,7 @@ h1{
 .product {
     background-color: #fff;
     padding: 30px;
-    margin: 40px auto;
+    margin: 60px ;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     max-width: 5000px;        /* or 100% */
