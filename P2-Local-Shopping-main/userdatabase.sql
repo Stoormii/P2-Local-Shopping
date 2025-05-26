@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS Order_Product (
     Store_ID INT ,
     Product_ID INT NOT NULL,
     Quantity INT NOT NULL,
+    Status ENUM('reserved', 'picked_up', 'cancelled') NOT NULL DEFAULT 'reserved',
     PRIMARY KEY (Order_product_id),
     FOREIGN KEY (Order_id) REFERENCES Orders(Order_id),
     FOREIGN KEY (Store_ID) REFERENCES Store(Store_ID),
