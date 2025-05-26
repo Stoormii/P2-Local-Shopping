@@ -814,7 +814,7 @@ link.addEventListener('click', () => {
 
                 </div>
  <script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/updateStatus.js"></script>
-
+<script src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/JS/storefrontpage.js"></script>
             </body>
             </html>
         `;
