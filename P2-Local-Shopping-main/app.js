@@ -812,7 +812,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             </head>
             <body>
             <nav class="navbar">
-  <nav class="navbar">
+
   <ul class="nav-links left">
     <li><a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/StoreFrontPage.html" id="home-link">Home</a></li>
     <li><a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/Store-Admin.html" id="product-link">Products</a></li>
