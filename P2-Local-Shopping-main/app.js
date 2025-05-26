@@ -351,7 +351,7 @@ if (item.Category_ID) {
                 <option value="xl">Extra Large (XL)</option>
             </select>
             <ul style="list-style: none; padding: 0;">
-                <li><a href="#" class="btn">Fit</a></li> 
+                
              </ul>
             
             
