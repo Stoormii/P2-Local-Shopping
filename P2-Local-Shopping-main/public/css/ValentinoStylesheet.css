@@ -406,6 +406,7 @@ h1{
   width: 300px;
   margin-left: auto;
   margin-right: auto;
+  z-index: 2;
 }
 
 .search-form {
@@ -452,7 +453,7 @@ h1{
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  z-index: 10;
+  z-index: 999;
 }
 
 /* Each result item */
