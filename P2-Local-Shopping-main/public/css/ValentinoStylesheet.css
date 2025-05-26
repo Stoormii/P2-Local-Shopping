@@ -594,6 +594,7 @@ h1{
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     display: block;
     margin: 0 auto;
+   padding-top: 60px;
 }
 .product-right h1 {
     font-size: 2rem;
