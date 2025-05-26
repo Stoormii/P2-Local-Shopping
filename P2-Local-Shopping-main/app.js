@@ -786,6 +786,7 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/baggestyle.css">
                 <title>Order Products</title>
                 <style>
                     body {
@@ -813,9 +814,9 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
             <nav class="navbar">
   <nav class="navbar">
   <ul class="nav-links left">
-    <li><a href="StoreFrontPage.html" id="home-link">Home</a></li>
-    <li><a href="Store-Admin.html" id="product-link">Products</a></li>
-    <li><a href="salesprojekt.html" id="neworder-link">New orders</a></li>
+    <li><a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/StoreFrontPage.html" id="home-link">Home</a></li>
+    <li><a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/Store-Admin.html" id="product-link">Products</a></li>
+    <li><a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/salesprojekt.html" id="neworder-link">New orders</a></li>
   </ul>
   <ul class="nav-links right">
     <li><button id="logout-btn" class="logout-button">Logout</button></li>
