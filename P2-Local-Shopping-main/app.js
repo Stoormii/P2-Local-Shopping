@@ -618,8 +618,9 @@ app.get('/store/:id', async (req, res) => {
         </div>
         <img src="${Store.image}" alt="${Store.Store_name}">
     </div>
-    </div>
     <div id="map"></div>
+    </div>
+    
 </body>
 </html>
 `;
