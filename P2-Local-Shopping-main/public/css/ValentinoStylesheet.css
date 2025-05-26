@@ -577,12 +577,13 @@ h1{
 .product {
     background-color: #fff;
     padding: 30px;
-    margin: 60px ;
+    margin: 60px auto;              /* center it horizontally */
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 5000px;        /* or 100% */
-    text-align: middle;
-    display: block;           /* Reset grid */
+    max-width: 1000px;              /* good responsive width cap */
+    width: 100%;                    /* allow full width inside container */
+    text-align: left;               /* fix invalid 'middle' */
+    display: block;
 }
 
 .product h1 {
