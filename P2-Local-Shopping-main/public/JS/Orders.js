@@ -42,7 +42,7 @@ function renderOrders(Orders) {
         OrderDiv.className = 'Orders';
         OrderDiv.setAttribute('data-name', Orders.Order_id);
         OrderDiv.innerHTML = `
-            <img id=${Orders.Order_id} src="/img/Neworder.png" alt="${Orders.Order_id}" onclick="redirect3(this.id)">
+            <img id=${Orders.Order_id} src="${baseUrl}/img/Neworder.png" alt="${Orders.Order_id}" onclick="redirect3(this.id)">
             <div class="Order-number">Order number.${Orders.Order_id}</div>
 <style>
     #statusBtn {
