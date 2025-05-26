@@ -536,7 +536,7 @@ app.get('/store/:id', async (req, res) => {
     <meta charset="UTF-8">
     <title>${Store.Store_name}</title>
    
-    <link rel="stylesheet" href="/css/ValentinoStylesheet.css">
+         <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/ValentinoStylesheet.css">
     <style>
         #map {
             height: 400px;
