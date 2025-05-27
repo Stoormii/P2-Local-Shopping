@@ -334,7 +334,7 @@ const [categoryProducts] = await pool.query(
     "SELECT * FROM Product WHERE Category_ID = ? AND Product_ID != ? ORDER BY views DESC LIMIT 10",
     [item.Category_ID, ProductID]
 );
-// Dynamically generate the size selection HTML based on Product_ID
+// Dynamically generate the size selection HTML 
 let sizeSelectionHTML =  `
 
         <div class="form-group">
