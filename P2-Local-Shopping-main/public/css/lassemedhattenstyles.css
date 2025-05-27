@@ -1,4 +1,4 @@
-body {
+/*body {
     font-family: Arial, sans-serif;
     background-color: white;
     color: black;
@@ -120,7 +120,7 @@ body.showCart .cartTab {
     padding: 20px;
 }
 
-/* Cart Items */
+
 .listCart .item {
     display: grid;
     grid-template-columns: 70px 1fr auto;
@@ -320,3 +320,4 @@ body.showCart .cartTab {
   min-height: 100vh;
   border-radius: 8px;
 }
+*/
