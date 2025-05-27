@@ -1,4 +1,5 @@
 
+// Define a constant for the base URL based on the environment (local or server)
 if (typeof baseUrl === 'undefined') {
     var baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 }
