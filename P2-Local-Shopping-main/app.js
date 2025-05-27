@@ -1,38 +1,40 @@
 // app.js
-import express from 'express';
-import 'dotenv/config';
-import cors from 'cors';
-import session from 'express-session';
-import MySQLStoreFactory from 'express-mysql-session';
-import { getUsers, createUser } from './database.js';
-import { createStore } from './database.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import bcrypt from 'bcrypt';
-import { pool } from './database.js'; // Importerer databaseforbindelse
+import express from 'express'; // Imports Express
+import 'dotenv/config'; // Imports dotenv for local environment variables
+import cors from 'cors'; // Imports CORS for cross-origin requests
+import session from 'express-session'; // Imports express-session for session management
+import MySQLStoreFactory from 'express-mysql-session'; // Imports MySQL session store
+import { getUsers, createUser } from './database.js'; //Imports getUsers and createUser functions from database.js
+import { createStore } from './database.js'; // Imports createStore function from database.js
+import path from 'path'; //import path for handling file paths
+import { fileURLToPath } from 'url'; // Imports fileURLToPath for converting __filename to a path
+import bcrypt from 'bcrypt'; // Imports bcrypt for password hashing
+import { pool } from './database.js'; // Imports the MySQL connection pool from database.js
 import multer from 'multer'; // Import multer for image uploads
-import { initializeDatabase } from './database.js'; // Eksporter initializeDatabase fra database.js
-import { createItem } from './database.js'; // Importer createItem-funktionen
+import { initializeDatabase } from './database.js'; // Eksports initializeDatabase from database.js
+import { createItem } from './database.js'; // Imports createItem function from database.js
 
-// Konverterer filsti for ES-moduler
+// Converts path for ES-moduler
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3399; // Matches mod_proxy.conf for /node9
-const baseUrl = process.env.BASE_URL || ''; // Brug miljøvariabel eller tom streng som standard
+const baseUrl = process.env.BASE_URL || ''; // Uses environment variable for base URL or defaults to an empty string
 
-// Opretter Express-applikation
+// Creates express application
 const app = express();
 
-app.set('trust proxy', true); // Sørger for, at req.protocol respekterer X-Forwarded-Proto-headeren
+app.set('trust proxy', true); // Makes sure that req.protocol respects the X-Forwarded-Proto header
 
-// Middleware til at parse JSON-data fra frontend
+// Middleware for passing JSON data from frontend
 app.use(express.json());
   
+// Middleware for passing URL-encoded data from frontend
 app.use(cors({
     origin: ['https://cs-25-sw-2-09.p2datsw.cs.aau.dk', 'http://localhost:3399'],
     credentials: true 
 }));
 
+// Initialize the database connection
 const MySQLStore = MySQLStoreFactory(session);
 const sessionStore = new MySQLStore({
   host: process.env.MYSQL_HOST,
@@ -42,28 +44,28 @@ const sessionStore = new MySQLStore({
 });
 
 app.use(session({
-    key: 'session_cookie_name', // Navnet på session-cookien
-    secret: 'your_secret_key', // Hemmelig nøgle til at signere sessionen
-    store: sessionStore, // Bruger MySQL som session store
-    resave: false, // Gør ikke sessionen om, hvis den ikke er ændret
-    saveUninitialized: false, // Gem ikke sessionen, før den er initialiseret
+    key: 'session_cookie_name', // Name for the session cookie
+    secret: 'your_secret_key', // Secret key for signing the session
+    store: sessionStore, // Uses MySQL as session store
+    resave: false, // Do not save the session if it was never modified
+    saveUninitialized: false, // Does not save uninitialized sessions
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24, // Sætter cookieens levetid til 1 dag
-        secure: false, // False pga HTPP
-        httpOnly: true, // Forhindrer adgang til cookien fra JavaScript
+        maxAge: 1000 * 60 * 60 * 24, // Sets cookie's lifetime to 1 day
+        secure: false, // False because of HTPP
+        httpOnly: true, // Connects the cookie from JavaScript
     },
 }));
 
-// Logger alle indgående anmodninger til fejlfinding
+// Logs all incoming requests for debugging
 app.use((req, res, next) => {
     console.log(`Received ${req.method} request for ${req.url}`);
     next();
 });
 
-// Middleware til at håndtere base-URL
+// Middleware to handle base-URL
 app.use('/node9/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Serverer statiske filer fra 'public'-mappen
+// Serves static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public'), (req, res, next) => {
     console.log(`Static middleware accessed for: ${req.url}`);
     next();
@@ -77,7 +79,7 @@ app.use('/uploads', (req, res, next) => {
 
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 
-// API-rute til at hente alle brugere
+// API-route to handle all users 
 app.get('/users', async (req, res) => {
     try {
         const users = await getUsers();
@@ -88,28 +90,28 @@ app.get('/users', async (req, res) => {
     }
 });
 
-// API-rute til oprettelse af ny bruger
+// API-route to create a new user
 app.post('/signup', async (req, res) => {
     console.log('Signup request received:', req.body);
     const { firstname, email, password } = req.body;
 
-    // Validerer at alle felter er udfyldt
+    // Validate all fields that are filled
     if (!firstname || !email || !password) {
         console.log('Missing fields in request body');
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Validerer adgangskodelængde på serveren
+    // Validates password length on the server
     if (password.length < 8) {
         console.log('Password too short');
         return res.status(400).json({ error: 'Password must be at least 8 characters' });
     }
 
     try {
-        // Hash adgangskode
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log('Hashed password:', hashedPassword);
-        // Opret bruger i databasen
+        // Creates the user in the database
         const result = await createUser(firstname, email, hashedPassword);
         console.log('User created successfully:', result);
         res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
@@ -122,19 +124,19 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// API-rute til login
+// API-route for login
 app.post('/login', async (req, res) => {
     console.log('Login request received:', req.body);
     const { email, password } = req.body;
 
-    // Validerer at alle felter er udfyldt
+    // Validate that all fields are filled
     if (!email || !password) {
         console.log('Missing email or password in request body');
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
-        // Hent bruger fra databasen baseret på email
+        // Gets the user from the database based on email
         const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
         console.log('Database query result:', rows);
 
@@ -144,7 +146,7 @@ app.post('/login', async (req, res) => {
         }
 
         const user = rows[0];
-        // Valider adgangskode
+        // Validate password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         console.log('Password validation result:', isPasswordValid);
 
@@ -166,7 +168,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Konfiguration af multer til filuploads
+// Config af multer til file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, path.join(__dirname, 'public/uploads')); // Gemmer logoer i 'public/uploads'
@@ -179,35 +181,35 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// API-rute til oprettelse af ny bruger
+// API-route to handle creation of a new store
 app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
     console.log('Store-Signup request received:', req.body);
     const { Store_name, Store_address, Store_description, email, password } = req.body;
 
-    // Validerer at alle felter er udfyldt
+    // Validates that all fields are filled 
     if (!Store_name || !Store_address || !Store_description || !email || !password) {
         console.log('Missing fields in request body');
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Validerer adgangskodelængde på serveren
+    // Validate that password length is at least 8 characters
     if (password.length < 8) {
         console.log('Password too short');
         return res.status(400).json({ error: 'Password must be at least 8 characters' });
     }
 
     try {
-        // Hash adgangskode
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log('Hashed password:', hashedPassword);
 
-        // Håndter logo-upload
+        // Handles logo upload
         let logoUrl = null;
         if (req.file) {
-            logoUrl = `/node9/uploads/${req.file.filename}`; //URL til logoet
+            logoUrl = `/node9/uploads/${req.file.filename}`; //URL the logo
             console.log('Uploaded logo URL:', logoUrl);
         }
-        // Opret butikken i databasen
+        // Create a new store in the database
         const result = await createStore(Store_name, Store_address, Store_description, email, hashedPassword, logoUrl);
         console.log('User created successfully:', result);
         res.status(201).json({ message: 'User created successfully!', userid: result.insertId });
@@ -217,7 +219,7 @@ app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({ error: 'Email already exists' });
         }
-            // Her fanger vi alle andre fejl
+            // Catch any other errors
     return res.status(500).json({ 
         error: 'Could not create store', 
         details: error.message,
@@ -226,31 +228,37 @@ app.post(`${baseUrl}/store-signup`, upload.single('logo'), async (req, res) => {
     }
 });
 
+// API-route for store login
 app.post('/storelogin', async (req, res) => {
     const { email, password } = req.body;
 
+    // Validate that all fields are filled
     if (!email || !password) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
+    // Searches the store in the database based on email
     try {
         const [rows] = await pool.query("SELECT * FROM Store WHERE email = ?", [email]);
         if (rows.length === 0) {
             return res.status(404).json({ error: 'Store not found' });
         }
 
+        // If store is found, validate the password
         const store = rows[0];
         const isPasswordValid = await bcrypt.compare(password, store.password);
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
+        // If password is valid, create a session for the store
         req.session.store = {
             id: store.Store_ID,
             storename: store.Store_name,
             email: store.email,
         };
 
+        // Log the successful login
         res.json({ message: 'Login successful', store: req.session.store });
     } catch (error) {
         console.error('Error in /storelogin route:', error);
@@ -258,6 +266,7 @@ app.post('/storelogin', async (req, res) => {
     }
 });
 
+//API-route to get the current session
 app.get('/session', (req, res) => {
     if (req.session.user) {
         res.json({ LoggedIn: true, user: req.session.user });
@@ -268,20 +277,20 @@ app.get('/session', (req, res) => {
     }
 });
 
-// API-rute til at logge ud
+// API-route to logout
 app.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.error('Logout error:', err);
             return res.status(500).json({ error: 'Could not log out' });
         }
-        res.clearCookie('session_cookie_name'); // matcher din session config
+        res.clearCookie('session_cookie_name'); // Matches your session config
         res.json({ message: 'Logged out successfully' });
     });
 });
 
 
-// Serve the redirect.js file
+// Serves the redirect.js file
 app.get('/js/redirect.js', (req, res) => {
  res.sendFile(path.join(__dirname, 'redirect.js'));
 });
@@ -477,8 +486,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
  }
 });
 
-// Route to serve store details
-// Funktionen til at vise Google API maps
+// Function to show Google maps API
 app.get('/store/:id', async (req, res) => {
     const storeId = req.params.id;
 
@@ -687,13 +695,7 @@ app.post('/Orders', async (req, res) => {
         const insertOrderSQL = "INSERT INTO Orders (id) VALUES (?)";
         const [orderResult] = await pool.query(insertOrderSQL, [orders[0].id]); // Use the first item's `id` for the order
  
- 
- 
- 
         const newOrderID = orderResult.insertId; // Get the newly created Order_ID
- 
- 
- 
  
         // Step 2: Insert all items into the Order_product table with the same Order_ID
         const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
@@ -879,26 +881,24 @@ app.put('/OrderProducts/:Order_ID/:Product_ID/:Store_ID/status', async (req, res
         res.status(500).json({ message: "Database error." });
     }
 });
-// Global fejlhåndtering
-// Tilføjelse, for at tilføje produkter til databasen
 
-// Tilføj produkt — automatisk knyttet til det loggede storeId
+// Add product based on the storeId that is logged in
 app.post('/add-product', async (req, res) => {
-  // Tjek at butikken er logget ind
+  // Check if the store is logged in
   if (!req.session.store) {
-    return res.status(401).json({ message: 'Du skal være logget ind som butik.' });
+    return res.status(401).json({ message: 'You need to be logged in as a store.' });
   }
 
-  const storeId = req.session.store.id;            // <-- her henter vi Store_ID
+  const storeId = req.session.store.id;            // <-- here we get Store_ID
   const { Product_name, Category_ID, Quantity, Description, Price, image } = req.body;
 
-  // Valider at de påkrævede felter er med
+  // Validate that all required fields are present
   if (!Product_name || !Category_ID || !Quantity || !Description || !Price) {
     return res.status(400).json({ message: 'Alle felter skal udfyldes.' });
   }
 
   try {
-    // Giv createItem dit storeId i stedet for et navn
+    // Give createItem the storeId instead of a name
     const result = await createItem(
       Product_name,
       Category_ID,
@@ -910,12 +910,12 @@ app.post('/add-product', async (req, res) => {
     );
 
     res.status(201).json({
-      message: 'Produkt tilføjet succesfuldt.',
+      message: 'Products is added successfully.',
       productId: result.insertId
     });
   } catch (error) {
-    console.error('Fejl ved tilføjelse af produkt:', error);
-    res.status(500).json({ message: 'Kunne ikke tilføje produktet.' });
+    console.error('Error adding the product:', error);
+    res.status(500).json({ message: 'Could not add product.' });
   }
 });
 
@@ -954,13 +954,13 @@ app.delete('/products/:id', async (req, res) => {
         );
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Produktet blev ikke fundet.' });
+            return res.status(404).json({ message: 'Product was not found.' });
         }
 
-        res.status(200).json({ message: 'Produktet blev slettet.' });
+        res.status(200).json({ message: 'Product has been deleted.' });
     } catch (error) {
-        console.error('Fejl ved sletning af produkt:', error);
-        res.status(500).json({ message: 'Kunne ikke slette produktet.' });
+        console.error('Error deleting the product:', error);
+        res.status(500).json({ message: 'Could not delete the product.' });
     }
 });
 
@@ -968,20 +968,20 @@ app.put('/products/:id', async (req, res) => {
   const productId = req.params.id;
   const {
     Product_name,
-    Category_ID,    // nu ID og ikke Name
+    Category_ID,    
     Quantity,
     Description,
     Price,
     image
   } = req.body;
 
-  // Valider at de påkrævede felter er med
+  // Validate that all required fields are filled
   if (!Product_name || !Number.isInteger(Category_ID) || !Quantity || !Description || !Price) {
     return res.status(400).json({ message: 'Alle felter skal udfyldes korrekt.' });
   }
 
   try {
-    // Udfør opdateringen med ID’er direkte
+    // Update the product with the given ID
     const [result] = await pool.query(
       `UPDATE Product
          SET Product_name = ?,
@@ -995,13 +995,13 @@ app.put('/products/:id', async (req, res) => {
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Produkt ikke fundet.' });
+      return res.status(404).json({ message: 'Product is not found.' });
     }
 
-    res.json({ message: 'Produkt opdateret.' });
+    res.json({ message: 'Product updated.' });
   } catch (err) {
-    console.error('Fejl ved opdatering af produkt:', err);
-    res.status(500).json({ message: 'Kunne ikke opdatere produktet.' });
+    console.error('Error updating the product:', err);
+    res.status(500).json({ message: 'Could not update product.' });
   }
 });
 
@@ -1013,10 +1013,10 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Bemærk ændringen fra /uploads/ til /node9/uploads/
+        // Url for uploaded image
         const imageUrl = `https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/uploads/${req.file.filename}`;
 
-        console.log('Generated image URL:', imageUrl); // (godt til debugging)
+        console.log('Generated image URL:', imageUrl); // For debugging
         res.status(200).json({ imageUrl });
     } catch (error) {
         console.error('Error in /upload-image route:', error);
@@ -1030,22 +1030,22 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-// Starter serveren på 0.0.0.0 for at fungere med reverse proxy
+// Starts the server on 0.0.0.0 for it to work with reverse proxy
 console.log('Port value:', PORT);
 
 (async () => {
     try {
-        console.log('Initialiserer databasen...');
-        await initializeDatabase(); // Vent på, at databasen bliver initialiseret
-        console.log('Databasen er initialiseret.');
+        console.log('Initializing the database...');
+        await initializeDatabase(); // Wait for the database to be initialized
+        console.log('Database is initialized.');
 
 
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port ${PORT}`);
         });
     } catch (error) {
-        console.error('Fejl under databaseinitialisering:', error);
-        process.exit(1); // Stop serveren, hvis initialisering fejler
+        console.error('Error while initialization:', error);
+        process.exit(1); // Stop the server, if the initializations fails 
     }
 })();
 
@@ -1079,7 +1079,7 @@ app.get('/categories', async (req, res) => {
     }
 });
 
-// Henter produkter baseret på én eller flere kategori-ID'er
+// Gets the products based on one or more category IDs
 app.get('/products/by-category', async (req, res) => {
     try {
         const ids = req.query.category_ids;
@@ -1088,14 +1088,14 @@ app.get('/products/by-category', async (req, res) => {
             return res.status(400).json({ message: 'No category_ids provided' });
         }
 
-        // Laver ID-strengen til en liste: "5,6,7" → [5, 6, 7]
+        // Makes a ID string into a list: "5,6,7" → [5, 6, 7]
         const idList = ids.split(',').map(id => parseInt(id)).filter(id => !isNaN(id));
 
         if (idList.length === 0) {
             return res.status(400).json({ message: 'Invalid category_ids' });
         }
 
-        // Bruges med parameter-binding (?) for sikkerhed
+        // Uses with parameter binding (?) for security
         const placeholders = idList.map(() => '?').join(',');
         const query = `
             SELECT * FROM Product
