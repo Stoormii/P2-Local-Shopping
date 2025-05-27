@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url'; // Imports fileURLToPath for converting __f
 import bcrypt from 'bcrypt'; // Imports bcrypt for password hashing
 import { pool } from './database.js'; // Imports the MySQL connection pool from database.js
 import multer from 'multer'; // Import multer for image uploads
-import { initializeDatabase } from './database.js'; // Eksports initializeDatabase from database.js
+import { initializeDatabase } from './database.js'; // Exports initializeDatabase from database.js
 import { createItem } from './database.js'; // Imports createItem function from database.js
 
 // Converts path for ES-moduler
@@ -168,10 +168,10 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Config af multer til file uploads
+// Config multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'public/uploads')); // Gemmer logoer i 'public/uploads'
+        cb(null, path.join(__dirname, 'public/uploads')); //Saves logos in 'public/uploads'
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -294,7 +294,7 @@ app.post('/logout', (req, res) => {
 app.get('/js/redirect.js', (req, res) => {
  res.sendFile(path.join(__dirname, 'redirect.js'));
 });
-// Route to serve item details - test af w
+// Route to serve item details 
 app.get('/Product/:ID', async (req, res) => {
  const ProductID = req.params.ID;
 
