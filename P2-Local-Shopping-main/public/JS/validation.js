@@ -1,8 +1,7 @@
-// Definerer en konstant BASE_URL baseret på miljøet (lokalt eller server)
-// Hvis URL'en indeholder 'localhost', bruges en tom streng, ellers bruges '/node9'
+// Define a constant for the base URL based on the environment (local or server)
 const BASE_URL = window.location.origin.includes('localhost')
-    ? '' // Lokalt miljø
-    : '/node9'; // Servermiljø
+    ? '' // Local 
+    : '/node9'; // Server
 
 // ======== Store Signup ========
 const storesignupForm = document.getElementById('StoreSignupForm');
@@ -18,7 +17,8 @@ if (storesignupForm) {
     const storeLogoInput           = document.getElementById('shop-image');
 
     storesignupForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Forhindrer standard formularindsendelse
+        e.preventDefault(); // 
+        // Prevent default form submission
         console.log('Store Signup submitted');
 
         const name           = storeNameInput.value.trim();
@@ -29,7 +29,7 @@ if (storesignupForm) {
         const description    = storeDescriptionInput.value.trim();
         const logoUrl        = storeLogoInput.value;
 
-        // Valider input-data
+        // Validate input-data
         const storeSignupErrors = getStoreSignupFormErrors(
             name, email, address, password, repeatPassword, description
         );
@@ -38,7 +38,7 @@ if (storesignupForm) {
             return;
         }
 
-        // Deaktiver knappen under anmodning
+        // Deactivate the submit button during the request
         const submitbutton = storesignupForm.querySelector('button[type="submit"]');
         submitbutton.disabled = true;
 
@@ -83,23 +83,23 @@ if (storeLoginForm) {
     const storeLoginErrorMessage  = document.getElementById('storelogin-error-message');
 
     storeLoginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Forhindrer standard formularindsendelse
+        e.preventDefault(); // Prevent default form submission
         console.log('Store Login submitted');
 
         const email = storeLoginEmailInput.value.trim();
         const pw    = storeLoginPasswordInput.value;
 
-        // Valider input-data
+        // Validate input-data
         const errors = getStoreLoginErrors(email, pw);
         if (errors.length > 0) {
             storeLoginErrorMessage.innerText = errors.join('. ');
             return;
         }
 
-        // Opret objekt med brugerdata til serveren
+        // Create an object with user data for the server
         const storeLoginData = { email, password: pw };
 
-        // Deaktiver knappen under anmodning
+        // Deactivate the submit button during the request
         const loginBtn = storeLoginForm.querySelector('button[type="submit"]');
         loginBtn.disabled = true;
 
@@ -113,7 +113,7 @@ if (storeLoginForm) {
                 body: JSON.stringify(storeLoginData),
             });
 
-            // Tjek om svaret er JSON
+            // Check if the response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
@@ -125,15 +125,15 @@ if (storeLoginForm) {
             console.log('Server response:', result);
 
             if (response.ok) {
-                // Omdiriger til Store Front Page ved succes
+                // Redirect to Store Front Page on success
                 window.location.href = `${BASE_URL}/StoreFrontPage.html`;
             } else {
-                // Vis serverfejl
+                // Show servererror 
                 storeLoginErrorMessage.innerText = result.error || 'An error occurred';
                 loginBtn.disabled = false;
             }
         } catch (error) {
-            // Håndter netværks- eller JSON-parsingsfejl
+            // Handle network or JSON parsing errors
             console.error('Network error:', error);
             storeLoginErrorMessage.innerText = 'An error occurred. Please try again later.';
             loginBtn.disabled = false;
@@ -153,7 +153,8 @@ if (signupForm) {
     const userSignupErrorMessage    = document.getElementById('usersignup-error-message');
 
     signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Forhindrer standard formularindsendelse
+        e.preventDefault(); // 
+        // Prevent default form submission
         console.log('User Signup submitted');
 
         const firstname = firstnameInput.value.trim();
@@ -161,17 +162,17 @@ if (signupForm) {
         const pw        = signupPasswordInput.value;
         const pw2       = signupRepeatPasswordInput.value;
 
-        // Valider input-data
+        // Validate input-data
         const errors = getUserSignupErrors(firstname, email, pw, pw2);
         if (errors.length > 0) {
             userSignupErrorMessage.innerText = errors.join('. ');
             return;
         }
 
-        // Opret objekt med brugerdata til serveren
+        // Create an object with user data for the server
         const userData = { firstname, email, password: pw };
 
-        // Deaktiver knappen under anmodning
+        // Deactivate the submit button during the request
         const signupBtn = signupForm.querySelector('button[type="submit"]');
         signupBtn.disabled = true;
 
@@ -185,7 +186,7 @@ if (signupForm) {
                 body: JSON.stringify(userData),
             });
 
-            // Tjek om svaret er JSON
+            // Check if the response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
@@ -197,15 +198,15 @@ if (signupForm) {
             console.log('Server response:', result);
 
             if (response.ok) {
-                // Omdiriger til login-siden ved succes
+                // Redirect to login page on success
                 window.location.href = `${BASE_URL}/login.html`;
             } else {
-                // Vis serverfejl
+                // Show server error
                 userSignupErrorMessage.innerText = result.error || 'An error occurred';
                 signupBtn.disabled = false;
             }
         } catch (error) {
-            // Håndter netværks- eller JSON-parsingsfejl
+            // Handle network or JSON parsing errors
             console.error('Network error:', error);
             userSignupErrorMessage.innerText = 'An error occurred. Please try again later.';
             signupBtn.disabled = false;
@@ -223,23 +224,23 @@ if (loginForm) {
     const userLoginErrorMessage = document.getElementById('error-message');
 
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Forhindrer standard formularindsendelse
+        e.preventDefault(); // Prevent default form submission
         console.log('User Login submitted');
 
         const email = loginEmailInput.value.trim();
         const pw    = loginPasswordInput.value;
 
-        // Valider input-data
+        // Validate input-data
         const errors = getUserLoginErrors(email, pw);
         if (errors.length > 0) {
             userLoginErrorMessage.innerText = errors.join('. ');
             return;
         }
 
-        // Opret objekt med brugerdata til serveren
+        // Create an object with user data for the server
         const loginData = { email, password: pw };
 
-        // Deaktiver knappen under anmodning
+        // Deactivate the submit button during the request
         const loginBtn = loginForm.querySelector('button[type="submit"]');
         loginBtn.disabled = true;
 
@@ -253,7 +254,7 @@ if (loginForm) {
                 body: JSON.stringify(loginData),
             });
 
-            // Tjek om svaret er JSON
+            // Check if the response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
@@ -265,15 +266,15 @@ if (loginForm) {
             console.log('Server response:', result);
 
             if (response.ok) {
-                // Omdiriger til forsiden ved succes
+                // Redirect to front page on success
                 window.location.href = `${BASE_URL}/frontpage.html`;
             } else {
-                // Vis serverfejl
+                // Show server error 
                 userLoginErrorMessage.innerText = result.error || 'An error occurred';
                 loginBtn.disabled = false;
             }
         } catch (error) {
-            // Håndter netværks- eller JSON-parsingsfejl
+            // Handle network or JSON parsing errors
             console.error('Network error:', error);
             userLoginErrorMessage.innerText = 'An error occurred. Please try again later.';
             loginBtn.disabled = false;
@@ -282,7 +283,7 @@ if (loginForm) {
 }
 
 
-// ======== Valideringsfunktioner ========
+// ======== Validation function ========
 function getStoreSignupFormErrors(name, email, address, pw, pwRepeat, desc) {
     const errs = [];
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -333,14 +334,14 @@ function getUserLoginErrors(email, pw) {
 // ======== Logout / Session handling ========
 async function handleLoginStatus() {
     const accountMenu = document.getElementById('account-menu');
-    if (!accountMenu) return; // <-- STOP, hvis vi ikke er på en side med menuen
+    if (!accountMenu) return; // <-- STOP, if we are on a site without the account menu
 
     try {
         const respos = await fetch(`${BASE_URL}/session`);
         const data = await respos.json();
         console.log('Session data:', data);
 
-        accountMenu.innerHTML = ''; // Tøm menuen
+        accountMenu.innerHTML = ''; // Empty the menu
 
         if (data.LoggedIn) {
             const greeting = document.createElement('span');
@@ -378,7 +379,7 @@ async function handleLoginStatus() {
     }
 }
 
-// Kør kun hvis elementet findes
+// Run, but only if the element exists
 if (document.getElementById('account-menu')) {
     handleLoginStatus();
 }
