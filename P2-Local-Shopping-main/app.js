@@ -455,7 +455,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
     <h1>${item.Product_name}</h1>
 <h4>
   <a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/store/${store.Store_ID}">
-    ${store.Store_name}
+    By: ${store.Store_name}
   </a>
 </h4>  
     <p><strong>Price: ${item.Price} DKK</strong></p>
