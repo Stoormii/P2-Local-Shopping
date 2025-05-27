@@ -156,9 +156,6 @@ export async function createItem(
   Price,
   image
 ) {
-// Find the Category_ID based on the provided Category_Name
-const Category_ID = await getCategoryIdByName(Category_Name);
-
 // If the category was not found, throw an error to stop the operation
 if (!Category_ID) {
   throw new Error(`Category '${Category_Name}' does not exist in the database.`);
