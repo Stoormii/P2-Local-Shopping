@@ -319,7 +319,7 @@ h1{
 
 
 .container img {
-  max-width: 100%;
+  max-width: 70%;
   height: auto;
   object-fit: cover;
   border-radius: 8px;
