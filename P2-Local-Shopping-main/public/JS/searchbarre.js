@@ -1,4 +1,4 @@
-// This function is called when the user submits the search form or presses the search button
+// This function is called when the user searches an item
 async function searchItems() {
     const searchBar = document.getElementById('searchBar');
     const query = searchBar.value.trim();
