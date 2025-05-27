@@ -139,7 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
         categorySelect.value                                = p.Category_ID;
         document.getElementById('productStock').value       = p.Quantity;
         document.getElementById('productDescription').value = p.Description;
-        document.getElementById('productPrice').value       = p.Price;
+        document.getElementById('productImage').dataset.imageUrl = p.image || '';
+
+        document.getElementById('imagePreview').innerHTML = p.image
+        ? `<img src="${p.image}" alt="Preview" />`
+        : '';
         openModal(true);
     }
 
