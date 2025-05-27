@@ -928,7 +928,7 @@ app.get('/products', async (req, res) => {
         console.log('Fetching products with LEFT JOIN...');
         const [products] = await pool.query(`
             SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, p.Store_ID,
-                   c.Category_name, s.Store_Name
+            p.Category_ID, c.Category_name, s.Store_Name
             FROM Product p
             LEFT JOIN Categories c ON p.Category_ID = c.Category_ID
             LEFT JOIN Store s ON p.Store_ID = s.Store_ID
@@ -963,15 +963,20 @@ app.delete('/products/:id', async (req, res) => {
 });
 
 app.put('/products/:id', async (req, res) => {
-  const productId = req.params.id;
-  const {
-    Product_name,
-    Category_ID,    
-    Quantity,
-    Description,
-    Price,
-    image
-  } = req.body;
+    // Check if the store is logged in
+    if (!req.session.store) {
+        return res.status(401).json({ message: 'Du skal være logget ind som butik.' });}
+    const storeId = req.session.store.id; // Get the Store_ID of the logged-in store
+    const productId = req.params.id;
+  
+    const {
+        Product_name,
+        Category_ID,    
+        Quantity,
+        Description,
+        Price,
+        image
+    } = req.body;
 
   // Validate that all required fields are filled
   if (!Product_name || !Number.isInteger(Category_ID) || !Quantity || !Description || !Price) {
@@ -988,7 +993,7 @@ app.put('/products/:id', async (req, res) => {
              Description  = ?,
              Price        = ?,
              image        = ?
-       WHERE Product_ID = ?`,
+       WHERE Product_ID = ? AND Store_ID = ?`,
       [Product_name, Category_ID, Quantity, Description, Price, image, productId]
     );
 

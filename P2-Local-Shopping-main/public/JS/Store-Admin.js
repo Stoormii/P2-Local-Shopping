@@ -133,12 +133,14 @@ document.addEventListener('DOMContentLoaded', function () {
         isEditing = true;
         currentProductId = id;
         modalTitle.textContent = 'Edit product';
+
+        // Fill form with product data
         document.getElementById('productName').value        = p.Product_name;
         categorySelect.value                                = p.Category_ID;
         document.getElementById('productStock').value       = p.Quantity;
         document.getElementById('productDescription').value = p.Description;
         document.getElementById('productPrice').value       = p.Price;
-        openModal();
+        openModal(true);
     }
 
     // Delete product 
@@ -152,12 +154,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Open/close modal
-    function openModal() {
-        modal.style.display    = 'flex';
-        isEditing              = false;
-        currentProductId       = null;
-        modalTitle.textContent = 'Add new product';
-        productForm.reset();
+    function openModal(isEdit = false) {
+        modal.style.display = 'flex';
+        if (!isEdit) {
+            productForm.reset(); // kun reset ved oprettelse
+            document.getElementById('imagePreview').innerHTML = ''; // ryd preview
+            modalTitle.textContent = 'Add new product';
+            isEditing = false;
+            currentProductId = null;
+        }
     }
     function closeModal() {
         modal.style.display = 'none';
