@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 
-  // 1. check if a store is log in - redirect to login
+  // check if a store is log in - redirect to login
   async function checkSession() {
     try {
       const res = await fetch(`${baseUrl}/session`);
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. update welcome text
+  //update welcome text
   function updateStoreWelcome(storeName) {
     const heading = document.getElementById('welcome-heading');
     if (heading) {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 3. add activ classes to navigation
+  // add activ classes to navigation
   const navLinks = document.querySelectorAll('.nav-links a');
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. Logout-button
+  // Logout-button
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
