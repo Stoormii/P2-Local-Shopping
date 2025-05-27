@@ -36,8 +36,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centrerer indholdet lodret */
-    position: relative; /* Gør det muligt at placere elementer absolut */
+    justify-content: center; 
+    position: relative; 
 }
 
 h1{
@@ -142,8 +142,8 @@ form textarea {
     border: 2px solid var(--input-color);
     border-left: none;
     background-color: var(--input-color);
-    min-height: 120px;    /* lidt større boks */
-    resize: vertical;     /* tillad bruger at ændre højde */
+    min-height: 120px;   
+    resize: vertical;     
     transition: 150ms ease;
 }
 
@@ -187,9 +187,9 @@ form div.incorrect input{
 
 .store-owner {
     position: absolute;
-    bottom: 20px; /* Afstand fra bunden */
+    bottom: 20px; 
     text-align: center;
     font-size: 0.9rem;
     color: var(--text-color);
-    width: 100%; /* Sørger for, at teksten er centreret */
+    width: 100%;
 }
