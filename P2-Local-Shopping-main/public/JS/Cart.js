@@ -37,7 +37,7 @@ document.body.addEventListener('click', (e) => {
     if (!btn) return;
     e.preventDefault();
 
-    //Retrieve prodct data
+    //Retrieve product data
     const productId = btn.dataset.id;
     const name = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
@@ -46,7 +46,7 @@ document.body.addEventListener('click', (e) => {
     const storeId = btn.dataset.storeId;
     
 
-    //add produt to cart and show cart
+    //add product to cart and show cart
     addToCart(productId, name, price, image, storeId, id);
     body.classList.add('showCart');
 });
@@ -107,7 +107,7 @@ function renderCart() {
     cartIconSpan.textContent = totalQty;
 }
 
-// Adjustt quantities
+// Adjust quantities
 listCartHTML.addEventListener('click', (e) => {
     const clickedItem = e.target.closest('.item');
     if (!clickedItem) return;
