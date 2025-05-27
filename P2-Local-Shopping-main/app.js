@@ -313,6 +313,16 @@ app.get('/Product/:ID', async (req, res) => {
 
 
    const item = rows[0];
+
+   // Fetch the store details
+const [storeRows] = await pool.query("SELECT * FROM Store WHERE Store_ID = ?", [item.Store_ID]);
+
+if (storeRows.length === 0) {
+  console.log(`Store with ID ${item.Store_ID} not found`);
+  return res.status(404).send("Store not found");
+}
+
+const store = storeRows[0];
 // Fetch top products from the same store
    const [storeProducts] = await pool.query(
     "SELECT * FROM Product WHERE Store_ID = ? AND Product_ID != ? ORDER BY views DESC LIMIT 10",
@@ -385,6 +395,8 @@ const categoryProductsHTML = categoryProducts.map(product => `
      <head>
          <meta charset="UTF-8">
          <title>${item.Product_name}</title>
+         <title>${store.Store_name}</title>
+
          <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/Cart.css">
          <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/ValentinoStylesheet.css">
      </head>
