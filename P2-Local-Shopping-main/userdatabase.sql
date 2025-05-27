@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     firstname VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(60) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    password VARCHAR(60) NOT NULL
 );
 
 -- Opret kun tabellen, hvis den ikke allerede findes (Products)
@@ -50,7 +49,6 @@ CREATE TABLE IF NOT EXISTS Orders (
     FOREIGN KEY (id) REFERENCES users(id)
 );
 CREATE TABLE IF NOT EXISTS Order_Product (
-    Order_product_id INT NOT NULL AUTO_INCREMENT,
     Order_id INT ,
     Store_ID INT ,
     Product_ID INT NOT NULL,
