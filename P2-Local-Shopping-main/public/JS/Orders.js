@@ -43,7 +43,28 @@ function renderOrders(Orders) {
         OrderDiv.innerHTML = `
             <img id=${Orders.Order_id} src="${baseUrl}/img/Neworder.png" alt="${Orders.Order_id}" onclick="redirect3(this.id)">
             <div class="Order-number">Order number.${Orders.Order_id}</div>
+<style>
+    #statusBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+                <button id="statusBtn-${Orders.Order_id}">Reserved</button>
 
+
+
+
+           
+            `;
+  const statusBtn = OrderDiv.querySelector(`#statusBtn-${Orders.Order_id}`);
+            statusBtn.addEventListener("click", function () {
+  if (statusBtn.innerText === "Reserved") {
+    statusBtn.innerText = "Picked up";
+  } else {
+    statusBtn.innerText = "Reserved";
+  }
+});
         carousel.appendChild(OrderDiv);
     });
 }
