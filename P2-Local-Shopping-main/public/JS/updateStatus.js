@@ -13,7 +13,7 @@ if (currentLabel === 'reserved') {
     return;
 }
     try {
-        const baseUrl = '/node9'; // or 'http://localhost:3000' for testing
+        const baseUrl = '/node9';
         const response = await fetch(`${baseUrl}/OrderProducts/${orderId}/${productId}/${storeId}/status`, {
             method: 'PUT',
             headers: {
