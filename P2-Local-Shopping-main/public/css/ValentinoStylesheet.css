@@ -600,6 +600,7 @@ h1{
 
 .product-right .form-group {
     margin-bottom: 20px;
+    margin-right: 10px;
 }
 
 .product-right select {
@@ -630,6 +631,7 @@ h1{
 .product-right ul {
     padding-left: 0;
     list-style: none;
+    margin-right: 10px;
 }
 
 .product-right ul li {
