@@ -16,6 +16,9 @@ h1{
   text-transform: uppercase;
 }
 
+h4 {
+  margin: 0px
+}
 
 .container {
   max-width: 1200px;
