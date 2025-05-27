@@ -992,8 +992,8 @@ app.put('/products/:id', async (req, res) => {
              Quantity     = ?,
              Description  = ?,
              Price        = ?,
-             image        = ?
-       WHERE Product_ID = ? AND Store_ID = ?`,
+             image        = ?,
+             WHERE Product_ID = ?`,
       [Product_name, Category_ID, Quantity, Description, Price, image, productId]
     );
 
