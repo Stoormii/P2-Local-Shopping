@@ -994,7 +994,7 @@ app.put('/products/:id', async (req, res) => {
              Price        = ?,
              image        = ?
        WHERE Product_ID = ? AND Store_ID = ?`,
-      [Product_name, Category_ID, Quantity, Description, Price, image, productId]
+      [Product_name, Category_ID, Quantity, Description, Price, image, productId, storeId]
     );
 
     if (result.affectedRows === 0) {
