@@ -102,7 +102,7 @@ h2 {
   margin: 0;
 }
 
-/* Navbar layout med venstre og højre links */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -112,9 +112,9 @@ h2 {
   border: 10px solid white;
   border-radius: 25px;
   padding: 0 20px;
-    height: 70px; /* Set a fixed height */
-  padding: 0 20px; /* Add consistent padding */
-  box-sizing: border-box; /* Ensure padding does not affect height */
+    height: 70px; 
+  padding: 0 20px; 
+  box-sizing: border-box; 
 }
 
 .nav-links {
@@ -137,15 +137,15 @@ h2 {
   justify-content: flex-end;
 }
 
-/* Almindelige links */
+
 .nav-links a {
   text-decoration: none;
   color: #fff;
   padding: 14px 16px;
   border-radius: 5px;
-    text-align: center; /* Center-align text */
-  display: inline-block; /* Ensure links behave like buttons */
-  width: 100px; /* Fixed width for consistent alignment */
+    text-align: center; 
+  display: inline-block; 
+  width: 100px; 
 }
 
 .nav-links a:hover {
@@ -158,7 +158,7 @@ h2 {
   font-weight: bold;
 }
 
-/* Logout-knap */
+
 .logout-button {
   background: none;
   border: none;
@@ -174,60 +174,60 @@ h2 {
   color: black;
 }
 
-/* Style the images inside the carousel */
+
 #carouselx img {
-width: 150px; /* Set the width of the images */
-height: 150px; /* Set the height of the images */
-object-fit: cover; /* Ensure the images are cropped proportionally */
-border-radius: 10px; /* Add rounded corners */
-border: 2px solid #ddd; /* Add a border around the images */
-transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth hover effects */
+width: 150px; 
+height: 150px;
+object-fit: cover; 
+border-radius: 10px; 
+border: 2px solid #ddd; 
+transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 
-/* Add hover effects for the images */
+
 #carouselx img:hover {
-transform: scale(1.1); /* Slightly enlarge the image on hover */
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
-border-color: #0073e6; /* Change the border color on hover */
+transform: scale(1.1); 
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+border-color: #0073e6; 
 }
 
 
-/* General carousel styling */
+/* carousel styling */
 .carouselx {
 display: flex;
-overflow-x: auto; /* Enable horizontal scrolling */
-scroll-behavior: smooth; /* Smooth scrolling */
-gap: 20px; /* Add spacing between items */
+overflow-x: auto; 
+scroll-behavior: smooth; 
+gap: 20px; 
 padding: 10px;
-background-color: #f9f9f9; /* Optional: Add a background color */
-border-radius: 10px; /* Optional: Add rounded corners */
+background-color: #f9f9f9; 
+border-radius: 10px; 
 }
 
 
-/* Hide the scrollbar for a cleaner look */
+
 .carouselx::-webkit-scrollbar {
-display: none; /* Hide scrollbar in WebKit browsers */
+display: none; 
 }
 
 
 .carouselx {
--ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
-scrollbar-width: none; /* Hide scrollbar in Firefox */
+-ms-overflow-style: none; 
+scrollbar-width: none; 
 }
 
 
-/* Style for carousel items (e.g., orders or products) */
+
 .carouselx .order {
-flex: 0 0 auto; /* Prevent items from shrinking */
-width: 150px; /* Set a fixed width for items */
-height: 150px; /* Set a fixed height for items */
-background-color: #fff; /* Optional: Add a background color */
-border: 1px solid #ddd; /* Optional: Add a border */
-border-radius: 10px; /* Optional: Add rounded corners */
-text-align: center; /* Center-align content */
+flex: 0 0 auto; 
+width: 150px; 
+height: 150px; 
+background-color: #fff; 
+border: 1px solid #ddd;
+border-radius: 10px; 
+text-align: center; 
 padding: 10px;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 
