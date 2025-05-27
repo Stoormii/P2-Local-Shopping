@@ -424,7 +424,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
            <div class="search-container">
 
                 <form onsubmit="event.preventDefault(); searchItems();" class="search-form">
-                    <button type="submit" class="search-button">🔍</button>
+                    <button type="submit" class="search-button"></button>
                     <input type="text" id="searchBar" class="search-input" placeholder="Search...">
                 </form>
             </div>
