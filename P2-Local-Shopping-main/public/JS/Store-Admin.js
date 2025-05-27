@@ -72,8 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div>${parseFloat(p.Price).toFixed(2)} DKK</div>
                     <span>${p.Category_name}</span>
                     <div class="actions">
-                        <button class="edit-btn" data-id="${p.Product_ID}">Rediger</button>
-                        <button class="delete-btn" data-id="${p.Product_ID}">Slet</button>
+                        <button class="edit-btn" data-id="${p.Product_ID}">Edit</button>
+                        <button class="delete-btn" data-id="${p.Product_ID}">Delete</button>
                     </div>
                 </div>
             `;
