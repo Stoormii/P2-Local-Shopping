@@ -1,4 +1,4 @@
-/* Navbar layout med venstre og højre links */
+/* Navbar layout  */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -8,9 +8,9 @@
   border: 10px solid white;
   border-radius: 25px;
   padding: 0 20px;
-    height: 70px; /* Set a fixed height */
-  padding: 0 20px; /* Add consistent padding */
-  box-sizing: border-box; /* Ensure padding does not affect height */
+    height: 70px; 
+  padding: 0 20px;
+  box-sizing: border-box; 
 }
 
 .nav-links {
@@ -33,15 +33,15 @@
   justify-content: flex-end;
 }
 
-/* Almindelige links */
+/* just links */
 .nav-links a {
   text-decoration: none;
   color: #fff;
   padding: 14px 16px;
   border-radius: 5px;
-    text-align: center; /* Center-align text */
-  display: inline-block; /* Ensure links behave like buttons */
-  width: 100px; /* Fixed width for consistent alignment */
+    text-align: center; 
+  display: inline-block; 
+  width: 100px; 
 }
 
 .nav-links a:hover {
@@ -54,7 +54,7 @@
   font-weight: bold;
 }
 
-/* Logout-knap */
+/* Logout-button */
 .logout-button {
   background: none;
   border: none;
