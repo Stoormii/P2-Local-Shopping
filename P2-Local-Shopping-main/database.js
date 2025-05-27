@@ -1,4 +1,5 @@
 // database.js
+
 import mysql from 'mysql2/promise'; // Importerer mysql2 biblioteket for at bruge Promises
 import fs from 'fs/promises'; // Importerer fs (file system) for at arbejde med filer asynkront
 import dotenv from 'dotenv';

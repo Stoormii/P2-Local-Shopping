@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStoreWelcome(data.store.storename);
       }
     } catch (err) {
-      console.error('Fejl ved sessionscheck:', err);
+      console.error('Error in sessionscheck:', err);
       window.location.href = 'storelogin.html';
     }
   }
@@ -46,15 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
 window.location.href = `${baseUrl}/storelogin.html`;
 
         } else {
-          alert('Logout fejlede.');
+          alert('Logout errorcode.');
         }
       } catch (error) {
-        console.error('Fejl under logout:', error);
-        alert('Noget gik galt under logout.');
+        console.error('Error logging out:', error);
+        alert('Something went wrong under logout.');
       }
     });
   }
 
-  // Initialisation of the function
+  // Initialization of the function
   checkSession();
 });
