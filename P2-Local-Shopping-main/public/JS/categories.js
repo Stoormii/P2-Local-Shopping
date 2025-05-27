@@ -9,9 +9,8 @@ const BASE_URL = window.location.origin.includes('localhost') */
 if (typeof baseUrl === 'undefined') {
     var baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 }
-// henterer kategorierne fra app.js
 
-// henterer kategorierne fra app.js
+// getting categories from app.js
 async function fetchCategories() {
     try {
         const response = await fetch(`${baseUrl}/categories`);
@@ -22,73 +21,73 @@ async function fetchCategories() {
         const categoryList = await response.json();
         console.log('Fetched categories:', categoryList);
 
-        showCategories(categoryList); // viser dem på siden
+        showCategories(categoryList); // shows categories in HTML
     } catch (error) {
         console.error('Error loading categories:', error);
         alert('Could not load categories. Please try again later.');
     }
 }
 
-// viser kategorierne i HTML
+// shows categories in HTML
 function showCategories(categoryList) {
-    const sortedList = sortByParent(categoryList); // sætter rækkefølgen parent → child
+    const sortedList = sortByParent(categoryList); // sorts categories
     const container = document.getElementById('category-list');
     container.innerHTML = '';
 
-    // Går gennem listen og laver links
+    // Goes through the list and creates links for each category
     for (let i = 0; i < sortedList.length; i++) {
         const category = sortedList[i];
 
         const link = document.createElement('a');
-        link.href = '#'; // så siden ikke opdateres
+        link.href = '#';
         link.textContent = category.Category_name;
         link.dataset.id = category.Category_ID;
         link.style.display = 'block';
 
-        // klik på kategori
+        // click event for categories
         link.addEventListener('click', function (event) {
             event.preventDefault();
 
             const clickedId = parseInt(event.target.dataset.id);
-            const leafIds = findLeafCategories(clickedId, categoryList); // finder leafs
+            const leafIds = findLeafCategories(clickedId, categoryList); // finds leafs
 
             if (leafIds.length === 0) {
-                alert('Ingen produkter fundet.');
+                alert('No products found.');
                 return;
             }
 
-            fetchProductsByCategory(leafIds); // henter produkter
+            fetchProductsByCategory(leafIds); // gets products from database
         });
 
         container.appendChild(link);
     }
 }
 
-// putter kategorierne i rækkefølge
+// puts catogories in a new list sorted by parent
 function sortByParent(categoryList) {
-    // sorterer kategorierne i en ny liste
+    // sorted list
     const sorted = [];
-    // holder kun unikke navne og bruges til at holde styr på hvilke kategorier der er tilføjet
+    // used list
     const added = new Set();
 
     function addCategory(parent) {
-        // Tjekker om den er tilføjet allerede
+        // checks if its added already
         if (added.has(parent.Category_ID)) return;
 
-        // Tilføjer den 
+        // Adds the category
         sorted.push(parent);
         added.add(parent.Category_ID);
 
-        // Gennemgår alle kategorierne og tjekker om det er dens parent samt kalder rekursivt
+        // goes through all categories and checks if it is its parent and calls recursively
         for (let i = 0; i < categoryList.length; i++) {
             const item = categoryList[i];
             if (item.Parent_ID === parent.Category_ID) {
-                addCategory(item); // Rekursiv kald
+                addCategory(item); // Recursive call
             }
         }
     }
 
-    // finder alle kategorier uden parent og kalder addCategory
+    // finds all categories without a parent and calls addCategory
     for (let i = 0; i < categoryList.length; i++) {
         const item = categoryList[i];
         if (item.Parent_ID === null) {
@@ -99,63 +98,63 @@ function sortByParent(categoryList) {
     return sorted;
 }
 
-// finder leaf-kategorier (dem uden børn) rekursivt
+// finds leaf categories (those without children) recursively
 function findLeafCategories(startId, categoryList) {
     const result = [];
 
     function addLeaf(id) {
         let isLeaf = true;
 
-        // Tjekker om den har børn
+        // checks if the category has children
         for (let i = 0; i < categoryList.length; i++) {
             const item = categoryList[i];
             if (item.Parent_ID === id) {
                 isLeaf = false;
-                addLeaf(item.Category_ID); // kalder på barnet
+                addLeaf(item.Category_ID); // calls recursively for children
             }
         }
 
-        // Hvis den ikke har børn er den et leaf
+        // if it is a leaf category, add it to the result
         if (isLeaf) {
             result.push(id);
         }
     }
 
-    addLeaf(startId); // starter fra den klikkede kategori
+    addLeaf(startId); // stars from the clicked category
     return result;
 }
 
-// henter produkter fra backend med flere kategori-id'er
+// gets products from backend with multiple category IDs
 function fetchProductsByCategory(categoryIds) {
-    const query = categoryIds.join(','); // laver f.eks. "5,6,7"
+    const query = categoryIds.join(',');
 
     fetch(`${baseUrl}/products/by-category?category_ids=${query}`)
         .then(res => res.json())
         .then(showProducts)
         .catch(err => {
             console.error(err);
-            alert('Kunne ikke hente produkter.');
+            alert('Couldnt fetch products.');
         });
 }
 
-// viser produkterne på siden
+// shows products in HTML
 function showProducts(productList) {
-    const container = document.getElementById('product-list'); // Finder containeren i HTML
-    container.innerHTML = ''; // Tømmer indholdet før nye produkter vises
+    const container = document.getElementById('product-list'); // finds the container for products
+    container.innerHTML = ''; // empties the container
 
     if (productList.length === 0) {
-        container.textContent = 'Ingen produkter fundet.';
+        container.textContent = 'No products found.';
         return;
     }
 
-    // Gennemgår hvert produkt og viser dem
+    // Goes through each product and shows them
     for (let i = 0; i < productList.length; i++) {
         const product = productList[i];
-        console.log('Rendering product for store:', product); // Debug - viser hvilket produkt der vises
+        console.log('Rendering product for store:', product);
 
-        const productDiv = document.createElement('div'); // Opretter en div til produktet
-        productDiv.className = 'product'; // Tilføjer CSS-klasse
-        productDiv.setAttribute('data-name', product.Product_name); // Gemmer produktnavn som attribut
+        const productDiv = document.createElement('div'); // creates a new div for each product
+        productDiv.className = 'product'; // adds css
+        productDiv.setAttribute('data-name', product.Product_name); // Saves productname as an atrribute
         productDiv.innerHTML = `
             <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}" onclick="redirectToProduct(this.id)">
             <div class="product-name">${product.Product_name}</div>
@@ -170,7 +169,7 @@ function redirectToProduct(productId) {
     window.location.href = `${baseUrl}/Product/${productId}`;
 }
 
-// loader når siden starter
+// loads when the site is ready
 document.addEventListener('DOMContentLoaded', () => {
     fetchCategories();
 });
