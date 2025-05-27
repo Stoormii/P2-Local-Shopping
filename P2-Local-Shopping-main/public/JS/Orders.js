@@ -50,21 +50,13 @@ function renderOrders(Orders) {
       cursor: pointer;
     }
   </style>
-                <button id="statusBtn-${Orders.Order_id}">Reserved</button>
 
 
 
 
            
             `;
-  const statusBtn = OrderDiv.querySelector(`#statusBtn-${Orders.Order_id}`);
-            statusBtn.addEventListener("click", function () {
-  if (statusBtn.innerText === "Reserved") {
-    statusBtn.innerText = "Picked up";
-  } else {
-    statusBtn.innerText = "Reserved";
-  }
-});
+ 
         carousel.appendChild(OrderDiv);
     });
 }
