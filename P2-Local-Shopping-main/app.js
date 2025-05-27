@@ -395,7 +395,6 @@ const categoryProductsHTML = categoryProducts.map(product => `
      <head>
          <meta charset="UTF-8">
          <title>${item.Product_name}</title>
-         <title>${store.Store_name}</title>
 
          <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/Cart.css">
          <link rel="stylesheet" href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/css/ValentinoStylesheet.css">
@@ -454,6 +453,11 @@ const categoryProductsHTML = categoryProducts.map(product => `
   </div>
   <div class="product-right">
     <h1>${item.Product_name}</h1>
+<h1>
+  <a href="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/store/${store.Store_ID}">
+    ${store.Store_name}
+  </a>
+</h1>  
     <p><strong>Price: ${item.Price} DKK</strong></p>
     ${sizeSelectionHTML}
     <h2>Specifications:</h2>
