@@ -1,11 +1,6 @@
-// Definerer en konstant BASE_URL baseret på miljøet (lokalt eller server)
-// Hvis URL'en indeholder 'localhost', bruges en tom streng, ellers bruges '/node9'
-/* const BASE_URL = window.location.origin.includes('localhost')
-    ? '' // Lokalt miljø
-    : '/node9'; // Servermiljø
+// Categories.js
 
-const BASE_URL = window.location.origin.includes('localhost') */
-
+// Define a constant for the base URL based on the environment (local or server)
 if (typeof baseUrl === 'undefined') {
     var baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 }
