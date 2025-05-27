@@ -5,11 +5,11 @@ async function searchItems() {
 
     if (query) {
         try {
-            const baseUrl = window.location.hostname === 'localhost' ? '' : '/node9'; // Adjust for localhost vs server
+            const baseUrl = window.location.hostname === 'localhost' ? '' : '/node9'; 
             console.log('Base URL:', baseUrl); // Debugging log
             const encodedQuery = encodeURIComponent(query);
             console.log('Sending search query:', query); // Debugging log
-            const response = await fetch(`${baseUrl}/search?q=${encodedQuery}`); // Use the correct base URL
+            const response = await fetch(`${baseUrl}/search?q=${encodedQuery}`); 
 
             if (!response.ok) {
                 throw new Error(`Server returned status ${response.status}`);
