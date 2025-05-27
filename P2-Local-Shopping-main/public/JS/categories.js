@@ -58,7 +58,7 @@ function showCategories(categoryList) {
     }
 }
 
-// puts catogories in a new list sorted by parent
+// puts categories in a new list sorted by parent
 function sortByParent(categoryList) {
     // sorted list
     const sorted = [];
