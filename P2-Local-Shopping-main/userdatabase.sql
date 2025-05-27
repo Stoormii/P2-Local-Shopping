@@ -1,8 +1,6 @@
--- Opret kun databasen, hvis den ikke allerede findes
 -- CREATE DATABASE IF NOT EXISTS cs_25_sw_2_09;
 -- USE cs_25_sw_2_09;
 
--- Opret kun tabellen, hvis den ikke allerede findes (Users)
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     firstname VARCHAR(255) NOT NULL,
@@ -10,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(60) NOT NULL
 );
 
--- Opret kun tabellen, hvis den ikke allerede findes (Products)
 CREATE TABLE IF NOT EXISTS Product (
     Product_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
     Product_name VARCHAR(255) NOT NULL,
@@ -22,7 +19,6 @@ CREATE TABLE IF NOT EXISTS Product (
     image VARCHAR(255) 
 );
 
--- Opret kun tabellen, hvis den ikke allerede findes (Categories)
 CREATE TABLE IF NOT EXISTS Categories (
   Category_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
   Category_name VARCHAR(255) NOT NULL,
@@ -30,8 +26,6 @@ CREATE TABLE IF NOT EXISTS Categories (
   FOREIGN KEY (Parent_ID) REFERENCES Categories(Category_ID)
 );
 
-
--- Opret kun tabellen, hvis den ikke allerede findes (Stores)
 CREATE TABLE IF NOT EXISTS Store (
     Store_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
     Store_name VARCHAR(255) NOT NULL,
@@ -48,6 +42,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     PRIMARY KEY (Order_id),
     FOREIGN KEY (id) REFERENCES users(id)
 );
+
 CREATE TABLE IF NOT EXISTS Order_Product (
     Order_id INT ,
     Store_ID INT ,
