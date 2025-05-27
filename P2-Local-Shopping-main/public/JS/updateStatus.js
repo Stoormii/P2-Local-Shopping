@@ -23,7 +23,7 @@ if (currentLabel === 'reserved') {
         });
 
         if (response.ok) {
-            button.innerText = newStatus === 'picked_up' ? 'Picked up' : 'Pick up';
+            button.innerText = newStatus === 'picked_up' ? 'Picked up' : 'reserved';
         } else {
             alert("Failed to update status.");
         }
