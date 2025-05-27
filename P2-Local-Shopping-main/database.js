@@ -149,7 +149,7 @@ export async function getCategoryIdByName(categoryName) {
 
 export async function createItem(
   Product_name,
-  Category_Name,
+  Category_ID,
   Store_ID,      
   Quantity,
   Description,
