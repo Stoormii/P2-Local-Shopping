@@ -1,3 +1,6 @@
+// updateStatus.js
+
+// Function to update the status of an order product
 async function updateStatus(orderId, productId, storeId, button) {
     const currentLabel = button.innerText.trim().toLowerCase();
 let newStatus;
@@ -25,7 +28,7 @@ if (currentLabel === 'reserved') {
             alert("Failed to update status.");
         }
     } catch (err) {
-        console.error("❌ Network or server error:", err.message || err);
+        console.error("Network or server error:", err.message || err);
         alert("Could not update status due to a network error.");
     }
 }

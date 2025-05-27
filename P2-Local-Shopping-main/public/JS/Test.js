@@ -39,4 +39,3 @@ document.getElementById("reserveButton").addEventListener("click", function () {
 });
 
 
-//slut indsæt orders i databasen
