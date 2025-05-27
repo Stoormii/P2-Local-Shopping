@@ -424,7 +424,7 @@ const categoryProductsHTML = categoryProducts.map(product => `
                     <img src="https://cs-25-sw-2-09.p2datsw.cs.aau.dk/node9/img/person_24dp_000000_FILL1_wght400_GRAD200_opsz24.png" alt="Account" width="35" height="35">
                 </button>
                 <div class="account-menu" id="account-menu">
-                    <!--Bliver opdateret dunamisk i validation.js -->
+                    <!--gets dynymcally updated in validation.js -->
                 </div>
             </div>
                             
@@ -691,13 +691,11 @@ app.post('/Orders', async (req, res) => {
  
  
     try {
-        // Step 1: Insert a single entry into the Orders table
         const insertOrderSQL = "INSERT INTO Orders (id) VALUES (?)";
         const [orderResult] = await pool.query(insertOrderSQL, [orders[0].id]); // Use the first item's `id` for the order
  
         const newOrderID = orderResult.insertId; // Get the newly created Order_ID
  
-        // Step 2: Insert all items into the Order_product table with the same Order_ID
         const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
         for (let order of orders) {
             await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID, order.Quantity]);
@@ -717,8 +715,8 @@ app.get('/Orders', async (req, res) => {
     if (!req.session.store) {
         return res.status(401).json({ message: "Not logged in as a store." });
     }
-
-    const storeId = req.session.store.id; // Get the Store_ID of the logged-in store
+// Get the Store_ID of the logged-in store
+    const storeId = req.session.store.id; 
 
     try {
         // Query to fetch orders that have products from the logged-in store
@@ -736,8 +734,8 @@ app.get('/Orders', async (req, res) => {
         if (rows.length === 0) {
             return res.json([]);
         }
-
-        res.json(rows); // Send the filtered orders as JSON
+// Send the filtered orders as JSON
+        res.json(rows); 
     } catch (error) {
         console.error('Error fetching orders for store:', error);
         res.status(500).json({ message: 'Database error! Could not fetch orders.' });
@@ -852,7 +850,7 @@ link.addEventListener('click', () => {
         `;
 
 
-        res.send(htmlContent); // Send the generated HTML as the response
+        res.send(htmlContent); 
     } catch (error) {
         console.error("Error fetching order products:", error);
         res.status(500).send("<h1>Database error! Could not fetch products.</h1>");
@@ -889,12 +887,12 @@ app.post('/add-product', async (req, res) => {
     return res.status(401).json({ message: 'You need to be logged in as a store.' });
   }
 
-  const storeId = req.session.store.id;            // <-- here we get Store_ID
+  const storeId = req.session.store.id;            
   const { Product_name, Category_ID, Quantity, Description, Price, image } = req.body;
 
-  // Validate that all required fields are present
+  // Check that all fields are filled
   if (!Product_name || !Category_ID || !Quantity || !Description || !Price) {
-    return res.status(400).json({ message: 'Alle felter skal udfyldes.' });
+    return res.status(400).json({ message: 'all fields must be filled.' });
   }
 
   try {
@@ -977,7 +975,7 @@ app.put('/products/:id', async (req, res) => {
 
   // Validate that all required fields are filled
   if (!Product_name || !Number.isInteger(Category_ID) || !Quantity || !Description || !Price) {
-    return res.status(400).json({ message: 'Alle felter skal udfyldes korrekt.' });
+    return res.status(400).json({ message: 'All fields must be filled.' });
   }
 
   try {
@@ -1088,7 +1086,7 @@ app.get('/products/by-category', async (req, res) => {
             return res.status(400).json({ message: 'No category_ids provided' });
         }
 
-        // Makes a ID string into a list: "5,6,7" → [5, 6, 7]
+        // Makes an ID string into a list
         const idList = ids.split(',').map(id => parseInt(id)).filter(id => !isNaN(id));
 
         if (idList.length === 0) {
@@ -1107,6 +1105,6 @@ app.get('/products/by-category', async (req, res) => {
         res.status(200).json(products);
     } catch (error) {
         console.error('Fejl i /products/by-category:', error);
-        res.status(500).json({ message: 'Kunne ikke hente produkter' });
+        res.status(500).json({ message: 'could not fetch products' });
     }
 });
