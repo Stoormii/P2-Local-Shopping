@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 
-  // 1. Tjek om butik er logget ind – ellers redirect til login
+  // 1. check if a store is log in - redirect to login
   async function checkSession() {
     try {
       const res = await fetch(`${baseUrl}/session`);
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. Opdater velkomsttekst
+  // 2. update welcome text
   function updateStoreWelcome(storeName) {
     const heading = document.getElementById('welcome-heading');
     if (heading) {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 3. Tilføj aktiv klasse til navigation
+  // 3. add activ classes to navigation
   const navLinks = document.querySelectorAll('.nav-links a');
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. Logout-knap
+  // 4. Logout-button
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
@@ -55,6 +55,6 @@ window.location.href = `${baseUrl}/storelogin.html`;
     });
   }
 
-  // Initialiser funktioner
+  // Initialisation of the function
   checkSession();
 });
