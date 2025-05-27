@@ -84,7 +84,7 @@ function renderTopProducts(products) {
         productDiv.innerHTML = `
             <img id=${product.Product_ID} src="${product.image}" alt="${product.Product_name}" onclick="redirectToProduct(this.id)">
             <div class="product-name">${product.Product_name}</div>
-            <div class="product-location">${product.Price}DKK</div>`;
+            <div class="product-location">${product.Price} DKK</div>`;
         carousel.appendChild(productDiv);
     });
 }
