@@ -1,11 +1,6 @@
-// Definerer en konstant BASE_URL baseret på miljøet (lokalt eller server)
-// Hvis URL'en indeholder 'localhost', bruges en tom streng, ellers bruges '/node9'
-/* const BASE_URL = window.location.origin.includes('localhost')
-    ? '' // Lokalt miljø
-    : '/node9'; // Servermiljø
+// frontpageloadstore.js
 
-const BASE_URL = window.location.origin.includes('localhost') */
-
+// Define a constant for the base URL based on the environment (local or server)
 if (typeof baseUrl === 'undefined') {
     var baseUrl = window.location.origin.includes('localhost') ? '' : '/node9';
 }
@@ -53,8 +48,7 @@ document.addEventListener('DOMContentLoaded', fetchStores);
 
 
 
-//kopi af ovenstående for products
-
+// Copy code from above for products
 async function fetchTopProducts() {
     try {
         // Fetch the top 5 products from the backend
@@ -104,7 +98,7 @@ function redirectToProduct(productId) {
 document.addEventListener('DOMContentLoaded', fetchTopProducts);
 
 
-//samme for store
+// Same for store
 async function fetchTopProductsForStore(storeId) {
     try {
         // Fetch the top 10 products for the specified store

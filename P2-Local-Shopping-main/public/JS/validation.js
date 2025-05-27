@@ -1,7 +1,6 @@
-// Define a constant for the base URL based on the environment (local or server)
 const BASE_URL = window.location.origin.includes('localhost')
-    ? '' // Local 
-    : '/node9'; // Server
+    ? ''  
+    : '/node9';
 
 // ======== Store Signup ========
 const storesignupForm = document.getElementById('StoreSignupForm');

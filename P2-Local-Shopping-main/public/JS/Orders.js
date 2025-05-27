@@ -1,8 +1,7 @@
+// Define a constant for the base URL based on the environment (local or server)
 const baseUrl = window.location.origin.includes('localhost')
-? '' // Lokalt miljø
-: '/node9'; // Servermiljø
-
-
+? '' // Local development
+: '/node9'; // Server 
 
 
 // orders
@@ -74,7 +73,7 @@ function renderOrders(Orders) {
 document.addEventListener('DOMContentLoaded', fetchOrders);''
 
 
-//Nedenfor er karussel til når man er inde i ordren
+// Below is the code for handling orders and rendering them in a carousel format.
 
 // Fetch the order products based on the selected order ID
 async function fetchOrderProducts(Order_ID) {
@@ -112,6 +111,7 @@ function renderOrderProducts(orderProducts) {
     }
 
 
+    // Loop through each product and create a div for it
     orderProducts.forEach(product => {
         console.log('Rendering product:', product); // Debugging log
         const productDiv = document.createElement('div');
