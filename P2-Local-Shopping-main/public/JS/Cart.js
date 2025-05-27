@@ -74,16 +74,17 @@ function addToCart(productId, name, price, image, storeId, id) {
     }
     updateCart();
 }
-
+//Saves the current state of the cart to the browser’s localStorage
 function updateCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
     renderCart();
 }
 
+//rebuilds the cart UI based on the cart array
 function renderCart() {
     listCartHTML.innerHTML = '';
     let totalQty = 0;
-
+//Loops through each item in the cart, generating HTML
     cart.forEach(item => {
         totalQty += item.Quantity;
         const itemHTML = `
