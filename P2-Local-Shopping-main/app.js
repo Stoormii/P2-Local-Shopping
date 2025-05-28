@@ -616,7 +616,7 @@ app.get('/store/:id', async (req, res) => {
             Description: ${Store.Store_description}</p>
             <p class="location"><strong>Location: ${Store.Store_address}</strong></p>
         </div>
-        <img src="${Store.image}" alt="${Store.Store_name}">
+        <img class="store-image" src="${Store.image}" alt="${Store.Store_name}">
     </div>
     <div id="map"></div>
     </div>

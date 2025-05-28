@@ -713,3 +713,7 @@ h4 {
 .product-card .btn:hover {
   background-color: #038c5a;
 }
+
+.store-image {
+    width: 300px;
+}
