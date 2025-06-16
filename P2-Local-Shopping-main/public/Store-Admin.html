@@ -74,10 +74,6 @@
                                     <option value="">Pick Category</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="productStock">ProductStock:</label>
-                                <input type="number" id="productStock" required>
-                            </div>
                         </div>
 
                         <div class="form-group">
@@ -105,6 +101,17 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="quantityModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeQuantityModal">&times;</span>
+        <h2>Product Sizes & Quantities</h2>
+        <div id="sizeInputs"></div>
+        <div class="form-actions">
+            <button class="button save-btn" id="saveSizesBtn">Save Sizes</button>
+        </div>
+    </div>
+</div>
 
     <script src="JS/Store-Admin.js"></script>
     <script src="JS/storefrontpage.js"></script>

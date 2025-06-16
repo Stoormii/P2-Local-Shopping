@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="actions">
                         <button class="edit-btn" data-id="${p.Product_ID}">Edit</button>
                         <button class="delete-btn" data-id="${p.Product_ID}">Delete</button>
+                        <button class="quantity-btn" data-id="${p.Product_ID}">Quantity</button>
                     </div>
                 </div>
             `;
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         document.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', handleEditProduct));
         document.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', handleDeleteProduct));
+        document.querySelectorAll('.quantity-btn').forEach(b => b.addEventListener('click', handleSizes));
     }
 
     // Upload image
@@ -101,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const payload = {
             Product_name: document.getElementById('productName').value,
             Category_ID:  parseInt(categorySelect.value, 10),
-            Quantity:     parseInt(document.getElementById('productStock').value, 10),
             Description:  document.getElementById('productDescription').value,
             Price:        parseFloat(document.getElementById('productPrice').value),
             image:        imageUrl,
@@ -137,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Fill form with product data
         document.getElementById('productName').value        = p.Product_name;
         categorySelect.value                                = p.Category_ID;
-        document.getElementById('productStock').value       = p.Quantity;
         document.getElementById('productDescription').value = p.Description;
         document.getElementById('productPrice').value       = p.Price;
         document.getElementById('productImage').dataset.imageUrl = p.image || '';
@@ -156,6 +156,62 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'DELETE', credentials: 'include'
         });
         await fetchProducts();
+    }
+
+    async function handleSizes(e) {
+        const id = e.target.dataset.id;
+        currentProductId = id;
+        const modal = document.getElementById('quantityModal');
+        const container = document.getElementById('sizeInputs');
+        container.innerHTML = '';
+        modal.style.display = 'flex';
+
+        try {
+            const res = await fetch(`${baseUrl}/product-sizes/${id}`, { credentials: 'include' });
+            const sizes = await res.json();
+
+            sizes.forEach(s => {
+                const row = document.createElement('div');
+                row.classList.add('size-row');
+                row.innerHTML = `
+                    <input type="text" class="size-input" value="${s.Size}" placeholder="Size">
+                    <input type="number" class="quantity-input" value="${s.Quantity}" placeholder="Quantity" min="0">
+                `;
+                container.appendChild(row);
+            });
+
+            AddNewRow(container); // Adds empty row at the end
+        } catch (err) {
+            console.error('Error loading sizes:', err);
+            AddNewRow(container); // Still add one row in case of error
+        }
+    }
+
+
+    function AddNewRow(container) {
+        const row = document.createElement('div');
+        row.classList.add('size-row');
+
+        row.innerHTML = `
+            <input type="text" class="size-input" placeholder="Size">
+            <input type="number" class="quantity-input" placeholder="Quantity" min="0">
+        `;
+        
+        const sizeInput = row.querySelector('.size-input');
+        const qtyInput = row.querySelector('.quantity-input');
+
+        function checkAndAdd() {
+            const filled = sizeInput.value.trim() || qtyInput.value.trim();
+            const isLast = container.lastElementChild === row;
+            if (filled && isLast) {
+                AddNewRow(container);
+            }
+        }
+
+        sizeInput.addEventListener('input', checkAndAdd);
+        qtyInput.addEventListener('input', checkAndAdd);
+
+        container.appendChild(row);
     }
 
     // Open/close modal
@@ -222,6 +278,41 @@ document.addEventListener('DOMContentLoaded', function () {
             );
             renderProducts(filtered);
         });
+        // Quantity modal: close button
+const closeQuantityModal = document.getElementById('closeQuantityModal');
+if (closeQuantityModal) {
+    closeQuantityModal.addEventListener('click', () => {
+        document.getElementById('quantityModal').style.display = 'none';
+    });
+}
+
+        // Save sizes to backend
+        const saveSizesBtn = document.getElementById('saveSizesBtn');
+        if (saveSizesBtn) {
+            saveSizesBtn.addEventListener('click', async () => {
+                const rows = document.querySelectorAll('.size-row');
+                const sizes = Array.from(rows).map(row => ({
+                    size: row.querySelector('.size-input').value.trim(),
+                    quantity: parseInt(row.querySelector('.quantity-input').value.trim(), 10)
+                })).filter(entry => entry.size && !isNaN(entry.quantity));
+
+                console.log('Sizes received:', sizes);
+
+                const res = await fetch(`${baseUrl}/product-sizes/${currentProductId}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sizes })
+                });
+
+                if (res.ok) {
+                    alert('Sizes saved!');
+                    document.getElementById('quantityModal').style.display = 'none';
+                } else {
+                    alert('Error saving sizes');
+                }
+    });
+}
     }
 
     (async function init() {
