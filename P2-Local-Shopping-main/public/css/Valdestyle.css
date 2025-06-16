@@ -222,6 +222,14 @@ body {
 .delete-btn:hover {
     background-color: #c0392b;
 }
+.quantity-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.quantity-btn:hover {
+    background-color: #2980b9;
+}
 
 .add-product-btn {
     position: fixed;

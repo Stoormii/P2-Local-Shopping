@@ -151,7 +151,6 @@ export async function createItem(
   Product_name,
   Category_ID,
   Store_ID,      
-  Quantity,
   Description,
   Price,
   image
@@ -170,10 +169,10 @@ if (!Category_ID) {
 const [result] = await pool.query(
   // SQL query with placeholders to safely insert values
   `INSERT INTO Product
-     (Product_name, Category_ID, Store_ID, Quantity, Description, Price, image)
-   VALUES (?, ?, ?, ?, ?, ?, ?)`,
+     (Product_name, Category_ID, Store_ID, Description, Price, image)
+   VALUES (?, ?, ?, ?, ?, ?)`,
   // The actual values to be inserted, in the same order as the columns above
-  [Product_name, Category_ID, Store_ID, Quantity, Description, Price, image]
+  [Product_name, Category_ID, Store_ID, Description, Price, image]
 );
 
 // Return the result of the query, which includes metadata such as insertId
@@ -192,6 +191,60 @@ export async function createStore(Store_name, Store_address, Store_description, 
         return result;
     } catch (error) {
         console.error('Error in createStore:', error);
+        throw error;
+    }
+}
+
+// Function to get all sizes and quantities for a given product
+export async function getProductSizes(productId) {
+    try {
+        const [rows] = await pool.query(
+            `SELECT Size, Quantity FROM Product_Size WHERE Product_ID = ?`,
+            [productId]
+        );
+        return rows; // Return all sizes for the specified product
+    } catch (error) {
+        console.error('Error in getProductSizes:', error); // Log error if something goes wrong
+        throw error;
+    }
+}
+
+// Function to save or update product sizes (insert if new, update if exists)
+export async function saveProductSizes(productId, sizes) {
+    const connection = await pool.getConnection(); // Grab a connection from the pool
+    try {
+        await connection.beginTransaction(); // Start transaction
+
+        for (const { size, quantity } of sizes) {
+            if (!size || isNaN(quantity)) continue; // Skip invalid rows
+
+            await connection.query(
+                `INSERT INTO Product_Size (Product_ID, Size, Quantity)
+                 VALUES (?, ?, ?)
+                 ON DUPLICATE KEY UPDATE Quantity = VALUES(Quantity)`,
+                [productId, size, quantity]
+            );
+        }
+
+        await connection.commit(); // Commit the transaction
+    } catch (error) {
+        await connection.rollback(); // Roll back on error
+        console.error('Error in saveProductSizes:', error);
+        throw error;
+    } finally {
+        connection.release(); // Always release connection
+    }
+}
+
+// Function to delete empty sizes for a product
+export async function deleteEmptySizes(productId) {
+    try {
+        await pool.query(
+            `DELETE FROM Product_Size WHERE Product_ID = ? AND (Size = '' OR Quantity IS NULL OR Quantity = 0)`,
+            [productId]
+        );
+    } catch (error) {
+        console.error('Error in deleteEmptySizes:', error);
         throw error;
     }
 }

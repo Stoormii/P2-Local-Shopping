@@ -13,6 +13,7 @@ import { pool } from './database.js'; // Imports the MySQL connection pool from 
 import multer from 'multer'; // Import multer for image uploads
 import { initializeDatabase } from './database.js'; // Exports initializeDatabase from database.js
 import { createItem } from './database.js'; // Imports createItem function from database.js
+import { getProductSizes, saveProductSizes, deleteEmptySizes } from './database.js'; // Imports functions for handling product sizes
 
 // Converts path for ES-moduler
 const __filename = fileURLToPath(import.meta.url);
@@ -712,9 +713,9 @@ app.post('/Orders', async (req, res) => {
  
         const newOrderID = orderResult.insertId; // Get the newly created Order_ID
  
-        const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
+        const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID) VALUES (?, ?, ?)";
         for (let order of orders) {
-            await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID, order.Quantity]);
+            await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID]);
         }
  
  
@@ -786,7 +787,6 @@ app.get('/OrderProducts/:Store_ID/:Order_ID', async (req, res) => {
                 <img src="${product.image}" alt="${product.Product_name}" style="width: 150px; height: 150px;">
                 <h2>${product.Product_name}</h2>
                 <p>Price: ${product.Price} DKK</p>
-                <p>Quantity: ${product.Quantity}</p>
                 <button onclick="updateStatus(${product.Order_id}, ${product.Product_ID}, ${product.Store_ID}, this)">
                 ${product.Status === 'picked_up' ? 'Picked up' : 'reserved'}
                 </button>
@@ -904,10 +904,10 @@ app.post('/add-product', async (req, res) => {
   }
 
   const storeId = req.session.store.id;            
-  const { Product_name, Category_ID, Quantity, Description, Price, image } = req.body;
+  const { Product_name, Category_ID, Description, Price, image } = req.body;
 
   // Check that all fields are filled
-  if (!Product_name || !Category_ID || !Quantity || !Description || !Price) {
+  if (!Product_name || !Category_ID || !Description || !Price) {
     return res.status(400).json({ message: 'all fields must be filled.' });
   }
 
@@ -917,7 +917,6 @@ app.post('/add-product', async (req, res) => {
       Product_name,
       Category_ID,
       storeId,      
-      Quantity,
       Description,
       Price,
       image
@@ -943,7 +942,7 @@ app.get('/products', async (req, res) => {
     try {
         console.log('Fetching products with LEFT JOIN...');
         const [products] = await pool.query(`
-            SELECT p.Product_ID, p.Product_name, p.Quantity, p.Description, p.Price, p.image, p.Store_ID,
+            SELECT p.Product_ID, p.Product_name, p.Description, p.Price, p.image, p.Store_ID,
             p.Category_ID, c.Category_name, s.Store_Name
             FROM Product p
             LEFT JOIN Categories c ON p.Category_ID = c.Category_ID
@@ -988,14 +987,13 @@ app.put('/products/:id', async (req, res) => {
     const {
         Product_name,
         Category_ID,    
-        Quantity,
         Description,
         Price,
         image
     } = req.body;
 
   // Validate that all required fields are filled
-  if (!Product_name || !Number.isInteger(Category_ID) || !Quantity || !Description || !Price) {
+  if (!Product_name || !Number.isInteger(Category_ID) || !Description || !Price) {
     return res.status(400).json({ message: 'All fields must be filled.' });
   }
 
@@ -1005,12 +1003,11 @@ app.put('/products/:id', async (req, res) => {
       `UPDATE Product
          SET Product_name = ?,
              Category_ID  = ?,
-             Quantity     = ?,
              Description  = ?,
              Price        = ?,
              image        = ?
        WHERE Product_ID = ? AND Store_ID = ?`,
-      [Product_name, Category_ID, Quantity, Description, Price, image, productId, storeId]
+      [Product_name, Category_ID, Description, Price, image, productId, storeId]
     );
 
     if (result.affectedRows === 0) {
@@ -1129,3 +1126,39 @@ app.get('/products/by-category', async (req, res) => {
         res.status(500).json({ message: 'could not fetch products' });
     }
 });
+
+// Function to get product sizes based on product ID
+app.get('/product-sizes/:productId', async (req, res) => {
+  const productId = parseInt(req.params.productId, 10);
+  if (!productId) return res.status(400).json({ message: 'Invalid product ID' });
+
+  try {
+    const sizes = await getProductSizes(productId);
+    res.json(sizes);
+  } catch (err) {
+    console.error('Error fetching sizes:', err);
+    res.status(500).json({ message: 'Could not fetch sizes' });
+  }
+});
+
+// Function to save product sizes
+app.post('/product-sizes/:productId', async (req, res) => {
+  const productId = parseInt(req.params.productId, 10);
+  const { sizes } = req.body;
+  
+  console.log('Received sizes:', sizes); 
+
+  if (!productId || !Array.isArray(sizes)) {
+    return res.status(400).json({ message: 'Invalid input' });
+  }
+
+  try {
+    await saveProductSizes(productId, sizes);
+    await deleteEmptySizes(productId); // Optional cleanup
+    res.json({ message: 'Sizes saved successfully' });
+  } catch (error) {
+    console.error('Error saving sizes:', error);
+    res.status(500).json({ message: 'Could not save sizes' });
+  }
+});
+
