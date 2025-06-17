@@ -350,7 +350,7 @@ for (let i = 0; i < sizes.length; i++) {
 
 // Final HTML snippet with corrected placeholder option
 const sizeSelectionHTML = `
-  <div class="product">
+  <div class="form-group">
     <label for="productSize">Size:</label>
     <select class="productSize" required>
       <option value="">Choose Size</option> <!--  -->
