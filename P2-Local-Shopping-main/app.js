@@ -336,24 +336,28 @@ const [categoryProducts] = await pool.query(
     [item.Category_ID, ProductID]
 );
 // Dynamically generate the size selection HTML 
-let sizeSelectionHTML =  `
+// Query for sizes for a product
+const [sizes] = await pool.query(
+    "SELECT Size, Quantity FROM Product_Size WHERE Product_ID = ?",
+    [item.Product_ID]
+);
+// Generate size options 
+let sizeOptions = '';
+for (let i = 0; i < sizes.length; i++) {
+  const size = sizes[i].Size;
+  sizeOptions += `<option value="${size}">${size}</option>`;
+}
 
-        <div class="form-group">
-            <label for="productCategory">Size:</label>
-            <select id="productCategory" required>
-                <option value="">Choose Size</option>
-                <option value="s">Small (S)</option>
-                <option value="m">Medium (M)</option>
-                <option value="l">Large (L)</option>
-                <option value="xl">Extra Large (XL)</option>
-            </select>
-            <ul style="list-style: none; padding: 0;">
-                
-             </ul>
-            
-            
-        </div>
-    `;
+// Final HTML snippet with corrected placeholder option
+const sizeSelectionHTML = `
+  <div class="product">
+    <label for="productSize">Size:</label>
+    <select class="productSize" required>
+      <option value="">Choose Size</option> <!--  -->
+      ${sizeOptions}
+    </select>
+  </div>
+`;
 
 // Generate HTML for the "Other products from the same store" carousel
 const storeProductsHTML = storeProducts.map(product => `
