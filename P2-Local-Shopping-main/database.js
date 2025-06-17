@@ -162,7 +162,7 @@ if (!Category_ID) {
 
   // Check if we have a valid Store_ID
   if (!Store_ID) {
-    throw new Error(`Ingen gyldigt Store_ID modtaget.`);
+    throw new Error(`No valid Store_ID.`);
   }
 
 // Insert a new product into the Product table
