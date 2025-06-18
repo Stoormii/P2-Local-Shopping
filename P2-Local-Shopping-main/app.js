@@ -717,9 +717,9 @@ app.post('/Orders', async (req, res) => {
  
         const newOrderID = orderResult.insertId; // Get the newly created Order_ID
  
-        const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID) VALUES (?, ?, ?)";
+        const insertOrderProductSQL = "INSERT INTO Order_Product (Order_ID, Store_ID, Product_ID, Quantity) VALUES (?, ?, ?, ?)";
         for (let order of orders) {
-            await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID]);
+            await pool.query(insertOrderProductSQL, [newOrderID, order.Store_ID, order.Product_ID, order.Quantity || 1]);
         }
  
  
