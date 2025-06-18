@@ -1,6 +1,8 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 const cartIconSpan = document.querySelector('.icon-cart span');
+//Selects the HTML element where the cart’s items will be rendered/listed.
 const listCartHTML = document.querySelector('.listCart');
+//Stores a reference to the <body> element of the page.
 const body = document.body;
 
 let id = null;
