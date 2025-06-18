@@ -113,7 +113,6 @@ function renderOrderProducts(orderProducts) {
             <img id="${product.Product_ID}" src="${product.image}" alt="${product.Product_name}">
             <div class="Product-name">${product.Product_name}</div>
             <div class="Product-price">Price: ${product.Price} DKK</div>
-            <div class="Product-quantity">Quantity: ${product.Quantity}</div>
             
         `;
          const button = productDiv.querySelector('.pickup-btn');
