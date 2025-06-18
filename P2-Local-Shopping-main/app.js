@@ -1158,7 +1158,7 @@ app.post('/product-sizes/:productId', async (req, res) => {
 
   try {
     await saveProductSizes(productId, sizes);
-    await deleteEmptySizes(productId); // Optional cleanup
+    await deleteEmptySizes(productId);
     res.json({ message: 'Sizes saved successfully' });
   } catch (error) {
     console.error('Error saving sizes:', error);
